@@ -26,4 +26,4 @@ A example of data visualization that is similar to what we want to have can be f
 
 ### Sketch
 Sketch:
-![alt-text](sketch.jpg)
+![alt text](sketch.jpg "Title")
