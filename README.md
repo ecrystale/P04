@@ -1,7 +1,8 @@
 # P#04 -- Team calm_squid_salsa
 
 ### Description of data set
-Source: [Nintendo json](https://www.nintendo.com/json/content/get/filter/game?limit=400)
+Source: [json of Nintendo data](https://www.nintendo.com/json/content/get/filter/game?limit=400)
+
 This dataset includes:
 - titles of Nintendo games
 - release date
@@ -11,7 +12,7 @@ This dataset includes:
 - front cover art
 - system, etc
 
-Because there are so many Nintendo games, we will use this dataset to create a timeline for users to view information on the Nintendo games. We are interested in seeing if there is a trend for what types of games are released during certain years.
+Because there are so many Nintendo games, we will use this dataset to create a timeline for users to view this information on the Nintendo games in a clear and manageable format. We are interested in seeing if there is a trend for what types of games are released during certain years.
 
 ### Explanation
 User interaction is necessary to view the information about specific games in the timeline. The games would be on the timeline organized by start date, and when the user hovers over them, information about the game will show up, including the type of game, system, etc.
