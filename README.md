@@ -23,3 +23,7 @@ Filters can be implemented to give the user only specific information they reque
 We will use enter/exit selections for filtering. If a certain game does not fit the query, such as games developed in 2019, it will be removed from the DOM by exit selections so that it is not displayed, and can be added to the data again through enter selections if the element matches the user's query.
 
 A example of data visualization that is similar to what we want to have can be found [here](http://guernica.museoreinasofia.es/cronologia/en/).
+
+### Sketch
+Sketch:
+![alt-text](sketch.jpg)
