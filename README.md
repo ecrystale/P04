@@ -1,5 +1,11 @@
 # P#04 -- Team calm_squid_salsa
 
+## Devos of Period 7
+* Tina Wong
+* Emily Lee
+* Jason Lin
+* Isaac Jon
+
 ### Description of data set
 Source: [json of Nintendo data](https://www.nintendo.com/json/content/get/filter/game?limit=400)
 
@@ -20,7 +26,7 @@ User interaction is necessary to view the information about specific games in th
 Filters can be implemented to give the user only specific information they request, such as games only within specific years, or only games of a certain type.
 
 ### Explanation of D3 features
-We will use enter/exit selections for filtering. If a certain game does not fit the query, such as games developed in 2019, it will be removed from the DOM by exit selections so that it is not displayed, and can be added to the data again through enter selections if the element matches the user's query.
+We will use enter/exit selections for filtering. If a certain game does not fit the query, such as games developed in 2019, it will be removed from the DOM by exit selections so that it is not displayed, and can be added to the data again through enter selections if the element matches the user's query. We would also like to use event listeners in D3 in order to add the element of interactivity when hovering over a specific bar from a year.
 
 A example of data visualization that is similar to what we want to have can be found [here](http://guernica.museoreinasofia.es/cronologia/en/).
 
