@@ -17,15 +17,12 @@ P #04: Viz not to be confused with vis or vis-a-vis
 ==============================================================
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-fristL -- TIMESTAMP
---------------------------------------------------------------
-<Thing fristL did.>
-==============================================================
-
 emilyL -- 2019-03-26 13:08
---------------------------------------------------------------
-Update README.md to reflect out project
+- Update README.md to reflect out project
 
 tinaW -- 2019-03-26 21:15
---------------------------------------------------------------
-Added to README.md to include D3 feature utilization
+- Added to README.md to include D3 feature utilization
+
+tinaW -- 2019-03-31 11:17
+- Added flask starter kit
+- Added link to external javascript file and tested its functionality
