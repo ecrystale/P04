@@ -42,7 +42,7 @@ all_data = [
 },
 "slug": "paper-mario-color-splash-wii-u",
 "buyitnow": "true",
-"release_date": "Oct 7, 2016",
+"release_date": "Oct 7, 2015",
 "digitaldownload": "false",
 "free_to_start": "false",
 "title": "Paper Mario: Color Splash",
@@ -457,7 +457,7 @@ all_data = [
 "id": "HrutaFC934_8wjziYsH5fby3vubc6eXK"
 }
 ]
-
+print(len(all_data))
 sorted_data = []
 for i in range(40):
     sorted_data.append([])

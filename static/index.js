@@ -15,14 +15,25 @@ Each bar will take up 2 or 3 months (Ex. One bar can be Jan-March 2011, next one
 User can narrow down on time, console, genre, ...
 Overall, there will be 40 bars (We can change it later if we want)
 */
+// var y_scale = d3.scaleLinear()
+//     .domain([0,200])
+//     .range([0,500]);
+//
+// var yAxis = d3.axisLeft(y_scale);
+//
+// var x_scale = d3.scaleLinear()
+//     .domain([2011,2020])
+//     .range([0,1200]);
+//
+// var xAxis = d3.axisBottom(x_scale);
 
 var x_scale = d3.scaleLinear()
-    .domain([0,40])
-    .range([0, 1000]);
+    .domain([2011,2020])
+    .range([0, 1200]);
 
 var y_scale = d3.scaleLinear()
     .domain([0,100])
-    .range([350,0]);
+    .range([500,0]);
 
 var x_axis = d3.axisBottom()
     .scale(x_scale)
@@ -34,12 +45,14 @@ var bar = chart.selectAll("g")
     .data(data)
     .enter().append("g")
     .attr("transform", function(d,i) {
-        return "translate(" + (25+i*30) + ",0)";
+        return "translate(" + (35+i*30) + ",0)";
     })
     .selectAll("g")
-    .data( function(d,i) {return d;})
+    .data( function(d) {return d;})
     .enter().append("g")
-    .append("rect")
+console.log(bar);
+
+var bar2 = bar.append("rect")
     .attr("width",20)
     .attr("height",20)
     .attr("fill","white")
@@ -57,7 +70,7 @@ var bar = chart.selectAll("g")
 function handleHover(d,i) {
     var x_col = d3.select(this.parentNode.parentNode).attr("transform").split("(")[1].split(",")[0];
     var inner_x = d3.mouse(this)[0];
-    var x = parseInt(x_col) + parseInt(inner_x) + 25;
+    var x_result = parseInt(x_col) + parseInt(inner_x) + 25;
     d3.select(this)
       .attr("stroke","blue")
       .attr("stroke-width",3);
@@ -65,7 +78,7 @@ function handleHover(d,i) {
     chart.append("text")
          .attr("id",d.game_code)
          .attr("transform", function (d){
-             return "translate(" + x + "," + (height/2) + ")";
+             return "translate(" + x_result + "," + (height/2) + ")";
          })
          .html(d.title + " | " + d.system + " | " + d.release_date);
 }
@@ -78,9 +91,9 @@ function handleUnhover(d,i) {
 }
 
 chart.append('g')
-    .attr("transform","translate (50,420)")
+    .attr("transform","translate (25,530)")
     .call(x_axis)
 
 chart.append('g')
-    .attr("transform","translate (50,70)")
+    .attr("transform","translate (25,30)")
     .call(y_axis)
