@@ -20,10 +20,21 @@ var bar = chart.selectAll("g")
     .data(data)
     .enter().append("g")
     .attr("transform", function(d,i) {
-        
-        return "translate(" + (100+i*10) + "," + "200" +")";
+        console.log("i",i);
+        return "translate(" + (100+i*10) + ",0)";
+    })
+    .selectAll("g")
+    .data( function(d,i) {return d;})
+    .enter().append("g")
+    .append("rect")
+    .attr("width",4)
+    .attr("height",4)
+    .attr("transform", function(d,i) {
+        console.log("j",i);
+        return "translate(0," + (200+i*10) +")";
+    })
+    .on("click", function(d) {
+         console.log(d);
     });
 
-bar.append("rect")
-   .attr("width",4)
-   .attr("height",4);
+console.log(bar);

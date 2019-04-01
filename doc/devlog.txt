@@ -30,3 +30,7 @@ tinaW -- 2019-03-31 11:17
 jasonL -- 2019-03-31 14:56
 - Made test data and organized it into groups
 - Started on the D3 representation of the data
+
+jasonL -- 2019-03-31 20:41
+- Display data based on the 2D array format
+- Added a click feature to show that each dot has its own data.
