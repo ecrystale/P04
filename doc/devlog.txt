@@ -18,19 +18,29 @@ P #04: Viz not to be confused with vis or vis-a-vis
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 emilyL -- 2019-03-26 13:08
+--------------------------------------------------------------
 - Update README.md to reflect out project
+==============================================================
 
 tinaW -- 2019-03-26 21:15
+--------------------------------------------------------------
 - Added to README.md to include D3 feature utilization
+==============================================================
 
 tinaW -- 2019-03-31 11:17
+--------------------------------------------------------------
 - Added flask starter kit
 - Added link to external javascript file and tested its functionality
+==============================================================
 
 jasonL -- 2019-03-31 14:56
+--------------------------------------------------------------
 - Made test data and organized it into groups
 - Started on the D3 representation of the data
+==============================================================
 
 jasonL -- 2019-03-31 20:41
+--------------------------------------------------------------
 - Display data based on the 2D array format
 - Added a click feature to show that each dot has its own data.
+==============================================================
