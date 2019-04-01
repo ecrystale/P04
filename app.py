@@ -42,7 +42,7 @@ all_data = [
 },
 "slug": "paper-mario-color-splash-wii-u",
 "buyitnow": "true",
-"release_date": "Oct 7, 2015",
+"release_date": "Apr 7, 2011",
 "digitaldownload": "false",
 "free_to_start": "false",
 "title": "Paper Mario: Color Splash",
@@ -62,7 +62,7 @@ all_data = [
 },
 "slug": "mario-and-sonic-at-the-rio-2016-olympic-games-wii-u",
 "buyitnow": "true",
-"release_date": "Jun 24, 2016",
+"release_date": "Sep 24, 2020",
 "digitaldownload": "false",
 "free_to_start": "false",
 "title": "Mario & Sonic at the Rio 2016 Olympic Games",
@@ -415,7 +415,7 @@ all_data = [
 "category": "Edutainment"
 },
 "buyitnow": "false",
-"release_date": "Jan 12, 2012",
+"release_date": "Jan 12, 2011",
 "front_box_art": "https://media.nintendo.com/nintendo/bin/AS78mFr0CjsTjLX0vfFQ6Y9K2BvhNZkr/v1hhqHHX0fcbcb5vpYtyGn8c3iep9JJE.jpg",
 "digitaldownload": "true",
 "game_code": "RVLNWAKE",
@@ -448,7 +448,54 @@ all_data = [
 },
 "buyitnow": "false",
 "video_link": "05OHc2NTqPAz8pAzarYA3Gf34OUai0r7",
-"release_date": "Jan 29, 2011",
+"release_date": "Jun 29, 2015",
+"front_box_art": "https://media.nintendo.com/nintendo/bin/QIiOA4IOs-JSPGbkVElY7s50m4-S7FO4/5VexYLkRVbh9KkQfNRWQakClKDeRMbwC.jpg",
+"digitaldownload": "true",
+"game_code": "RVLW3AE",
+"system": "Wii",
+"title": "Carmen Sandiego Adventures in Math: The Big Ben Burglary",
+"id": "HrutaFC934_8wjziYsH5fby3vubc6eXK"
+},
+{
+"number_of_players": "1 player",
+"categories": {
+"category": "Edutainment"
+},
+"buyitnow": "false",
+"release_date": "Jan 12, 2013",
+"front_box_art": "https://media.nintendo.com/nintendo/bin/AS78mFr0CjsTjLX0vfFQ6Y9K2BvhNZkr/v1hhqHHX0fcbcb5vpYtyGn8c3iep9JJE.jpg",
+"digitaldownload": "true",
+"game_code": "RVLNWAKE",
+"system": "Wii",
+"title": "Carmen Sandiego Adventures in Math: The Case of the Crumbling Cathedral",
+"id": "PEiyBVfEafqMdyIG-60d6VcH5HOUSy76"
+},
+{
+"number_of_players": "1 player",
+"categories": {
+"category": [
+"Action",
+"Adventure"
+]
+},
+"buyitnow": "false",
+"video_link": "EwaXFuajpqdV8elG8v9it-pyPqNZE10s",
+"release_date": "Dec 5, 2015",
+"front_box_art": "https://media.nintendo.com/nintendo/bin/QVEKt5EdJPA6GboIVUTaVp6FZtgbaIGc/5b7oNqCnD8d7n5_yCqkitGCm9tx7y_67.jpg",
+"digitaldownload": "true",
+"game_code": "RVLNWZAE",
+"system": "Wii",
+"title": "Zombii Attack",
+"id": "wSmaRwcJFGcWeZsOUiXS3FEJaWels6ho"
+},
+{
+"number_of_players": "up to 6 players",
+"categories": {
+"category": "Edutainment"
+},
+"buyitnow": "false",
+"video_link": "05OHc2NTqPAz8pAzarYA3Gf34OUai0r7",
+"release_date": "Nov 29, 2011",
 "front_box_art": "https://media.nintendo.com/nintendo/bin/QIiOA4IOs-JSPGbkVElY7s50m4-S7FO4/5VexYLkRVbh9KkQfNRWQakClKDeRMbwC.jpg",
 "digitaldownload": "true",
 "game_code": "RVLW3AE",
@@ -459,17 +506,17 @@ all_data = [
 ]
 print(len(all_data))
 sorted_data = []
-for i in range(40):
+for i in range(60):
     sorted_data.append([])
 
 month_dict = {
-"Jan": 0, "Feb": 0, "Mar": 0, "Apr": 1, "May": 1, "Jun": 1, "Jul": 2, "Aug": 2, "Sep": 2, "Oct": 3, "Nov": 3, "Dec": 3
+"Jan": 0, "Feb": 0, "Mar": 1, "Apr": 1, "May": 2, "Jun": 2, "Jul": 3, "Aug": 3, "Sep": 4, "Oct": 4, "Nov": 5, "Dec": 5
 }
 
 for game in all_data:
     # date_arr looks like ["month","day","year"]
     date_arr = game["release_date"].split()
-    new_index = month_dict[date_arr[0]] + 4*(int(date_arr[2]) - 2011)
+    new_index = month_dict[date_arr[0]] + 6*(int(date_arr[2]) - 2011)
     sorted_data[new_index].append(game)
 
 @app.route("/") #assign fxn to route

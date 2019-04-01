@@ -60,3 +60,9 @@ tinaW -- 2019-04-01 08:02
 --------------------------------------------------------------
 - Added front cover art display when hovering over boxes
 ==============================================================
+
+jasonL -- 2019-04-01 10:42
+--------------------------------------------------------------
+- Made boxes smaller and made it to scale
+- Made the data that display when hovering stay on svg.
+==============================================================
