@@ -44,3 +44,8 @@ jasonL -- 2019-03-31 20:41
 - Display data based on the 2D array format
 - Added a click feature to show that each dot has its own data.
 ==============================================================
+
+jasonL -- 2019-03-31 20:41
+--------------------------------------------------------------
+- Hovering over boxes will display data and highlight box
+==============================================================

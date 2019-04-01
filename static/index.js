@@ -20,21 +20,45 @@ var bar = chart.selectAll("g")
     .data(data)
     .enter().append("g")
     .attr("transform", function(d,i) {
-        console.log("i",i);
-        return "translate(" + (100+i*10) + ",0)";
+        return "translate(" + (25+i*30) + ",0)";
     })
     .selectAll("g")
     .data( function(d,i) {return d;})
     .enter().append("g")
     .append("rect")
-    .attr("width",4)
-    .attr("height",4)
+    .attr("width",20)
+    .attr("height",20)
+    .attr("fill","white")
+    .attr("stroke","black")
+    .attr("stroke-width",1)
     .attr("transform", function(d,i) {
-        console.log("j",i);
-        return "translate(0," + (200+i*10) +")";
+        return "translate(0," + (height-60-(i*20)) +")";
     })
+    .on("mouseover", handleHover)
+    .on("mouseout", handleUnhover)
     .on("click", function(d) {
          console.log(d);
     });
+//&#13;&#10;
+function handleHover(d,i) {
+    var x_col = d3.select(this.parentNode.parentNode).attr("transform").split("(")[1].split(",")[0];
+    var inner_x = d3.mouse(this)[0];
+    var x = parseInt(x_col) + parseInt(inner_x) + 25;
+    d3.select(this)
+      .attr("stroke","blue")
+      .attr("stroke-width",3);
+    // Maybe use a function
+    chart.append("text")
+         .attr("id",d.game_code)
+         .attr("transform", function (d){
+             return "translate(" + x + "," + (height/2) + ")";
+         })
+         .html(d.title + " | " + d.system + " | " + d.release_date);
+}
 
-console.log(bar);
+function handleUnhover(d,i) {
+    d3.select(this)
+      .attr("stroke","black")
+      .attr("stroke-width",1);
+    d3.select("#" + d.game_code).remove();
+}
