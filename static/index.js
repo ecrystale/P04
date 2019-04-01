@@ -17,7 +17,7 @@ Overall, there will be 40 bars (We can change it later if we want)
 */
 
 var x_scale = d3.scaleLinear()
-.domain([2010.9,2021.1])
+.domain([2008.9,2021.1])
     .range([0, 1210]);
 
 var y_scale = d3.scaleLinear()
