@@ -70,14 +70,13 @@ function handleHover(d,i) {
          .html(d.title + " | " + d.system + " | " + d.release_date);
 }
 
-<<<<<<< HEAD
 function handleUnhover(d,i) {
     d3.select(this)
       .attr("stroke","black")
       .attr("stroke-width",1);
     d3.select("#" + d.game_code).remove();
 }
-=======
+
 chart.append('g')
     .attr("transform","translate (50,420)")
     .call(x_axis)
@@ -85,6 +84,3 @@ chart.append('g')
 chart.append('g')
     .attr("transform","translate (50,70)")
     .call(y_axis)
-
-console.log(bar);
->>>>>>> e35b49d4e4beda4bc3741eb83bb24cc94510d4cc
