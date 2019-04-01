@@ -15,17 +15,6 @@ Each bar will take up 2 or 3 months (Ex. One bar can be Jan-March 2011, next one
 User can narrow down on time, console, genre, ...
 Overall, there will be 40 bars (We can change it later if we want)
 */
-// var y_scale = d3.scaleLinear()
-//     .domain([0,200])
-//     .range([0,500]);
-//
-// var yAxis = d3.axisLeft(y_scale);
-//
-// var x_scale = d3.scaleLinear()
-//     .domain([2011,2020])
-//     .range([0,1200]);
-//
-// var xAxis = d3.axisBottom(x_scale);
 
 var x_scale = d3.scaleLinear()
     .domain([2011,2020])
