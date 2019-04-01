@@ -70,6 +70,14 @@ function handleHover(d,i) {
              return "translate(" + x_result + "," + (height/2) + ")";
          })
          .html(d.title + " | " + d.system + " | " + d.release_date);
+    chart.append("svg:image")
+        .attr("id", "img")
+        .attr("transform", function (d){
+            return "translate(" + x_result + "," + (height/2) + ")";
+        })
+        .attr("xlink:href", d.front_box_art)
+        .attr("width", 100)
+        .attr("height", 200);
 }
 
 function handleUnhover(d,i) {
@@ -77,6 +85,7 @@ function handleUnhover(d,i) {
       .attr("stroke","black")
       .attr("stroke-width",1);
     d3.select("#" + d.game_code).remove();
+    d3.select("#img").remove();
 }
 
 chart.append('g')
