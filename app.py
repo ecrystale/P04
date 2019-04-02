@@ -548,7 +548,7 @@ def fyears():
     for i in range(60):
         sorted_data.append([])
     date=request.form["year"]
-    if int(date)>=2008 and int(date)<=2020:
+    if int(date)>=2006 and int(date)<=2020:
         for game in all_data:
             # date_arr looks like ["month","day","year"]
             date_arr = game["release_date"].split()
