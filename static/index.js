@@ -66,11 +66,11 @@ function handleHover(d,i) {
     var y_col = d3.select(this).attr("transform").split(",")[1].split(")")[0];//.attr("transform").split(",")[1].split(")")[0];
     var inner_y = d3.mouse(this)[1];
     var y_result = parseInt(y_col) + parseInt(inner_y) - 60;
-    if (y_result > 140){
-        y_result = 140;
+    if (y_result > 270){
+        y_result = 270;
     }
-    else if (y_result < 1){
-        y_result = 1;
+    else if (y_result < 135){
+        y_result = 135;
     }
     d3.select(this)
       .attr("stroke","blue")
@@ -78,7 +78,7 @@ function handleHover(d,i) {
     chart.append("rect")
             .attr("id", "border")
        			.attr("x", x_result)
-            .attr("y", y_result)
+            .attr("y", y_result-130)
        			.attr("height", 380)
        			.attr("width", 210 )
        			.style("stroke", 'black')
@@ -96,25 +96,25 @@ function handleHover(d,i) {
         chart.append("text")
              .attr("id",d.game_code)
              .attr("transform", function (d){
-                 return "translate(" + x_result + "," + (y_result+330) + ")";
+                 return "translate(" + x_result + "," + (y_result+200) + ")";
              })
              .html(d.title)
         chart.append("text")
              .attr("id",d.game_code)
              .attr("transform", function (d){
-                 return "translate(" + x_result + "," + (y_result+350) + ")";
+                 return "translate(" + x_result + "," + (y_result+220) + ")";
              })
              .html(d.system)
         chart.append("text")
              .attr("id",d.game_code)
              .attr("transform", function (d){
-                  return "translate(" + x_result + "," + (y_result+370) + ")";
+                  return "translate(" + x_result + "," + (y_result+240) + ")";
              })
              .html(d.release_date)
     }
     chart.append("svg:image")
         .attr("id", "img")
-        .attr("transform","translate(" + (x_result+5) + "," + (y_result+5) + ")")
+        .attr("transform","translate(" + (x_result+5) + "," + (y_result-125) + ")")
         .attr("xlink:href", d.front_box_art)
         .attr("width", 200)
         .attr("height", 300)
