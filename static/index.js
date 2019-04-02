@@ -34,7 +34,7 @@ var bar = chart.selectAll("g")
     .data(data)
     .enter().append("g")
     .attr("transform", function(d,i) {
-        return "translate(" + (40+i*19.7717) + ",0)";
+        return "translate(" + (40+i*10) + ",0)";
     })
     .selectAll("g")
     .data( function(d) {return d;})
@@ -43,12 +43,12 @@ var bar = chart.selectAll("g")
 
 var bar2 = bar.append("rect")
     .attr("width",15)
-    .attr("height",15)
+    .attr("height",10)
     .attr("fill","white")
     .attr("stroke","grey")
     .attr("stroke-width",1)
     .attr("transform", function(d,i) {
-        return "translate(0," + (height-60-(i*15)) +")";
+        return "translate(0," + (height-35-(i*10)) +")";
     })
     .on("mouseover", handleHover)
     .on("mouseout", handleUnhover)
@@ -67,12 +67,23 @@ function handleHover(d,i) {
       .attr("stroke","blue")
       .attr("stroke-width",2);
     // Maybe use a function
-    chart.append("text")
-         .attr("id",d.game_code)
-         .attr("transform", function (d){
-             return "translate(" + x_result + "," + (height/2) + ")";
-         })
-         .html(d.title + "<br><br>" + d.system + "<br><br>" + d.release_date);
+    if (!d.game_code){
+
+        chart.append("text")
+             .attr("id","weirdo")
+             .attr("transform", function (d){
+                 return "translate(" + x_result + "," + (height/2) + ")";
+             })
+             .html(d.title + "<br><br>" + d.system + "<br><br>" + d.release_date);
+    }
+    else {
+        chart.append("text")
+             .attr("id",d.game_code)
+             .attr("transform", function (d){
+                 return "translate(" + x_result + "," + (height/2) + ")";
+             })
+             .html(d.title + "<br><br>" + d.system + "<br><br>" + d.release_date);
+    }
     chart.append("svg:image")
         .attr("id", "img")
         .attr("transform", function (d){
@@ -87,7 +98,12 @@ function handleUnhover(d,i) {
     d3.select(this)
       .attr("stroke","gray")
       .attr("stroke-width",1);
-    d3.select("#" + d.game_code).remove();
+    if (!d.game_code){
+        d3.select("#weirdo").remove();
+    }
+    else {
+        d3.select("#" + d.game_code).remove();
+    }
     d3.select("#img").remove();
 }
 
