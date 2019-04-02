@@ -6,4 +6,8 @@
 <p class="bar_data" hidden>{{bar_data | tojson}}</p>
 <script src="http://d3js.org/d3.v5.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='index.js')}}"></script>
+<br>
+<form action="/filtyear" method="POST">
+      Year: <input type="text" name="year"><br>
+</form>
 {% endblock %}
