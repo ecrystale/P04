@@ -72,3 +72,11 @@ tinaW -- 2019-04-01 16:59
 - Updated README with LAUNCH CODES
 - Added border, but needs a lot of adjusting so it fits the text and image.
 ==============================================================
+
+emilyL -- 2019-04-01 22:30
+--------------------------------------------------------------
+- Created a text box in html for the year filter
+- Year filter shows only data from entered year (on a different page)
+- Else, all data is shown (default)
+- Added rough design.pdf - can be changed/adjusted
+==============================================================
