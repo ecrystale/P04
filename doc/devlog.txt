@@ -78,4 +78,12 @@ jasonL -- 2019-04-01 22:52
 - Made boxes even smaller.
 - Included all data
 - Adjusted image and border but still need to adjust text
+=======
+emilyL -- 2019-04-01 22:30
+--------------------------------------------------------------
+- Created a text box in html for the year filter
+- Year filter shows only data from entered year (on a different page)
+- Else, all data is shown (default)
+- Added rough design.pdf - can be changed/adjusted
+==============================================================
 ==============================================================
