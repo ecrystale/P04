@@ -32,14 +32,6 @@ for game in all_data:
 
 @app.route("/") #assign fxn to route
 def index():
-    sorted_data=[]
-    for i in range(90):
-        sorted_data.append([])
-    for game in all_data:
-    # date_arr looks like ["month","day","year"]
-        date_arr = game["release_date"].split()
-        new_index = month_dict[date_arr[0]] + 6*(int(date_arr[2]) - 2006)
-        sorted_data[new_index].append(game)
     return render_template('index.html', bar_data = sorted_data)
 
 @app.route("/filtyear", methods=["POST"])
