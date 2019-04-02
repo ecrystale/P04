@@ -21,8 +21,8 @@ var x_scale = d3.scaleLinear()
     .range([0, 1210]);
 
 var y_scale = d3.scaleLinear()
-    .domain([0,100])
-    .range([500,0]);
+    .domain([0,85])
+    .range([525,0]);
 
 var x_axis = d3.axisBottom()
     .scale(x_scale).tickFormat(d3.format("d")).ticks(17)
@@ -34,7 +34,7 @@ var bar = chart.selectAll("g")
     .data(data)
     .enter().append("g")
     .attr("transform", function(d,i) {
-        return "translate(" + (40+i*13.09524) + ",0)";
+        return "translate(" + (42+i*13.09524) + ",0)";
     })
     .selectAll("g")
     .data( function(d) {return d;})
@@ -48,7 +48,7 @@ var bar2 = bar.append("rect")
     .attr("stroke","grey")
     .attr("stroke-width",1)
     .attr("transform", function(d,i) {
-        return "translate(0," + (height-35-(i*6)) +")";
+        return "translate(0," + (height-29-(i*6)) +")";
     })
     .on("mouseover", handleHover)
     .on("mouseout", handleUnhover)
@@ -60,12 +60,18 @@ function handleHover(d,i) {
     var x_col = d3.select(this.parentNode.parentNode).attr("transform").split("(")[1].split(",")[0];
     var inner_x = d3.mouse(this)[0];
     var x_result = parseInt(x_col) + parseInt(inner_x) + 25;
-    if (x_result > 1000){
+    if (x_result > 1040){
         x_result -= 260;
     }
     var y_col = d3.select(this).attr("transform").split(",")[1].split(")")[0];//.attr("transform").split(",")[1].split(")")[0];
     var inner_y = d3.mouse(this)[1];
     var y_result = parseInt(y_col) + parseInt(inner_y) - 60;
+    if (y_result > 140){
+        y_result = 140;
+    }
+    else if (y_result < 1){
+        y_result = 1;
+    }
     d3.select(this)
       .attr("stroke","blue")
       .attr("stroke-width",2);
@@ -90,9 +96,21 @@ function handleHover(d,i) {
         chart.append("text")
              .attr("id",d.game_code)
              .attr("transform", function (d){
-                 return "translate(" + x_result + "," + (height/2) + ")";
+                 return "translate(" + x_result + "," + (y_result+330) + ")";
              })
-             .html(d.title + "<br><br>" + d.system + "<br><br>" + d.release_date);
+             .html(d.title)
+        chart.append("text")
+             .attr("id",d.game_code)
+             .attr("transform", function (d){
+                 return "translate(" + x_result + "," + (y_result+350) + ")";
+             })
+             .html(d.system)
+        chart.append("text")
+             .attr("id",d.game_code)
+             .attr("transform", function (d){
+                  return "translate(" + x_result + "," + (y_result+370) + ")";
+             })
+             .html(d.release_date)
     }
     chart.append("svg:image")
         .attr("id", "img")
@@ -108,10 +126,10 @@ function handleUnhover(d,i) {
       .attr("stroke","gray")
       .attr("stroke-width",1);
     if (!d.game_code){
-        d3.select("#weirdo").remove();
+        d3.selectAll("#weirdo").remove();
     }
     else {
-        d3.select("#" + d.game_code).remove();
+        d3.selectAll("#" + d.game_code).remove();
     }
     d3.select("#img").remove();
     d3.select("#border").remove();
@@ -122,5 +140,5 @@ chart.append('g')
     .call(x_axis)
 
 chart.append('g')
-    .attr("transform","translate (25,30)")
+    .attr("transform","translate (25,5)")
     .call(y_axis)

@@ -73,12 +73,6 @@ tinaW -- 2019-04-01 16:59
 - Added border, but needs a lot of adjusting so it fits the text and image.
 ==============================================================
 
-jasonL -- 2019-04-01 22:52
---------------------------------------------------------------
-- Made boxes even smaller.
-- Included all data
-- Adjusted image and border but still need to adjust text
-=======
 emilyL -- 2019-04-01 22:30
 --------------------------------------------------------------
 - Created a text box in html for the year filter
@@ -86,4 +80,16 @@ emilyL -- 2019-04-01 22:30
 - Else, all data is shown (default)
 - Added rough design.pdf - can be changed/adjusted
 ==============================================================
+
+jasonL -- 2019-04-01 22:52
+--------------------------------------------------------------
+- Made boxes even smaller.
+- Included all data
+- Adjusted image and border but still need to adjust text
+==============================================================
+
+jasonL -- 2019-04-02 10:17
+--------------------------------------------------------------
+- Aligned text with images but need a way to wrap text
+- Changed scaling of y axis
 ==============================================================
