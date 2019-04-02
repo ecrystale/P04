@@ -17,7 +17,7 @@ Overall, there will be 40 bars (We can change it later if we want)
 */
 
 var x_scale = d3.scaleLinear()
-.domain([2008.9,2021.1])
+.domain([2005.8,2021.2])
     .range([0, 1210]);
 
 var y_scale = d3.scaleLinear()
@@ -25,7 +25,7 @@ var y_scale = d3.scaleLinear()
     .range([500,0]);
 
 var x_axis = d3.axisBottom()
-    .scale(x_scale).tickFormat(d3.format("d"))
+    .scale(x_scale).tickFormat(d3.format("d")).ticks(17)
 
 var y_axis = d3.axisLeft()
     .scale(y_scale)
@@ -34,7 +34,7 @@ var bar = chart.selectAll("g")
     .data(data)
     .enter().append("g")
     .attr("transform", function(d,i) {
-        return "translate(" + (40+i*10) + ",0)";
+        return "translate(" + (40+i*13.09524) + ",0)";
     })
     .selectAll("g")
     .data( function(d) {return d;})
@@ -42,13 +42,13 @@ var bar = chart.selectAll("g")
 // console.log(bar);
 
 var bar2 = bar.append("rect")
-    .attr("width",15)
-    .attr("height",10)
+    .attr("width",11)
+    .attr("height",6)
     .attr("fill","white")
     .attr("stroke","grey")
     .attr("stroke-width",1)
     .attr("transform", function(d,i) {
-        return "translate(0," + (height-35-(i*10)) +")";
+        return "translate(0," + (height-35-(i*6)) +")";
     })
     .on("mouseover", handleHover)
     .on("mouseout", handleUnhover)
@@ -60,15 +60,25 @@ function handleHover(d,i) {
     var x_col = d3.select(this.parentNode.parentNode).attr("transform").split("(")[1].split(",")[0];
     var inner_x = d3.mouse(this)[0];
     var x_result = parseInt(x_col) + parseInt(inner_x) + 25;
-    if (x_result > 900){
-        x_result -= 300;
+    if (x_result > 1000){
+        x_result -= 260;
     }
+    var y_col = d3.select(this).attr("transform").split(",")[1].split(")")[0];//.attr("transform").split(",")[1].split(")")[0];
+    var inner_y = d3.mouse(this)[1];
+    var y_result = parseInt(y_col) + parseInt(inner_y) - 60;
     d3.select(this)
       .attr("stroke","blue")
       .attr("stroke-width",2);
-    // Maybe use a function
+    chart.append("rect")
+            .attr("id", "border")
+       			.attr("x", x_result)
+            .attr("y", y_result)
+       			.attr("height", 380)
+       			.attr("width", 210 )
+       			.style("stroke", 'black')
+       			.style("fill", "white")
+       			.style("stroke-width", border);
     if (!d.game_code){
-
         chart.append("text")
              .attr("id","weirdo")
              .attr("transform", function (d){
@@ -84,23 +94,13 @@ function handleHover(d,i) {
              })
              .html(d.title + "<br><br>" + d.system + "<br><br>" + d.release_date);
     }
-    chart.append("rect")
-            .attr("id", "border")
-       			.attr("x", x_result-5)
-            .attr("y", height/2 - 15)
-       			.attr("height", height / 3)
-       			.attr("width", width / 3)
-       			.style("stroke", 'black')
-       			.style("fill", "white")
-       			.style("stroke-width", border);
     chart.append("svg:image")
         .attr("id", "img")
-        .attr("transform", function (d){
-            return "translate(" + x_result + "," + (height/2) + ")";
-        })
+        .attr("transform","translate(" + (x_result+5) + "," + (y_result+5) + ")")
         .attr("xlink:href", d.front_box_art)
-        .attr("width", 100)
-        .attr("height", 200);
+        .attr("width", 200)
+        .attr("height", 300)
+        .attr("preserveAspectRatio","none");
 }
 
 function handleUnhover(d,i) {
