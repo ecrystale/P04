@@ -93,3 +93,8 @@ jasonL -- 2019-04-02 10:17
 - Aligned text with images but need a way to wrap text
 - Changed scaling of y axis
 ==============================================================
+
+jasonL -- 2019-04-02 14:10
+--------------------------------------------------------------
+- Aligned text and made the box expand dynamically
+==============================================================

@@ -57,6 +57,9 @@ var bar2 = bar.append("rect")
     });
 
 function handleHover(d,i) {
+    var titleText = createText(18, d.title);
+    var offset = (titleText.length-1) * 20;
+
     var x_col = d3.select(this.parentNode.parentNode).attr("transform").split("(")[1].split(",")[0];
     var inner_x = d3.mouse(this)[0];
     var x_result = parseInt(x_col) + parseInt(inner_x) + 25;
@@ -66,8 +69,8 @@ function handleHover(d,i) {
     var y_col = d3.select(this).attr("transform").split(",")[1].split(")")[0];//.attr("transform").split(",")[1].split(")")[0];
     var inner_y = d3.mouse(this)[1];
     var y_result = parseInt(y_col) + parseInt(inner_y) - 60;
-    if (y_result > 270){
-        y_result = 270;
+    if (y_result > 270-offset){
+        y_result = 270-offset;
     }
     else if (y_result < 135){
         y_result = 135;
@@ -79,28 +82,22 @@ function handleHover(d,i) {
             .attr("id", "border")
        			.attr("x", x_result)
             .attr("y", y_result-130)
-       			.attr("height", 380)
+       			.attr("height", 380+offset)
        			.attr("width", 210 )
        			.style("stroke", 'black')
        			.style("fill", "white")
        			.style("stroke-width", border);
-    addText(chart,25,d.title)
+    addText(chart,titleText,x_result+5,y_result+200)
     chart.append("text")
          .attr("id","popup")
          .attr("transform", function (d){
-             return "translate(" + (x_result+5) + "," + (y_result+200) + ")";
-         })
-         .html(d.title)
-    chart.append("text")
-         .attr("id","popup")
-         .attr("transform", function (d){
-             return "translate(" + (x_result+5) + "," + (y_result+220) + ")";
+             return "translate(" + (x_result+5) + "," + (y_result+offset+220) + ")";
          })
          .html(d.system)
     chart.append("text")
          .attr("id","popup")
          .attr("transform", function (d){
-              return "translate(" + (x_result+5) + "," + (y_result+240) + ")";
+              return "translate(" + (x_result+5) + "," + (y_result+offset+240) + ")";
          })
          .html(d.release_date)
     chart.append("svg:image")
@@ -129,7 +126,7 @@ chart.append('g')
     .attr("transform","translate (25,5)")
     .call(y_axis)
 
-var addText = (chart, maxLength, text, id) => {
+var createText = (maxLength,text) => {
     var words = text.split(" ");
     var outputText = [];
     var curLine = [];
@@ -145,11 +142,22 @@ var addText = (chart, maxLength, text, id) => {
         lineLength += words[i].length;
     }
     outputText.push(curLine);
+    return outputText;
+}
 
+var addText = (chart, outputText, x, y) => {
+    console.log(outputText);
     for (i=0; i<outputText.length; i++){
         var j;
+        var line = "";
         for (j=0; j<outputText[i].length; j++){
-            
+            line += outputText[i][j] + " ";
         }
+        chart.append("text")
+             .attr("id","popup")
+             .attr("transform", function (data){
+                 return "translate(" + x + "," + (y+i*20) + ")";
+             })
+             .html(line)
     }
 }
