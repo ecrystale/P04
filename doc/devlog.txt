@@ -70,4 +70,5 @@ jasonL -- 2019-04-01 10:42
 tinaW -- 2019-04-01 16:59
 --------------------------------------------------------------
 - Updated README with LAUNCH CODES
+- Added border, but needs a lot of adjusting so it fits the text and image.
 ==============================================================

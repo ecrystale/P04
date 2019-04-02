@@ -67,6 +67,15 @@ function handleHover(d,i) {
       .attr("stroke","blue")
       .attr("stroke-width",2);
     // Maybe use a function
+    chart.append("rect")
+            .attr("id", "border")
+       			.attr("x", x_result-5)
+            .attr("y", height/2 - 15)
+       			.attr("height", height / 3)
+       			.attr("width", width / 3)
+       			.style("stroke", 'black')
+       			.style("fill", "white")
+       			.style("stroke-width", border);
     chart.append("text")
          .attr("id",d.game_code)
          .attr("transform", function (d){
@@ -89,6 +98,7 @@ function handleUnhover(d,i) {
       .attr("stroke-width",1);
     d3.select("#" + d.game_code).remove();
     d3.select("#img").remove();
+    d3.select("#border").remove();
 }
 
 chart.append('g')
