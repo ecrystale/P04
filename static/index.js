@@ -17,7 +17,7 @@ Overall, there will be 40 bars (We can change it later if we want)
 */
 
 var x_scale = d3.scaleLinear()
-.domain([2010.9,2021.1])
+.domain([2008.9,2021.1])
     .range([0, 1210]);
 
 var y_scale = d3.scaleLinear()
@@ -84,6 +84,15 @@ function handleHover(d,i) {
              })
              .html(d.title + "<br><br>" + d.system + "<br><br>" + d.release_date);
     }
+    chart.append("rect")
+            .attr("id", "border")
+       			.attr("x", x_result-5)
+            .attr("y", height/2 - 15)
+       			.attr("height", height / 3)
+       			.attr("width", width / 3)
+       			.style("stroke", 'black')
+       			.style("fill", "white")
+       			.style("stroke-width", border);
     chart.append("svg:image")
         .attr("id", "img")
         .attr("transform", function (d){
@@ -105,6 +114,7 @@ function handleUnhover(d,i) {
         d3.select("#" + d.game_code).remove();
     }
     d3.select("#img").remove();
+    d3.select("#border").remove();
 }
 
 chart.append('g')

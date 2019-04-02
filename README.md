@@ -33,3 +33,17 @@ A example of data visualization that is similar to what we want to have can be f
 ### Sketch
 Sketch:
 ![alt text](sketch.jpg "Title")
+
+### LAUNCH CODES
+1. First, clone this repository:
+```
+$ git clone https://github.com/ecrystale/P04.git
+```
+2. Next, change your directory to go into your local copy of the repository:
+```
+$ cd P04
+```
+3. Now, activate your virtual environment and run the python file to start the Flask server:
+```
+(venv) $ python3 app.py
+```

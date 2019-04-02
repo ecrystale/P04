@@ -66,3 +66,9 @@ jasonL -- 2019-04-01 10:42
 - Made boxes smaller and made it to scale
 - Made the data that display when hovering stay on svg.
 ==============================================================
+
+tinaW -- 2019-04-01 16:59
+--------------------------------------------------------------
+- Updated README with LAUNCH CODES
+- Added border, but needs a lot of adjusting so it fits the text and image.
+==============================================================
