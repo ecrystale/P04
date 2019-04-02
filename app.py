@@ -24,31 +24,28 @@ month_dict = {
 "Jan": 0, "Feb": 0, "Mar": 1, "Apr": 1, "May": 2, "Jun": 2, "Jul": 3, "Aug": 3, "Sep": 4, "Oct": 4, "Nov": 5, "Dec": 5
 }
 
-<<<<<<< HEAD
 for game in all_data:
     # date_arr looks like ["month","day","year"]
     date_arr = game["release_date"].split()
     new_index = month_dict[date_arr[0]] + 6*(int(date_arr[2]) - 2006)
     sorted_data[new_index].append(game)
 
-=======
->>>>>>> 1f3d22099f49774fd72d48e4fbd3ec3128754963
 @app.route("/") #assign fxn to route
 def index():
     sorted_data=[]
-    for i in range(60):
+    for i in range(90):
         sorted_data.append([])
     for game in all_data:
     # date_arr looks like ["month","day","year"]
         date_arr = game["release_date"].split()
-        new_index = month_dict[date_arr[0]] + 6*(int(date_arr[2]) - 2011)
+        new_index = month_dict[date_arr[0]] + 6*(int(date_arr[2]) - 2006)
         sorted_data[new_index].append(game)
     return render_template('index.html', bar_data = sorted_data)
 
 @app.route("/filtyear", methods=["POST"])
 def fyears():
     sorted_data=[]
-    for i in range(60):
+    for i in range(90):
         sorted_data.append([])
     date=request.form["year"]
     if int(date)>=2006 and int(date)<=2020:
@@ -56,7 +53,7 @@ def fyears():
             # date_arr looks like ["month","day","year"]
             date_arr = game["release_date"].split()
             if date_arr[2]==date:
-                   new_index = month_dict[date_arr[0]] + 6*(int(date_arr[2]) - 2011)
+                   new_index = month_dict[date_arr[0]] + 6*(int(date_arr[2]) - 2006)
                    sorted_data[new_index].append(game)
         return render_template('index.html', bar_data = sorted_data)
     return redirect(url_for("index"))
