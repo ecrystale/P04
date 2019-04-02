@@ -34,7 +34,7 @@ var bar = chart.selectAll("g")
     .data(data)
     .enter().append("g")
     .attr("transform", function(d,i) {
-        return "translate(" + (42+i*13.09524) + ",0)";
+        return "translate(" + (43+i*13.09524) + ",0)";
     })
     .selectAll("g")
     .data( function(d) {return d;})
@@ -42,7 +42,7 @@ var bar = chart.selectAll("g")
 // console.log(bar);
 
 var bar2 = bar.append("rect")
-    .attr("width",11)
+    .attr("width",8.667)
     .attr("height",6)
     .attr("fill","white")
     .attr("stroke","grey")
@@ -55,7 +55,7 @@ var bar2 = bar.append("rect")
     .on("click", function(d) {
          console.log(d);
     });
-//&#13;&#10;
+
 function handleHover(d,i) {
     var x_col = d3.select(this.parentNode.parentNode).attr("transform").split("(")[1].split(",")[0];
     var inner_x = d3.mouse(this)[0];
@@ -84,34 +84,25 @@ function handleHover(d,i) {
        			.style("stroke", 'black')
        			.style("fill", "white")
        			.style("stroke-width", border);
-    if (!d.game_code){
-        chart.append("text")
-             .attr("id","weirdo")
-             .attr("transform", function (d){
-                 return "translate(" + x_result + "," + (height/2) + ")";
-             })
-             .html(d.title + "<br><br>" + d.system + "<br><br>" + d.release_date);
-    }
-    else {
-        chart.append("text")
-             .attr("id",d.game_code)
-             .attr("transform", function (d){
-                 return "translate(" + x_result + "," + (y_result+200) + ")";
-             })
-             .html(d.title)
-        chart.append("text")
-             .attr("id",d.game_code)
-             .attr("transform", function (d){
-                 return "translate(" + x_result + "," + (y_result+220) + ")";
-             })
-             .html(d.system)
-        chart.append("text")
-             .attr("id",d.game_code)
-             .attr("transform", function (d){
-                  return "translate(" + x_result + "," + (y_result+240) + ")";
-             })
-             .html(d.release_date)
-    }
+    addText(chart,25,d.title)
+    chart.append("text")
+         .attr("id","popup")
+         .attr("transform", function (d){
+             return "translate(" + (x_result+5) + "," + (y_result+200) + ")";
+         })
+         .html(d.title)
+    chart.append("text")
+         .attr("id","popup")
+         .attr("transform", function (d){
+             return "translate(" + (x_result+5) + "," + (y_result+220) + ")";
+         })
+         .html(d.system)
+    chart.append("text")
+         .attr("id","popup")
+         .attr("transform", function (d){
+              return "translate(" + (x_result+5) + "," + (y_result+240) + ")";
+         })
+         .html(d.release_date)
     chart.append("svg:image")
         .attr("id", "img")
         .attr("transform","translate(" + (x_result+5) + "," + (y_result-125) + ")")
@@ -125,12 +116,7 @@ function handleUnhover(d,i) {
     d3.select(this)
       .attr("stroke","gray")
       .attr("stroke-width",1);
-    if (!d.game_code){
-        d3.selectAll("#weirdo").remove();
-    }
-    else {
-        d3.selectAll("#" + d.game_code).remove();
-    }
+    d3.selectAll("#popup").remove();
     d3.select("#img").remove();
     d3.select("#border").remove();
 }
@@ -142,3 +128,28 @@ chart.append('g')
 chart.append('g')
     .attr("transform","translate (25,5)")
     .call(y_axis)
+
+var addText = (chart, maxLength, text, id) => {
+    var words = text.split(" ");
+    var outputText = [];
+    var curLine = [];
+    var i;
+    var lineLength = 0;
+    for (i=0; i<words.length; i++){
+        if (lineLength + words[i].length > maxLength){
+            outputText.push(curLine);
+            curLine = [];
+            lineLength = 0;
+        }
+        curLine.push(words[i]);
+        lineLength += words[i].length;
+    }
+    outputText.push(curLine);
+
+    for (i=0; i<outputText.length; i++){
+        var j;
+        for (j=0; j<outputText[i].length; j++){
+            
+        }
+    }
+}
