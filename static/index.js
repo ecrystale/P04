@@ -170,38 +170,48 @@ display(cur_data);
 
 document.getElementById("filter").addEventListener("click",(e)=>{
     var yearFilter = document.getElementById("year").value;
+
     cur_data = []
     var i;
     for (i=0; i<all_data.length; i++){
         filteredCol = [];
         for (j=0; j<all_data[i].length; j++){
-            curGame = all_data[i][j]
-            curYear = curGame.release_date.split(" ")[2];
-            if (curYear == yearFilter){
+	    curGame = all_data[i][j]
+	    curYear = curGame.release_date.split(" ")[2];
+	    if(yearFilter=="ally"){
                 filteredCol.push(curGame);
-            }
+
+	    }
+	    if (curYear == yearFilter){
+                filteredCol.push(curGame);
+	    }
         }
         cur_data.push(filteredCol);
     }
     console.log(cur_data);
     display(cur_data)
+    
 });
 
 document.getElementById("system_filter").addEventListener("click",(e)=>{
     var systemFilter = document.getElementById("system").value;
+
     cur_data = []
     var i;
     for (i=0; i<all_data.length; i++){
         filteredCol = [];
         for (j=0; j<all_data[i].length; j++){
-            curGame = all_data[i][j]
-            curSystem = curGame.system;
-            if (curSystem == systemFilter){
+	    curGame = all_data[i][j]
+	    curSystem = curGame.system;
+	    if(systemFilter=="alls"){
                 filteredCol.push(curGame);
-            }
+	    }
+	    if (curSystem == systemFilter){
+                filteredCol.push(curGame);
+	    }
         }
         cur_data.push(filteredCol);
     }
     console.log(cur_data);
-    display(cur_data)
+    display(cur_data) 
 });

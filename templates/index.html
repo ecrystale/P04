@@ -3,6 +3,7 @@
 {% block title %} NinTimeDo {% endblock %}
 {% block content %}
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='index.css') }}">
+<center><h1>NinTimeDo -- Nintendo Game Timeline</h1></center>
 <svg class="chart"></svg>
 <p class="bar_data" hidden>{{bar_data | tojson}}</p>
 <div class="filter_menu">
@@ -12,6 +13,7 @@
       <td>
         Year:
         <select id="year">
+          <option value="ally">All</option>
           <option value="2006">2006</option>
           <option value="2007">2007</option>
           <option value="2008">2008</option>
@@ -34,6 +36,7 @@
       <td>
         System:
         <select id="system">
+          <option value="alls">All</option>
           <option value="Nintendo 3DS">Nintendo 3DS</option>
           <option value="Nintendo DS">Nintendo DS</option>
           <option value="Nintendo Switch">Nintendo Switch</option>
@@ -48,4 +51,6 @@
 </div>
 <script src="http://d3js.org/d3.v5.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='index.js')}}"></script>
+<br><hr>
+&copy; Team calm-squid-salsa
 {% endblock %}
