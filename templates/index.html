@@ -3,7 +3,7 @@
 {% block title %} NinTimeDo {% endblock %}
 {% block content %}
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='index.css') }}">
-<center><h1>NinTimeDo -- Nintendo Game Timeline</h1></center>
+<h1>NinTimeDo &#8212; Nintendo Game Timeline</h1>
 <svg class="chart"></svg>
 <p class="bar_data" hidden>{{bar_data | tojson}}</p>
 <div class="filter_menu">
@@ -52,5 +52,7 @@
 <script src="http://d3js.org/d3.v5.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='index.js')}}"></script>
 <br><hr>
-&copy; Team calm-squid-salsa
+<footer>
+  &copy; Team calm-squid-salsa
+</footer>
 {% endblock %}

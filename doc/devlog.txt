@@ -108,4 +108,5 @@ tinaW -- 2019-04-02 20:18
 --------------------------------------------------------------
 - Added filtering by system
 - Started own css file to align filtering table
+- Updated css colors
 ==============================================================

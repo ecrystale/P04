@@ -88,7 +88,7 @@ function handleHover(d,i) {
         y_result = 135;
     }
     d3.select(this)
-      .attr("stroke","blue")
+      .attr("stroke","turquoise")
       .attr("stroke-width",2);
     chart.append("rect")
          .attr("id", "border")
@@ -190,7 +190,7 @@ document.getElementById("filter").addEventListener("click",(e)=>{
     }
     console.log(cur_data);
     display(cur_data)
-    
+
 });
 
 document.getElementById("system_filter").addEventListener("click",(e)=>{
@@ -213,5 +213,5 @@ document.getElementById("system_filter").addEventListener("click",(e)=>{
         cur_data.push(filteredCol);
     }
     console.log(cur_data);
-    display(cur_data) 
+    display(cur_data)
 });
