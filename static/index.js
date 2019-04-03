@@ -186,3 +186,22 @@ document.getElementById("filter").addEventListener("click",(e)=>{
     console.log(cur_data);
     display(cur_data)
 });
+
+document.getElementById("system_filter").addEventListener("click",(e)=>{
+    var systemFilter = document.getElementById("system").value;
+    cur_data = []
+    var i;
+    for (i=0; i<all_data.length; i++){
+        filteredCol = [];
+        for (j=0; j<all_data[i].length; j++){
+            curGame = all_data[i][j]
+            curSystem = curGame.system;
+            if (curSystem == systemFilter){
+                filteredCol.push(curGame);
+            }
+        }
+        cur_data.push(filteredCol);
+    }
+    console.log(cur_data);
+    display(cur_data)
+});

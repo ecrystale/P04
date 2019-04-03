@@ -22,9 +22,19 @@ Year:
   <option value="2018">2018</option>
   <option value="2019">2019</option>
   <option value="2020">2020</option>
-</select><br>
-<button id="filter">Filter</button>
+</select>
 
+System:
+<select id="system">
+  <option value="Nintendo 3DS">Nintendo 3DS</option>
+  <option value="Nintendo DS">Nintendo DS</option>
+  <option value="Nintendo Switch">Nintendo Switch</option>
+  <option value="Wii U">Wii U</option>
+  <option value="Wii">Wii</option>
+</select>
+<br>
+<button id="filter">Filter by Year</button>
+<button id="system_filter">Filter by System</button>
 <script src="http://d3js.org/d3.v5.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='index.js')}}"></script>
 {% endblock %}
