@@ -1,0 +1,13 @@
+.filter_menu {
+  width: 100%;
+}
+table {
+  margin: 0 auto;
+  border-style: double;
+  border-collapse: separate;
+  border-spacing: 5px;
+}
+td {
+  text-align: center;
+
+}
