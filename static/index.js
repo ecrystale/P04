@@ -58,7 +58,7 @@ var display = (data) => {
                   .on("click", function(d) {
                       console.log(d);
                   });
-
+                  
     chart.append('g')
          .attr("transform","translate (25,530)")
          .call(x_axis)

@@ -1,7 +1,15 @@
+html {
+        background: url('/static/nintendo.jpg') no-repeat center fixed;
+        background-size: cover;
+    }
 h1 {
   text-align: center;
   font-family: Tahoma, sans-serif;
-  color: #696969;
+  color: #FFFFFF;
+  text-shadow: -1px 1px 0 #000,
+				  1px 1px 0 #000,
+				 1px -1px 0 #000,
+				-1px -1px 0 #000;
 }
 .filter_menu {
   width: 100%;
@@ -11,10 +19,15 @@ table {
   border-style: double;
   border-collapse: separate;
   border-spacing: 5px;
+  background-color: white;
 }
 td {
   text-align: center;
 }
 footer {
   text-align: center;
+  color: white;
+}
+.chart {
+  color: white;
 }
