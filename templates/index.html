@@ -4,7 +4,6 @@
 {% block content %}
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='index.css') }}">
 <h1>NinTimeDo &#8212; Nintendo Game Timeline</h1>
-<!-- <img src="/static/nintendo.jpg"> -->
 <svg class="chart"></svg>
 <p class="bar_data" hidden>{{bar_data | tojson}}</p>
 <div class="filter_menu">

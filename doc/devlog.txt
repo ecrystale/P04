@@ -122,16 +122,21 @@ emilyL -- 2019-04-02 21:05
 - titles on page / team name
 ==============================================================
 
-tinaW -- 2019-04-02 13:24
+tinaW -- 2019-04-04 13:24
 --------------------------------------------------------------
 - Added background image, and adjusted css colors
 - Need to change the opacity of the image for the axes to appear clearer
 ==============================================================
 
-emilyL -- 2019-04-02 22:56
+emilyL -- 2019-04-04 22:56
 --------------------------------------------------------------
 - Changing the colors of the boxes based off prices
 - Undefined prices are white
 - Prices between 0 and 10 are pink
 - Prices over 10 are red
+==============================================================
+
+tinaW -- 2019-04-05 00:36
+--------------------------------------------------------------
+- Added background opacity and outlined the chart axes and footer
 ==============================================================
