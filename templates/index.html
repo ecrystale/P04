@@ -3,7 +3,7 @@
 {% block title %} NinTimeDo {% endblock %}
 {% block content %}
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='index.css') }}">
-<h1>NinTimeDo &#8212; Nintendo Game Timeline</h1>
+<h1 style = "margin:0px">NinTimeDo &#8212; Nintendo Game Timeline</h1>
 <svg class="chart"></svg>
 <p class="bar_data" hidden>{{bar_data | tojson}}</p>
 <div class="filter_menu">
@@ -31,7 +31,6 @@
           <option value="2020">2020</option>
         </select>
         <br>
-        <button id="filter">Filter by Year</button>
       </td>
       <td>
         System:
@@ -44,8 +43,12 @@
           <option value="Wii">Wii</option>
         </select>
         <br>
-        <button id="system_filter">Filter by System</button>
       </td>
+    </tr>
+    <tr>
+        <td>
+            <button id="filter">Filter by Year</button>
+        </td>
     </tr>
   </table>
 </div>

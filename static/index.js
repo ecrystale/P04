@@ -178,50 +178,23 @@ display(cur_data);
 
 document.getElementById("filter").addEventListener("click",(e)=>{
     var yearFilter = document.getElementById("year").value;
-    if (yearFilter == "ally"){
-        display(all_data);
-    }
-    else {
-        var temp_data = []
-        var i;
-        for (i=0; i<cur_data.length; i++){
-            filteredCol = [];
-            for (j=0; j<cur_data[i].length; j++){
-                curGame = cur_data[i][j]
-                curYear = curGame.release_date.split(" ")[2];
-                if (curYear == yearFilter){
-                    filteredCol.push(curGame);
-                }
-            }
-            temp_data.push(filteredCol);
-        }
-        cur_data = temp_data;
-        console.log(cur_data);
-        display(cur_data)
-    }
-});
-
-document.getElementById("system_filter").addEventListener("click",(e)=>{
     var systemFilter = document.getElementById("system").value;
-    if (systemFilter == "alls"){
-        display(all_data);
-    }
-    else {
-        temp_data = []
-        var i;
-        for (i=0; i<cur_data.length; i++){
-            filteredCol = [];
-            for (j=0; j<cur_data[i].length; j++){
-                curGame = cur_data[i][j]
-                curSystem = curGame.system;
-                if (curSystem == systemFilter){
-                    filteredCol.push(curGame);
-                }
+    var temp_data = []
+    var i;
+    for (i=0; i<all_data.length; i++){
+        filteredCol = [];
+        for (j=0; j<all_data[i].length; j++){
+            curGame = all_data[i][j]
+            curYear = curGame.release_date.split(" ")[2];
+            curSystem = curGame.system;
+            if ((curYear == yearFilter || yearFilter === "ally") &&
+                (curSystem == systemFilter || systemFilter === "alls")) {
+                filteredCol.push(curGame);
             }
-            temp_data.push(filteredCol);
         }
-        cur_data = temp_data;
-        console.log(cur_data);
-        display(cur_data)
+        temp_data.push(filteredCol);
     }
+    cur_data = temp_data;
+    console.log(cur_data);
+    display(cur_data)
 });
