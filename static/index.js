@@ -48,13 +48,39 @@ var display = (data) => {
         .attr("width",8.667)
         .attr("height",6)
         .attr("fill", function(d){
-	    if (d.eshop_price>10){
-		return "red"
-	    }
-	    if (d.eshop_price>0){
-		return "pink"
-	    }
-	    return "white"
+        if (d.eshop_price > 80){
+          return "#000000"
+  	    }
+        else if (d.eshop_price > 80){
+          return "#330000"
+  	    }
+        else if (Number(d.eshop_price) > 70){
+          return "#660000"
+  	    }
+        else if (Number(d.eshop_price) > 60){
+          return "#990000"
+  	    }
+        else if (Number(d.eshop_price) > 50){
+          return "#cc0000"
+  	    }
+        else if (Number(d.eshop_price) > 40){
+          return "#ff0000"
+  	    }
+        else if (Number(d.eshop_price) > 30){
+          return "#ff3333"
+  	    }
+  	    else if (Number(d.eshop_price)> 20){
+          return "#ff6666"
+  	    }
+        else if (Number(d.eshop_price) > 10) {
+          return "#ff9999"
+        }
+  	    else if (Number(d.eshop_price) > 0){
+  		     return "#ffcccc"
+  	    }
+        else {
+            return "white"
+        }
 	})
         .attr("stroke","grey")
         .attr("stroke-width",1)
