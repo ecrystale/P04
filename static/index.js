@@ -9,63 +9,71 @@ var all_data = JSON.parse(document.getElementsByClassName("bar_data")[0].innerHT
 // console.log(data)
 var cur_data = all_data;
 /**
-Some Notes:
-X-Axis will go from January 1, 2011 to December 31, 2020
-Each bar will take up 2 or 3 months (Ex. One bar can be Jan-March 2011, next one can be April-June 2011)
-User can narrow down on time, console, genre, ...
-Overall, there will be 40 bars (We can change it later if we want)
+   Some Notes:
+   X-Axis will go from January 1, 2011 to December 31, 2020
+   Each bar will take up 2 or 3 months (Ex. One bar can be Jan-March 2011, next one can be April-June 2011)
+   User can narrow down on time, console, genre, ...
+   Overall, there will be 40 bars (We can change it later if we want)
 */
 
 var display = (data) => {
     var x_scale = d3.scaleLinear()
-                    .domain([2005.8,2021.2])
-                    .range([0, 1210]);
+        .domain([2005.8,2021.2])
+        .range([0, 1210]);
 
     var y_scale = d3.scaleLinear()
-                    .domain([0,85])
-                    .range([525,0]);
+        .domain([0,85])
+        .range([525,0]);
 
     var x_axis = d3.axisBottom()
-                   .scale(x_scale).tickFormat(d3.format("d")).ticks(17)
+        .scale(x_scale).tickFormat(d3.format("d")).ticks(17)
 
     var y_axis = d3.axisLeft()
-                   .scale(y_scale)
+        .scale(y_scale)
     // d3.select(".chart").innerHTML = "";
     var bar = chart.selectAll("g")
-                   .remove()
-                   .exit()
-                   .data(data)
-                   .enter().append("g")
-                   .attr("transform", function(d,i) {
-                       return "translate(" + (43+i*13.09524) + ",0)";
-                   })
-                   .selectAll("g")
-                   .data( function(d) {return d;})
-                   .enter().append("g")
+        .remove()
+        .exit()
+        .data(data)
+        .enter().append("g")
+        .attr("transform", function(d,i) {
+            return "translate(" + (43+i*13.09524) + ",0)";
+        })
+        .selectAll("g")
+        .data( function(d) {return d;})
+        .enter().append("g")
     // console.log(bar);
 
     var bar2 = bar.append("rect")
-                  .attr("width",8.667)
-                  .attr("height",6)
-                  .attr("fill","white")
-                  .attr("stroke","grey")
-                  .attr("stroke-width",1)
-                  .attr("transform", function(d,i) {
-                      return "translate(0," + (height-29-(i*6)) +")";
-                  })
-                  .on("mouseover", handleHover)
-                  .on("mouseout", handleUnhover)
-                  .on("click", function(d) {
-                      console.log(d);
-                  });
-                  
+        .attr("width",8.667)
+        .attr("height",6)
+        .attr("fill", function(d){
+	    if (d.eshop_price>10){
+		return "red"
+	    }
+	    if (d.eshop_price>0){
+		return "pink"
+	    }
+	    return "white"
+	})
+        .attr("stroke","grey")
+        .attr("stroke-width",1)
+        .attr("transform", function(d,i) {
+            return "translate(0," + (height-29-(i*6)) +")";
+        })
+        .on("mouseover", handleHover)
+        .on("mouseout", handleUnhover)
+        .on("click", function(d) {
+            console.log(d);
+        });
+    
     chart.append('g')
-         .attr("transform","translate (25,530)")
-         .call(x_axis)
+        .attr("transform","translate (25,530)")
+        .call(x_axis)
 
     chart.append('g')
-         .attr("transform","translate (25,5)")
-         .call(y_axis)
+        .attr("transform","translate (25,5)")
+        .call(y_axis)
 }
 
 function handleHover(d,i) {
@@ -88,45 +96,45 @@ function handleHover(d,i) {
         y_result = 135;
     }
     d3.select(this)
-      .attr("stroke","turquoise")
-      .attr("stroke-width",2);
+	.attr("stroke","turquoise")
+	.attr("stroke-width",2);
     chart.append("rect")
-         .attr("id", "border")
-         .attr("x", x_result)
-         .attr("y", y_result-130)
-         .attr("height", 380+offset)
-         .attr("width", 210 )
-         .style("stroke", 'black')
-         .style("fill", "white")
-         .style("stroke-width", border);
+        .attr("id", "border")
+        .attr("x", x_result)
+        .attr("y", y_result-130)
+        .attr("height", 380+offset)
+        .attr("width", 210 )
+        .style("stroke", 'black')
+        .style("fill", "white")
+        .style("stroke-width", border);
     addText(chart,titleText,x_result+5,y_result+200)
     chart.append("text")
-         .attr("id","popup")
-         .attr("transform", function (d){
-             return "translate(" + (x_result+5) + "," + (y_result+offset+220) + ")";
-         })
-         .html(d.system)
-         chart.append("text")
-         .attr("id","popup")
-         .attr("transform", function (d){
-             return "translate(" + (x_result+5) + "," + (y_result+offset+240) + ")";
-         })
-         .html(d.release_date)
-         chart.append("svg:image")
-         .attr("id", "img")
-         .attr("transform","translate(" + (x_result+5) + "," + (y_result-125) + ")")
-         .attr("xlink:href", d.front_box_art)
-         .attr("width", 200)
-         .attr("height", 300)
-         .attr("preserveAspectRatio","none");
+        .attr("id","popup")
+        .attr("transform", function (d){
+            return "translate(" + (x_result+5) + "," + (y_result+offset+220) + ")";
+        })
+        .html(d.system)
+    chart.append("text")
+        .attr("id","popup")
+        .attr("transform", function (d){
+            return "translate(" + (x_result+5) + "," + (y_result+offset+240) + ")";
+        })
+        .html(d.release_date)
+    chart.append("svg:image")
+        .attr("id", "img")
+        .attr("transform","translate(" + (x_result+5) + "," + (y_result-125) + ")")
+        .attr("xlink:href", d.front_box_art)
+        .attr("width", 200)
+        .attr("height", 300)
+        .attr("preserveAspectRatio","none");
 
 
-     }
+}
 
 function handleUnhover(d,i) {
     d3.select(this)
-      .attr("stroke","gray")
-      .attr("stroke-width",1);
+	.attr("stroke","gray")
+	.attr("stroke-width",1);
     d3.selectAll("#popup").remove();
     d3.select("#img").remove();
     d3.select("#border").remove();
@@ -159,11 +167,11 @@ var addText = (chart, outputText, x, y) => {
             line += outputText[i][j] + " ";
         }
         chart.append("text")
-             .attr("id","popup")
-             .attr("transform", function (data){
-                 return "translate(" + x + "," + (y+i*20) + ")";
-             })
-             .html(line)
+            .attr("id","popup")
+            .attr("transform", function (data){
+                return "translate(" + x + "," + (y+i*20) + ")";
+            })
+            .html(line)
     }
 }
 display(cur_data);
