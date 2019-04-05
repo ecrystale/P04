@@ -66,7 +66,7 @@ var display = (data) => {
         .on("click", function(d) {
             console.log(d);
         });
-    
+
     chart.append('g')
         .attr("transform","translate (25,530)")
         .call(x_axis)
@@ -178,48 +178,50 @@ display(cur_data);
 
 document.getElementById("filter").addEventListener("click",(e)=>{
     var yearFilter = document.getElementById("year").value;
-
-    cur_data = []
-    var i;
-    for (i=0; i<all_data.length; i++){
-        filteredCol = [];
-        for (j=0; j<all_data[i].length; j++){
-	    curGame = all_data[i][j]
-	    curYear = curGame.release_date.split(" ")[2];
-	    if(yearFilter=="ally"){
-                filteredCol.push(curGame);
-
-	    }
-	    if (curYear == yearFilter){
-                filteredCol.push(curGame);
-	    }
-        }
-        cur_data.push(filteredCol);
+    if (yearFilter == "ally"){
+        display(all_data);
     }
-    console.log(cur_data);
-    display(cur_data)
-
+    else {
+        var temp_data = []
+        var i;
+        for (i=0; i<cur_data.length; i++){
+            filteredCol = [];
+            for (j=0; j<cur_data[i].length; j++){
+                curGame = cur_data[i][j]
+                curYear = curGame.release_date.split(" ")[2];
+                if (curYear == yearFilter){
+                    filteredCol.push(curGame);
+                }
+            }
+            temp_data.push(filteredCol);
+        }
+        cur_data = temp_data;
+        console.log(cur_data);
+        display(cur_data)
+    }
 });
 
 document.getElementById("system_filter").addEventListener("click",(e)=>{
     var systemFilter = document.getElementById("system").value;
-
-    cur_data = []
-    var i;
-    for (i=0; i<all_data.length; i++){
-        filteredCol = [];
-        for (j=0; j<all_data[i].length; j++){
-	    curGame = all_data[i][j]
-	    curSystem = curGame.system;
-	    if(systemFilter=="alls"){
-                filteredCol.push(curGame);
-	    }
-	    if (curSystem == systemFilter){
-                filteredCol.push(curGame);
-	    }
-        }
-        cur_data.push(filteredCol);
+    if (systemFilter == "alls"){
+        display(all_data);
     }
-    console.log(cur_data);
-    display(cur_data)
+    else {
+        temp_data = []
+        var i;
+        for (i=0; i<cur_data.length; i++){
+            filteredCol = [];
+            for (j=0; j<cur_data[i].length; j++){
+                curGame = cur_data[i][j]
+                curSystem = curGame.system;
+                if (curSystem == systemFilter){
+                    filteredCol.push(curGame);
+                }
+            }
+            temp_data.push(filteredCol);
+        }
+        cur_data = temp_data;
+        console.log(cur_data);
+        display(cur_data)
+    }
 });
