@@ -20,7 +20,7 @@ var color = d3.scaleOrdinal()
         .domain(["> $90", "> $80", "> $70", "> $60", "> $50", "> $40", "> $30", "> $20", "> $10", "> $0", "Free", "No price data"])
         .range(["#000000", "#330000", "#660000", "#990000", "#cc0000", "#ff0000", "#ff3333", "#ff6666", "#ff9999", "#ffcccc", "#ffe6e6", "white"]);
 var svg_legend = d3.select(".legend").append("svg")
-    .attr("width", 100).attr("height", 235)
+    .attr("width", 105).attr("height", 240)
 var legend = svg_legend.selectAll('.legend')
        .data(color.domain())
        .enter().append('g')
@@ -32,7 +32,7 @@ var legend = svg_legend.selectAll('.legend')
 
  legend.append('rect')
      .attr("x", 0)
-     .attr("y", 0)
+     .attr("y", 3)
      .attr("width", 10)
      .attr("height", 10)
      .attr("stroke", "black")
@@ -42,11 +42,10 @@ var legend = svg_legend.selectAll('.legend')
 
  legend.append('text')
      .attr("x", 20)
-     .attr("y", 10)
- //.attr("dy", ".35em")
- .text(function (d, i) {
-     return d
- })
+     .attr("y", 14)
+     .text(function (d, i) {
+       return d
+     })
      .attr("class", "textselected")
      .style("text-anchor", "start")
      .style("font-size", 15)
