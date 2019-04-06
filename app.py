@@ -16,23 +16,23 @@ for system in systems:
     data = json.loads(info)
     all_data += data["games"]["game"]
 
-sorted_data = []
-for i in range(90):
-    sorted_data.append([])
+# sorted_data = []
+# for i in range(90):
+#     sorted_data.append([])
 
-month_dict = {
-"Jan": 0, "Feb": 0, "Mar": 1, "Apr": 1, "May": 2, "Jun": 2, "Jul": 3, "Aug": 3, "Sep": 4, "Oct": 4, "Nov": 5, "Dec": 5
-}
+# month_dict = {
+# "Jan": 0, "Feb": 0, "Mar": 1, "Apr": 1, "May": 2, "Jun": 2, "Jul": 3, "Aug": 3, "Sep": 4, "Oct": 4, "Nov": 5, "Dec": 5
+# }
 
-for game in all_data:
-    # date_arr looks like ["month","day","year"]
-    date_arr = game["release_date"].split()
-    new_index = month_dict[date_arr[0]] + 6*(int(date_arr[2]) - 2006)
-    sorted_data[new_index].append(game)
+# for game in all_data:
+#     # date_arr looks like ["month","day","year"]
+#     # date_arr = game["release_date"].split()
+#     # new_index = month_dict[date_arr[0]] + 6*(int(date_arr[2]) - 2006)
+#     sorted_data.append(game)
 
 @app.route("/") #assign fxn to route
 def index():
-    return render_template('index.html', bar_data = sorted_data)
+    return render_template('index.html', bar_data = all_data)
 
 @app.route("/filtyear", methods=["POST"])
 def fyears():

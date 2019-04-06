@@ -6,15 +6,29 @@ var chart = d3.select(".chart")
 
 // Get the correctly organized data from python
 var all_data = JSON.parse(document.getElementsByClassName("bar_data")[0].innerHTML);
-// console.log(data)
-var cur_data = all_data;
+// var cur_data = all_data;
 /**
    Some Notes:
-   X-Axis will go from January 1, 2011 to December 31, 2020
+   X-Axis will go from January 1, 2006 to December 31, 2020
    Each bar will take up 2 or 3 months (Ex. One bar can be Jan-March 2011, next one can be April-June 2011)
    User can narrow down on time, console, genre, ...
    Overall, there will be 40 bars (We can change it later if we want)
 */
+
+var month_dict = {
+    "Jan": 0,
+    "Feb": 0,
+    "Mar": 1,
+    "Apr": 1,
+    "May": 2,
+    "Jun": 2,
+    "Jul": 3,
+    "Aug": 3,
+    "Sep": 4,
+    "Oct": 4,
+    "Nov": 5,
+    "Dec": 5
+};
 
 var display = (data) => {
     var x_scale = d3.scaleLinear()
@@ -30,49 +44,81 @@ var display = (data) => {
 
     var y_axis = d3.axisLeft()
         .scale(y_scale)
-    // d3.select(".chart").innerHTML = "";
-    var bar = chart.selectAll("g")
-        .remove()
-        .exit()
-        .data(data)
-        .enter().append("g")
-        .attr("transform", function(d,i) {
-            return "translate(" + (43+i*13.09524) + ",0)";
-        })
-        .selectAll("g")
-        .data( function(d) {return d;})
-        .enter().append("g")
-    // console.log(bar);
 
-    var bar2 = bar.append("rect")
-        .attr("width",8.667)
-        .attr("height",6)
-        .attr("fill", function(d){
-	    if (d.eshop_price>10){
-		return "red"
-	    }
-	    if (d.eshop_price>0){
-		return "pink"
-	    }
-	    return "white"
-	})
-        .attr("stroke","grey")
-        .attr("stroke-width",1)
-        .attr("transform", function(d,i) {
-            return "translate(0," + (height-29-(i*6)) +")";
-        })
-        .on("mouseover", handleHover)
-        .on("mouseout", handleUnhover)
-        .on("click", function(d) {
-            console.log(d);
-        });
+    var bar = chart.selectAll(".box").data(data, function(e){return e.front_box_art+e.title+e.release_date+e.system});
+    console.log(bar);
+    var colSpace = [];
+
+    var i;
+    var trans_time = 2000;
+    for (i=0; i<90; i++){
+        colSpace.push(0);
+    }
+
+    bar.exit()
+       .transition()
+       .duration(trans_time)
+       .attr("transform", function(d) {
+           var date = d.release_date.split(" ");
+           var month = date[0];
+           var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
+           console.log(d.release_date,colIndex);
+           return "translate(0,-550)";
+       })
+       .style("fill-opacity", 1e-6)
+       .remove();
+
+    bar.transition().duration(trans_time)
+       .attr("transform", function(d) {
+           var date = d.release_date.split(" ");
+           var month = date[0];
+           var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
+           var heightOffset = colSpace[colIndex];
+           colSpace[colIndex]++;
+           console.log(d.release_date,colIndex,heightOffset);
+           return "translate(0,0)";
+       });
+
+    bar.enter().append("g")
+       .attr("class","box")
+       .append("rect")
+       .attr("width",8.667)
+       .attr("height",6)
+       .attr("fill", function(d){
+           if (d.eshop_price>10){
+               return "red"
+           }
+           if (d.eshop_price>0){
+               return "pink"
+           }
+           return "white"
+       })
+       .attr("stroke","grey")
+       .attr("stroke-width",1)
+       .on("click", function(d) {
+           console.log(d);
+       })
+       .on("mouseover", handleHover)
+       .on("mouseout", handleUnhover)
+       .attr("transform","translate(0,0)")
+       .transition().duration(trans_time)
+       .attr("transform", function(d) {
+           var date = d.release_date.split(" ");
+           var month = date[0];
+           var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
+           var heightOffset = colSpace[colIndex];
+           colSpace[colIndex]++;
+           return "translate(" + (43+colIndex*13.09524) + "," + (height - 29 - (heightOffset*6)) +")";
+       });
 
     chart.append('g')
         .attr("transform","translate (25,530)")
+        .attr("class","x axis")
         .call(x_axis)
 
     chart.append('g')
         .attr("transform","translate (25,5)")
+        .attr("class","y axis")
         .call(y_axis)
 }
 
@@ -80,13 +126,14 @@ function handleHover(d,i) {
     var titleText = createText(18, d.title);
     var offset = (titleText.length-1) * 20;
 
-    var x_col = d3.select(this.parentNode.parentNode).attr("transform").split("(")[1].split(",")[0];
+    var transformVal = d3.select(this)["_groups"][0][0].attributes[5].nodeValue;
+    x_col = transformVal.split("(")[1].split(",")[0];
     var inner_x = d3.mouse(this)[0];
     var x_result = parseInt(x_col) + parseInt(inner_x) + 25;
     if (x_result > 1040){
         x_result -= 260;
     }
-    var y_col = d3.select(this).attr("transform").split(",")[1].split(")")[0];//.attr("transform").split(",")[1].split(")")[0];
+    var y_col = transformVal.split(",")[1].split(")")[0];//.attr("transform").split(",")[1].split(")")[0];
     var inner_y = d3.mouse(this)[1];
     var y_result = parseInt(y_col) + parseInt(inner_y) - 60;
     if (y_result > 270-offset){
@@ -96,7 +143,7 @@ function handleHover(d,i) {
         y_result = 135;
     }
     d3.select(this)
-	.attr("stroke","turquoise")
+    .attr("stroke","turquoise")
 	.attr("stroke-width",2);
     chart.append("rect")
         .attr("id", "border")
@@ -174,7 +221,6 @@ var addText = (chart, outputText, x, y) => {
             .html(line)
     }
 }
-display(cur_data);
 
 document.getElementById("filter").addEventListener("click",(e)=>{
     var yearFilter = document.getElementById("year").value;
@@ -182,19 +228,17 @@ document.getElementById("filter").addEventListener("click",(e)=>{
     var temp_data = []
     var i;
     for (i=0; i<all_data.length; i++){
-        filteredCol = [];
-        for (j=0; j<all_data[i].length; j++){
-            curGame = all_data[i][j]
-            curYear = curGame.release_date.split(" ")[2];
-            curSystem = curGame.system;
-            if ((curYear == yearFilter || yearFilter === "ally") &&
-                (curSystem == systemFilter || systemFilter === "alls")) {
-                filteredCol.push(curGame);
-            }
+        curGame = all_data[i];
+        curYear = curGame.release_date.split(" ")[2];
+        curSystem = curGame.system;
+        if ((curYear == yearFilter || yearFilter === "ally") &&
+        (curSystem == systemFilter || systemFilter === "alls")) {
+            temp_data.push(curGame);
         }
-        temp_data.push(filteredCol);
     }
     cur_data = temp_data;
     console.log(cur_data);
     display(cur_data)
 });
+
+display(all_data);
