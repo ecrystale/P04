@@ -362,16 +362,29 @@ var addText = (chart, outputText, x, y) => {
 document.getElementById("filter").addEventListener("click",(e)=>{
     var yearFilter = document.getElementById("year").value;
     var systemFilter = document.getElementById("system").value;
+    var priceFilter = document.getElementById("price").value;
     var temp_data = []
     var i;
     for (i=0; i<all_data.length; i++){
         var curGame = all_data[i];
         var curYear = curGame.release_date.split(" ")[2];
         var curSystem = curGame.system;
-        if ((curYear == yearFilter || yearFilter === "ally") &&
-        (curSystem == systemFilter || systemFilter === "alls")) {
-            temp_data.push(curGame);
+        var curPrice = Number(curGame.eshop_price);
+        if(Number(priceFilter) === 100) {
+          if ((curYear == yearFilter || yearFilter === "ally") &&
+          (curSystem == systemFilter || systemFilter === "alls") &&
+          (curPrice >  Number(priceFilter) - 10 || priceFilter === "allp")) {
+              temp_data.push(curGame);
+          }
         }
+        else {
+          if ((curYear == yearFilter || yearFilter === "ally") &&
+          (curSystem == systemFilter || systemFilter === "alls") &&
+          (curPrice <=  Number(priceFilter) || priceFilter === "allp")) {
+              temp_data.push(curGame);
+          }
+        }
+
     }
     if (yearFilter !== "ally"){
         console.log("m");
