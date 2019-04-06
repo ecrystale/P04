@@ -15,7 +15,7 @@ var all_data = JSON.parse(document.getElementsByClassName("bar_data")[0].innerHT
    Overall, there will be 40 bars (We can change it later if we want)
 */
 
-<<<<<<< HEAD
+
 var month_dict = {
     "Jan": 0,
     "Feb": 0,
@@ -30,7 +30,7 @@ var month_dict = {
     "Nov": 5,
     "Dec": 5
 };
-=======
+
 var color = d3.scaleOrdinal()
         .domain(["> $90", "> $80", "> $70", "> $60", "> $50", "> $40", "> $30", "> $20", "> $10", "> $0", "Free", "No price data"])
         .range(["#000000", "#330000", "#660000", "#990000", "#cc0000", "#ff0000", "#ff3333", "#ff6666", "#ff9999", "#ffcccc", "#ffe6e6", "white"]);
@@ -64,7 +64,6 @@ var legend = svg_legend.selectAll('.legend')
      .attr("class", "textselected")
      .style("text-anchor", "start")
      .style("font-size", 15)
->>>>>>> 23b5f2cffc4b1326a93c1021fdcea8c40c375b4a
 
 var display = (data) => {
     var x_scale = d3.scaleLinear()
@@ -83,11 +82,10 @@ var display = (data) => {
 
 
     var bar = chart.selectAll(".box").data(data, function(e){return e.front_box_art+e.title+e.release_date+e.system});
-    console.log(bar);
     var colSpace = [];
 
     var i;
-    var trans_time = 2000;
+    var trans_time = 1500;
     for (i=0; i<90; i++){
         colSpace.push(0);
     }
@@ -99,21 +97,19 @@ var display = (data) => {
            var date = d.release_date.split(" ");
            var month = date[0];
            var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
-           console.log(d.release_date,colIndex);
            return "translate(0,-550)";
        })
        .style("fill-opacity", 1e-6)
        .remove();
 
-    bar.transition().duration(trans_time)
+    bar.select("rect").transition().duration(trans_time)
        .attr("transform", function(d) {
            var date = d.release_date.split(" ");
            var month = date[0];
            var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
            var heightOffset = colSpace[colIndex];
            colSpace[colIndex]++;
-           console.log(d.release_date,colIndex,heightOffset);
-           return "translate(0,0)";
+           return "translate(" + (43+colIndex*13.09524) + "," + (height - 26 - (heightOffset*6)) +")";
        });
 
     bar.enter().append("g")
@@ -166,16 +162,22 @@ var display = (data) => {
        })
        .on("mouseover", handleHover)
        .on("mouseout", handleUnhover)
-       .attr("transform","translate(0,0)")
-       .transition().duration(trans_time)
        .attr("transform", function(d){
            var date = d.release_date.split(" ");
            var month = date[0];
            var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
-           var heightOffset = colSpace[colIndex];
-           colSpace[colIndex]++;
-           return "translate(" + (43+colIndex*13.09524) + "," + (height - 29 - (heightOffset*6)) +")";
-       });
+           return "translate(" + (43+colIndex*13.09524) + ","+(height-26)+")";
+        })
+        .transition().delay(function(d, i) { return i*2.5; })
+        .duration(trans_time)
+        .attr("transform", function(d){
+            var date = d.release_date.split(" ");
+            var month = date[0];
+            var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
+            var heightOffset = colSpace[colIndex];
+            colSpace[colIndex]++;
+            return "translate(" + (43+colIndex*13.09524) + "," + (height - 26 - (heightOffset*6)) +")";
+        });
 
 
     chart.append('g')
