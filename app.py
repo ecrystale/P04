@@ -1,10 +1,9 @@
-from flask import Flask, render_template, request, url_for, redirect
-import urllib.request, json, os
+from flask import Flask, render_template, url_for, redirect
+import json
 
 app = Flask(__name__) #create instance of class Flask
 
 #get JSON data...
-
 all_data = []
 systems = ["ds","3ds","wii","wii_u","switch"]
 

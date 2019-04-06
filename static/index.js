@@ -38,6 +38,7 @@ var month_dict2 = {
 };
 
 var prevAxis = "m";
+var prevColHeight = -1;
 
 var display = (data, axis) => {
     var x_scale;
@@ -69,12 +70,7 @@ var display = (data, axis) => {
                    .scale(o);
     }
 
-    y_scale = d3.scaleLinear()
-        .domain([0,85])
-        .range([525,0]);
 
-    y_axis = d3.axisLeft()
-        .scale(y_scale)
 
 
     var bar = chart.selectAll(".box").data(data, function(e){return e.front_box_art+e.title+e.release_date+e.system});
@@ -86,16 +82,57 @@ var display = (data, axis) => {
         colSpace.push(0);
     }
 
+    for (i=0; i<data.length; i++){
+        var date = data[i].release_date.split(" ");
+        var month = date[0];
+        if (axis === "y"){
+            var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
+            var heightOffset = colSpace[colIndex];
+            colSpace[colIndex]++;
+            data[i].colIndex = 43+colIndex*13.09524;
+            data[i].heightOffset = heightOffset;
+        }
+        else {
+            var dayOffset = 0;
+            var date = parseInt(date[1].split(",")[0]);
+            if (date > 20){
+                dayOffset = 2;
+            }
+            else if (date > 10){
+                dayOffset = 1;
+            }
+            var colIndex = dayOffset + 3*month_dict2[month];
+            var heightOffset = colSpace[colIndex];
+            colSpace[colIndex]++;
+            data[i].colIndex = 60+colIndex*32.01058;
+            data[i].heightOffset = heightOffset;
+        }
+    }
+
+    var maxColHeight = 0;
+
+    for (i=0; i<colSpace.length; i++){
+        if (colSpace[i] > maxColHeight){
+            maxColHeight = colSpace[i];
+        }
+    }
+
+    maxColHeight = Math.round(1.2*maxColHeight);
+
+    var rectHeight = 525 / maxColHeight;
+
+    y_scale = d3.scaleLinear()
+        .domain([0,maxColHeight])
+        .range([525,0]);
+
+    y_axis = d3.axisLeft()
+        .scale(y_scale)
+
     bar.exit()
        .transition()
        .delay(function(d, i) { return i*2; })
        .duration(trans_time)
-       .attr("transform", function(d) {
-           var date = d.release_date.split(" ");
-           var month = date[0];
-           var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
-           return "translate(0,550)";
-       })
+       .attr("transform","translate(0,550)")
        .style("fill-opacity", 1e-6)
        .style("stroke-opacity", 1e-6)
        .remove();
@@ -111,29 +148,9 @@ var display = (data, axis) => {
                return 21.34038;
            }
        })
+       .attr("height",rectHeight)
        .attr("transform", function(d) {
-           var date = d.release_date.split(" ");
-           var month = date[0];
-           if (axis === "y"){
-               var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
-               var heightOffset = colSpace[colIndex];
-               colSpace[colIndex]++;
-               return "translate(" + (43+colIndex*13.09524) + "," + (height - 26 - (heightOffset*6)) +")";
-           }
-           else {
-               var dayOffset = 0;
-               var date = parseInt(date[1].split(",")[0]);
-               if (date > 20){
-                   dayOffset = 2;
-               }
-               else if (date > 10){
-                   dayOffset = 1;
-               }
-               var colIndex = dayOffset + 3*month_dict2[month];
-               var heightOffset = colSpace[colIndex];
-               colSpace[colIndex]++;
-               return "translate(" + (60+colIndex*32.01058) + "," + (height - 26 - (heightOffset*6)) +")";
-           }
+           return "translate(" + d.colIndex + "," + (height - 20-rectHeight - (d.heightOffset*rectHeight)) +")";
        });
 
     bar.enter().append("g")
@@ -144,7 +161,7 @@ var display = (data, axis) => {
        })
        .on("mouseover", handleHover)
        .on("mouseout", handleUnhover)
-       .attr("height",6)
+       .attr("height",rectHeight)
        .attr("fill", function(d){
            if (d.eshop_price > 90){
                return "#000000"
@@ -185,12 +202,8 @@ var display = (data, axis) => {
        })
        .attr("stroke","grey")
        .attr("stroke-width",1)
-
        .attr("transform", function(d){
-           var date = d.release_date.split(" ");
-           var month = date[0];
-           var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
-           return "translate(" + (43+colIndex*13.09524) + ","+(height+20)+")";
+           return "translate(" + d.colIndex + ","+(height+20)+")";
         })
         .transition().delay(function(d, i) { return i*3; })
         .duration(trans_time)
@@ -203,53 +216,45 @@ var display = (data, axis) => {
             }
         })
         .attr("transform", function(d) {
-            var date = d.release_date.split(" ");
-            var month = date[0];
-            if (axis === "y"){
-                var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
-                var heightOffset = colSpace[colIndex];
-                colSpace[colIndex]++;
-                return "translate(" + (43+colIndex*13.09524) + "," + (height - 26 - (heightOffset*6)) +")";
-            }
-            else {
-                var dayOffset = 0;
-                var date = parseInt(date[1].split(",")[0]);
-                if (date > 20){
-                    dayOffset = 2;
-                }
-                else if (date > 10){
-                    dayOffset = 1;
-                }
-                var colIndex = dayOffset + 3*month_dict2[month];
-                var heightOffset = colSpace[colIndex];
-                colSpace[colIndex]++;
-                return "translate(" + (60+colIndex*32.01058) + "," + (height - 26 - (heightOffset*6)) +")";
-            }
+            return "translate(" + d.colIndex + "," + (height - 20-rectHeight - (d.heightOffset*rectHeight)) +")";
         });
 
-    chart.select(".x").remove();
-    chart.select(".y").remove();
-
     if (prevAxis === axis){
+        chart.select(".x").remove();
         chart.append('g')
             .attr("class","x axis")
             .attr("transform","translate (25,530)")
-            .call(x_axis.bind(this))
+            .call(x_axis);
     }
     else {
+        chart.select(".x").transition().duration(trans_time+1500)
+             .attr("transform","translate(1300,530)").remove();
         chart.append('g')
             .attr("transform","translate(-1300,530)")
-            .attr("class","x axis").transition().duration(5000)
+            .attr("class","x axis").transition().duration(trans_time+1500)
             .attr("transform","translate (25,530)")
-            .call(x_axis.bind(this))
+            .call(x_axis)
     }
 
-    chart.append('g')
-        .attr("transform","translate (25,5)")
-        .attr("class","y axis")
-        .call(y_axis)
+    if (prevColHeight === maxColHeight){
+        chart.select(".y").remove();
+        chart.append('g')
+             .attr("transform","translate (25,5)")
+             .attr("class","y axis")
+             .call(y_axis);
+    }
+    else {
+        chart.select(".y").transition().duration(trans_time+1500)
+             .attr("transform","translate(25,-530)").remove();
+        chart.append('g')
+             .attr("transform","translate(25,600)")
+             .attr("class","y axis").transition().duration(trans_time+1500)
+             .attr("transform","translate (25,5)")
+             .call(y_axis);
+    }
 
     prevAxis = axis;
+    prevColHeight = maxColHeight;
 }
 
 function handleHover(d,i) {
