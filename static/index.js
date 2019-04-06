@@ -46,40 +46,6 @@ var month_dict2 = {
     "Dec": 11
 };
 
-var color = d3.scaleOrdinal()
-        .domain(["> $90", "> $80", "> $70", "> $60", "> $50", "> $40", "> $30", "> $20", "> $10", "> $0", "Free", "No price data"])
-        .range(["#000000", "#330000", "#660000", "#990000", "#cc0000", "#ff0000", "#ff3333", "#ff6666", "#ff9999", "#ffcccc", "#ffe6e6", "white"]);
-var svg_legend = d3.select(".legend").append("svg")
-    .attr("width", 105).attr("height", 240)
-var legend = svg_legend.selectAll('.legend')
-       .data(color.domain())
-       .enter().append('g')
-       .attr("transform", function (d, i) {
-       {
-           return "translate(0," + i * 20 + ")"
-       }
-   })
-
- legend.append('rect')
-     .attr("x", 0)
-     .attr("y", 3)
-     .attr("width", 10)
-     .attr("height", 10)
-     .attr("stroke", "black")
-     .style("fill", function (d, i) {
-     return color(i)
- })
-
- legend.append('text')
-     .attr("x", 20)
-     .attr("y", 14)
-     .text(function (d, i) {
-       return d
-     })
-     .attr("class", "textselected")
-     .style("text-anchor", "start")
-     .style("font-size", 15)
-
 var prevAxis = "m";
 
 var display = (data, axis) => {

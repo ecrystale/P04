@@ -14,14 +14,16 @@ h1 {
 				-1px -1px 0 #000;
 }
 .filter_menu {
-  width: 100%;
+  width: 50%;
+  display: inline;
+  float: left;
 }
 table {
-  margin: 0 auto;
   border-style: double;
   border-collapse: separate;
   border-spacing: 5px;
   background-color: white;
+  margin: 0 auto;
 }
 td {
   text-align: center;
@@ -34,6 +36,9 @@ footer {
 				 1px -1px 0 #000,
 				-1px -1px 0 #000;
 }
+.legend_menu{
+    display: inline;
+}
 .chart {
   color: #FFFFFF;
   margin-top: -250px;
@@ -45,3 +50,26 @@ footer {
   padding: 8px;
   float:right 100px;
 }
+
+.legend_menu div{
+    border: 1px solid black;
+    width:10px;
+    height:10px;
+    display: inline-block;
+}
+#filter{
+    margin: 0 auto;
+}
+
+#no {background-color: white}
+#free { background-color: #ffe6e6}
+#zero {background-color: #ffcccc}
+#ten {background-color: #ff9999}
+#twenty {background-color: #ff6666}
+#thirty {background-color: #ff3333}
+#forty {background-color: #ff0000}
+#fifty {background-color: #cc0000}
+#sixty {background-color: #990000}
+#seventy {background-color: #660000}
+#eighty {background-color: #330000}
+#ninety {background-color: #000000}
