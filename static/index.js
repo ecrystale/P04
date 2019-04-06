@@ -102,7 +102,7 @@ var display = (data) => {
        .on("mouseout", handleUnhover)
        .attr("transform","translate(0,0)")
        .transition().duration(trans_time)
-       .attr("transform", function(d) {
+       .attr("transform", function(d){
            var date = d.release_date.split(" ");
            var month = date[0];
            var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
