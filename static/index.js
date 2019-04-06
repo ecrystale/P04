@@ -6,15 +6,6 @@ var chart = d3.select(".chart")
 
 // Get the correctly organized data from python
 var all_data = JSON.parse(document.getElementsByClassName("bar_data")[0].innerHTML);
-// var cur_data = all_data;
-/**
-   Some Notes:
-   X-Axis will go from January 1, 2006 to December 31, 2020
-   Each bar will take up 2 or 3 months (Ex. One bar can be Jan-March 2011, next one can be April-June 2011)
-   User can narrow down on time, console, genre, ...
-   Overall, there will be 40 bars (We can change it later if we want)
-*/
-
 
 var month_dict = {
     "Jan": 0,
@@ -363,6 +354,7 @@ document.getElementById("filter").addEventListener("click",(e)=>{
     var yearFilter = document.getElementById("year").value;
     var systemFilter = document.getElementById("system").value;
     var priceFilter = document.getElementById("price").value;
+    var categoryFilter = document.getElementById("category").value;
     var temp_data = []
     var i;
     for (i=0; i<all_data.length; i++){
@@ -370,28 +362,24 @@ document.getElementById("filter").addEventListener("click",(e)=>{
         var curYear = curGame.release_date.split(" ")[2];
         var curSystem = curGame.system;
         var curPrice = Number(curGame.eshop_price);
-        if(Number(priceFilter) === 100) {
-          if ((curYear == yearFilter || yearFilter === "ally") &&
-          (curSystem == systemFilter || systemFilter === "alls") &&
-          (curPrice >  Number(priceFilter) - 10 || priceFilter === "allp")) {
-              temp_data.push(curGame);
-          }
-        }
-        else {
-          if ((curYear == yearFilter || yearFilter === "ally") &&
-          (curSystem == systemFilter || systemFilter === "alls") &&
-          (curPrice <=  Number(priceFilter) || priceFilter === "allp")) {
-              temp_data.push(curGame);
-          }
-        }
+        var curCategories = curGame.categories.category;
+        if (typeof(curCategories) === "string"){
+            curCategories = [curCategories];
 
+        }
+        if ((curYear == yearFilter || yearFilter === "ally") &&
+        (curSystem == systemFilter || systemFilter === "alls") &&
+        ((Number(priceFilter) === 100 && curPrice > 90) ||
+        (Number(priceFilter) !== 100 && curPrice <=  Number(priceFilter)) ||
+        priceFilter === "allp") &&
+        (curCategories.includes(categoryFilter)|| categoryFilter === "allc" )) {
+            temp_data.push(curGame);
+        }
     }
     if (yearFilter !== "ally"){
-        console.log("m");
         display(temp_data,"m");
     }
     else {
-        console.log("y");
         display(temp_data,"y");
     }
 });
