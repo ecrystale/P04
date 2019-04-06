@@ -31,6 +31,21 @@ var month_dict = {
     "Dec": 5
 };
 
+var month_dict2 = {
+    "Jan": 0,
+    "Feb": 1,
+    "Mar": 2,
+    "Apr": 3,
+    "May": 4,
+    "Jun": 5,
+    "Jul": 6,
+    "Aug": 7,
+    "Sep": 8,
+    "Oct": 9,
+    "Nov": 10,
+    "Dec": 11
+};
+
 var color = d3.scaleOrdinal()
         .domain(["> $90", "> $80", "> $70", "> $60", "> $50", "> $40", "> $30", "> $20", "> $10", "> $0", "Free", "No price data"])
         .range(["#000000", "#330000", "#660000", "#990000", "#cc0000", "#ff0000", "#ff3333", "#ff6666", "#ff9999", "#ffcccc", "#ffe6e6", "white"]);
@@ -84,12 +99,17 @@ var display = (data, axis) => {
                    .ticks(17)
     }
     else {
+        var o =d3.scalePoint()
+        .domain(["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan "])
+        .range([0,1210])
+        .padding(.3);
+
         x_scale = d3.scaleTime()
-                    .domain([new Date("2013-12-20"), new Date("2015-1-10")])
+                    .domain([123232323, 12])
                     .range([0, 1210]);
 
         x_axis = d3.axisBottom()
-                   .scale(x_scale).tickFormat(d3.timeFormat("%b"));
+                   .scale(o);
     }
 
     y_scale = d3.scaleLinear()
@@ -124,21 +144,49 @@ var display = (data, axis) => {
        .remove();
 
     bar.select("rect").transition()
-       .delay(function(d, i) { return i*5; })
+       .delay(function(d, i) { return i*3; })
        .duration(trans_time)
+       .attr("width", function(d){
+           if (axis === "y"){
+               return 8.73;
+           }
+           else {
+               return 21.34038;
+           }
+       })
        .attr("transform", function(d) {
            var date = d.release_date.split(" ");
            var month = date[0];
-           var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
-           var heightOffset = colSpace[colIndex];
-           colSpace[colIndex]++;
-           return "translate(" + (43+colIndex*13.09524) + "," + (height - 26 - (heightOffset*6)) +")";
+           if (axis === "y"){
+               var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
+               var heightOffset = colSpace[colIndex];
+               colSpace[colIndex]++;
+               return "translate(" + (43+colIndex*13.09524) + "," + (height - 26 - (heightOffset*6)) +")";
+           }
+           else {
+               var dayOffset = 0;
+               var date = parseInt(date[1].split(",")[0]);
+               if (date > 20){
+                   dayOffset = 2;
+               }
+               else if (date > 10){
+                   dayOffset = 1;
+               }
+               var colIndex = dayOffset + 3*month_dict2[month];
+               var heightOffset = colSpace[colIndex];
+               colSpace[colIndex]++;
+               return "translate(" + (60+colIndex*32.01058) + "," + (height - 26 - (heightOffset*6)) +")";
+           }
        });
 
     bar.enter().append("g")
        .attr("class","box")
        .append("rect")
-       .attr("width",8.667)
+       .on("click", function(d) {
+           console.log(d);
+       })
+       .on("mouseover", handleHover)
+       .on("mouseout", handleUnhover)
        .attr("height",6)
        .attr("fill", function(d){
            if (d.eshop_price > 90){
@@ -180,11 +228,7 @@ var display = (data, axis) => {
        })
        .attr("stroke","grey")
        .attr("stroke-width",1)
-       .on("click", function(d) {
-           console.log(d);
-       })
-       .on("mouseover", handleHover)
-       .on("mouseout", handleUnhover)
+
        .attr("transform", function(d){
            var date = d.release_date.split(" ");
            var month = date[0];
@@ -193,13 +237,37 @@ var display = (data, axis) => {
         })
         .transition().delay(function(d, i) { return i*3; })
         .duration(trans_time)
-        .attr("transform", function(d){
+        .attr("width", function(d){
+            if (axis === "y"){
+                return 8.73;
+            }
+            else {
+                return 21.34038;
+            }
+        })
+        .attr("transform", function(d) {
             var date = d.release_date.split(" ");
             var month = date[0];
-            var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
-            var heightOffset = colSpace[colIndex];
-            colSpace[colIndex]++;
-            return "translate(" + (43+colIndex*13.09524) + "," + (height - 26 - (heightOffset*6)) +")";
+            if (axis === "y"){
+                var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
+                var heightOffset = colSpace[colIndex];
+                colSpace[colIndex]++;
+                return "translate(" + (43+colIndex*13.09524) + "," + (height - 26 - (heightOffset*6)) +")";
+            }
+            else {
+                var dayOffset = 0;
+                var date = parseInt(date[1].split(",")[0]);
+                if (date > 20){
+                    dayOffset = 2;
+                }
+                else if (date > 10){
+                    dayOffset = 1;
+                }
+                var colIndex = dayOffset + 3*month_dict2[month];
+                var heightOffset = colSpace[colIndex];
+                colSpace[colIndex]++;
+                return "translate(" + (60+colIndex*32.01058) + "," + (height - 26 - (heightOffset*6)) +")";
+            }
         });
 
     chart.select(".x").remove();
@@ -213,8 +281,8 @@ var display = (data, axis) => {
     }
     else {
         chart.append('g')
-            .attr("transform","translate(1300,530)")
-            .attr("class","x axis").transition().duration(500)
+            .attr("transform","translate(-1300,530)")
+            .attr("class","x axis").transition().duration(5000)
             .attr("transform","translate (25,530)")
             .call(x_axis.bind(this))
     }
@@ -231,8 +299,8 @@ function handleHover(d,i) {
     var titleText = createText(18, d.title);
     var offset = (titleText.length-1) * 20;
 
-    var transformVal = d3.select(this)["_groups"][0][0].attributes[5].nodeValue;
-    x_col = transformVal.split("(")[1].split(",")[0];
+    var transformVal = d3.select(this)["_groups"][0][0].attributes[4].nodeValue;
+    var x_col = transformVal.split("(")[1].split(",")[0];
     var inner_x = d3.mouse(this)[0];
     var x_result = parseInt(x_col) + parseInt(inner_x) + 25;
     if (x_result > 1040){
@@ -340,9 +408,11 @@ document.getElementById("filter").addEventListener("click",(e)=>{
         }
     }
     if (yearFilter !== "ally"){
+        console.log("m");
         display(temp_data,"m");
     }
     else {
+        console.log("y");
         display(temp_data,"y");
     }
 });
