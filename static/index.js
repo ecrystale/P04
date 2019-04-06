@@ -65,19 +65,38 @@ var legend = svg_legend.selectAll('.legend')
      .style("text-anchor", "start")
      .style("font-size", 15)
 
-var display = (data) => {
-    var x_scale = d3.scaleLinear()
-        .domain([2005.8,2021.2])
-        .range([0, 1210]);
+var prevAxis = "m";
 
-    var y_scale = d3.scaleLinear()
+var display = (data, axis) => {
+    var x_scale;
+    var x_axis;
+    var y_scale;
+    var y_axis;
+
+    if (axis === "y"){
+        x_scale = d3.scaleLinear()
+                    .domain([2005.8,2021.2])
+                    .range([0, 1210]);
+
+        x_axis = d3.axisBottom()
+                   .scale(x_scale)
+                   .tickFormat(d3.format("d"))
+                   .ticks(17)
+    }
+    else {
+        x_scale = d3.scaleTime()
+                    .domain([new Date("2013-12-20"), new Date("2015-1-10")])
+                    .range([0, 1210]);
+
+        x_axis = d3.axisBottom()
+                   .scale(x_scale).tickFormat(d3.timeFormat("%b"));
+    }
+
+    y_scale = d3.scaleLinear()
         .domain([0,85])
         .range([525,0]);
 
-    var x_axis = d3.axisBottom()
-        .scale(x_scale).tickFormat(d3.format("d")).ticks(17)
-
-    var y_axis = d3.axisLeft()
+    y_axis = d3.axisLeft()
         .scale(y_scale)
 
 
@@ -92,17 +111,21 @@ var display = (data) => {
 
     bar.exit()
        .transition()
+       .delay(function(d, i) { return i*2; })
        .duration(trans_time)
        .attr("transform", function(d) {
            var date = d.release_date.split(" ");
            var month = date[0];
            var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
-           return "translate(0,-550)";
+           return "translate(0,550)";
        })
        .style("fill-opacity", 1e-6)
+       .style("stroke-opacity", 1e-6)
        .remove();
 
-    bar.select("rect").transition().duration(trans_time)
+    bar.select("rect").transition()
+       .delay(function(d, i) { return i*5; })
+       .duration(trans_time)
        .attr("transform", function(d) {
            var date = d.release_date.split(" ");
            var month = date[0];
@@ -166,9 +189,9 @@ var display = (data) => {
            var date = d.release_date.split(" ");
            var month = date[0];
            var colIndex = parseInt(month_dict[month]) + 6*(parseInt(date[2]) - 2006);
-           return "translate(" + (43+colIndex*13.09524) + ","+(height-26)+")";
+           return "translate(" + (43+colIndex*13.09524) + ","+(height+20)+")";
         })
-        .transition().delay(function(d, i) { return i*2.5; })
+        .transition().delay(function(d, i) { return i*3; })
         .duration(trans_time)
         .attr("transform", function(d){
             var date = d.release_date.split(" ");
@@ -179,16 +202,29 @@ var display = (data) => {
             return "translate(" + (43+colIndex*13.09524) + "," + (height - 26 - (heightOffset*6)) +")";
         });
 
+    chart.select(".x").remove();
+    chart.select(".y").remove();
 
-    chart.append('g')
-        .attr("transform","translate (25,530)")
-        .attr("class","x axis")
-        .call(x_axis)
+    if (prevAxis === axis){
+        chart.append('g')
+            .attr("class","x axis")
+            .attr("transform","translate (25,530)")
+            .call(x_axis.bind(this))
+    }
+    else {
+        chart.append('g')
+            .attr("transform","translate(1300,530)")
+            .attr("class","x axis").transition().duration(500)
+            .attr("transform","translate (25,530)")
+            .call(x_axis.bind(this))
+    }
 
     chart.append('g')
         .attr("transform","translate (25,5)")
         .attr("class","y axis")
         .call(y_axis)
+
+    prevAxis = axis;
 }
 
 function handleHover(d,i) {
@@ -243,8 +279,6 @@ function handleHover(d,i) {
         .attr("width", 200)
         .attr("height", 300)
         .attr("preserveAspectRatio","none");
-
-
 }
 
 function handleUnhover(d,i) {
@@ -297,17 +331,20 @@ document.getElementById("filter").addEventListener("click",(e)=>{
     var temp_data = []
     var i;
     for (i=0; i<all_data.length; i++){
-        curGame = all_data[i];
-        curYear = curGame.release_date.split(" ")[2];
-        curSystem = curGame.system;
+        var curGame = all_data[i];
+        var curYear = curGame.release_date.split(" ")[2];
+        var curSystem = curGame.system;
         if ((curYear == yearFilter || yearFilter === "ally") &&
         (curSystem == systemFilter || systemFilter === "alls")) {
             temp_data.push(curGame);
         }
     }
-    cur_data = temp_data;
-    console.log(cur_data);
-    display(cur_data)
+    if (yearFilter !== "ally"){
+        display(temp_data,"m");
+    }
+    else {
+        display(temp_data,"y");
+    }
 });
 
-display(all_data);
+display(all_data,"y");
