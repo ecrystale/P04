@@ -15,6 +15,7 @@ var all_data = JSON.parse(document.getElementsByClassName("bar_data")[0].innerHT
    Overall, there will be 40 bars (We can change it later if we want)
 */
 
+<<<<<<< HEAD
 var month_dict = {
     "Jan": 0,
     "Feb": 0,
@@ -29,6 +30,41 @@ var month_dict = {
     "Nov": 5,
     "Dec": 5
 };
+=======
+var color = d3.scaleOrdinal()
+        .domain(["> $90", "> $80", "> $70", "> $60", "> $50", "> $40", "> $30", "> $20", "> $10", "> $0", "Free", "No price data"])
+        .range(["#000000", "#330000", "#660000", "#990000", "#cc0000", "#ff0000", "#ff3333", "#ff6666", "#ff9999", "#ffcccc", "#ffe6e6", "white"]);
+var svg_legend = d3.select(".legend").append("svg")
+    .attr("width", 105).attr("height", 240)
+var legend = svg_legend.selectAll('.legend')
+       .data(color.domain())
+       .enter().append('g')
+       .attr("transform", function (d, i) {
+       {
+           return "translate(0," + i * 20 + ")"
+       }
+   })
+
+ legend.append('rect')
+     .attr("x", 0)
+     .attr("y", 3)
+     .attr("width", 10)
+     .attr("height", 10)
+     .attr("stroke", "black")
+     .style("fill", function (d, i) {
+     return color(i)
+ })
+
+ legend.append('text')
+     .attr("x", 20)
+     .attr("y", 14)
+     .text(function (d, i) {
+       return d
+     })
+     .attr("class", "textselected")
+     .style("text-anchor", "start")
+     .style("font-size", 15)
+>>>>>>> 23b5f2cffc4b1326a93c1021fdcea8c40c375b4a
 
 var display = (data) => {
     var x_scale = d3.scaleLinear()
@@ -44,6 +80,7 @@ var display = (data) => {
 
     var y_axis = d3.axisLeft()
         .scale(y_scale)
+
 
     var bar = chart.selectAll(".box").data(data, function(e){return e.front_box_art+e.title+e.release_date+e.system});
     console.log(bar);
@@ -85,13 +122,42 @@ var display = (data) => {
        .attr("width",8.667)
        .attr("height",6)
        .attr("fill", function(d){
-           if (d.eshop_price>10){
-               return "red"
+           if (d.eshop_price > 90){
+               return "#000000"
            }
-           if (d.eshop_price>0){
-               return "pink"
+           else if (d.eshop_price > 80){
+               return "#330000"
            }
-           return "white"
+           else if (Number(d.eshop_price) > 70){
+               return "#660000"
+           }
+           else if (Number(d.eshop_price) > 60){
+               return "#990000"
+           }
+           else if (Number(d.eshop_price) > 50){
+               return "#cc0000"
+           }
+           else if (Number(d.eshop_price) > 40){
+               return "#ff0000"
+           }
+           else if (Number(d.eshop_price) > 30){
+               return "#ff3333"
+           }
+           else if (Number(d.eshop_price)> 20){
+               return "#ff6666"
+           }
+           else if (Number(d.eshop_price) > 10) {
+               return "#ff9999"
+           }
+           else if (Number(d.eshop_price) > 0){
+               return "#ffcccc"
+           }
+           else if (Number(d.eshop_price) == 0){
+               return "#ffe6e6"
+           }
+           else {
+               return "white"
+           }
        })
        .attr("stroke","grey")
        .attr("stroke-width",1)
@@ -110,6 +176,7 @@ var display = (data) => {
            colSpace[colIndex]++;
            return "translate(" + (43+colIndex*13.09524) + "," + (height - 29 - (heightOffset*6)) +")";
        });
+
 
     chart.append('g')
         .attr("transform","translate (25,530)")

@@ -1,7 +1,7 @@
 html {
         background: url('/static/nintendo.jpg') no-repeat center fixed;
         background-size: cover;
-        background-color: hsla(0,0%,100%,0.30);
+        background-color: hsla(0,0%,0%,0.80);
         background-blend-mode: overlay;
     }
 h1 {
@@ -28,21 +28,20 @@ td {
 }
 footer {
   text-align: center;
-  color: black;
-  text-shadow: -1px 1px 0 #FFF,
-				  1px 1px 0 #FFF,
-				 1px -1px 0 #FFF,
-				-1px -1px 0 #FFF;
-}
-.chart {
-  color: #FFFFFF;
+  color: white;
   text-shadow: -1px 1px 0 #000,
 				  1px 1px 0 #000,
 				 1px -1px 0 #000,
 				-1px -1px 0 #000;
-  /* color: black;
-  text-shadow: -1px 1px 0 #FFF,
-				  1px 1px 0 #FFF,
-				 1px -1px 0 #FFF,
-				-1px -1px 0 #FFF; */
+}
+.chart {
+  color: #FFFFFF;
+  margin-top: -250px;
+}
+.legend {
+  margin-left: 100px;
+  background-color: white;
+  width: 125px;
+  padding: 8px;
+  float:right 100px;
 }
