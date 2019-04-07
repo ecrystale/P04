@@ -252,7 +252,37 @@ var display = (data, axis) => {
     prevAxis = axis;
 }
 
+
+
+var myCanvas = document.createElement('canvas');
+
 function handleHover(d,i) {
+    document.body.appendChild(myCanvas);
+    //var loc=getPointerInfo().getLocation();
+    // var xy=loc.getLocation();
+    //var e=window.event;
+    myCanvas.style.position = 'absolute';
+    console.log(event.clientX)
+    console.log(event.clientY)
+    myCanvas.style.left=event.clientX-20+"px";
+    myCanvas.style.top=event.clientY+"px";
+    myCanvas.style.zIndex="0";
+    myCanvas.style.width="5px";
+    myCanvas.style.height="10px";
+    myCanvas.width=myCanvas.offsetWidth;
+    myCanvas.height=myCanvas.offsetHeight;
+    var ctx=myCanvas.getContext("2d");
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(5, 5);
+    ctx.lineTo(0, 10);
+    ctx.closePath();
+    ctx.lineWidth = 10;
+    ctx.strokeStyle = '#666666';
+    ctx.stroke(); 
+    ctx.fillStyle = "#FFCC00";
+    ctx.fill();
+    
     var titleText = createText(18, d.title);
     var offset = (titleText.length-1) * 20;
 
@@ -307,6 +337,7 @@ function handleHover(d,i) {
 }
 
 function handleUnhover(d,i) {
+    document.body.removeChild(myCanvas);
     d3.select(this)
 	.attr("stroke","gray")
 	.attr("stroke-width",1);
