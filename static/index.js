@@ -10,7 +10,7 @@ chart.append("text")
      .attr("font-family", "Tahoma, sans-serif")
      .attr("font-weight","bold")
      .html("NinTimeDo — Nintendo Game Timeline")
-     .attr("transform","translate(300,25)");
+     .attr("transform","translate(350,25)");
 
 // Get the correctly organized data from python
 var all_data = JSON.parse(document.getElementsByClassName("bar_data")[0].innerHTML);
@@ -284,7 +284,6 @@ function handleHover(d,i) {
     else if (y_result < 160){
         y_result = 160;
     }
-    console.log(x_result);
     d3.select(this)
     .attr("stroke","turquoise")
 	.attr("stroke-width",2);
@@ -397,6 +396,7 @@ document.getElementById("filter").addEventListener("click",(e)=>{
     var systemFilter = document.getElementById("system").value;
     var priceFilter = document.getElementById("price").value;
     var categoryFilter = document.getElementById("category").value;
+    var titleFilter = document.getElementById("search").value;
     var temp_data = []
     var i;
     for (i=0; i<all_data.length; i++){
@@ -405,6 +405,7 @@ document.getElementById("filter").addEventListener("click",(e)=>{
         var curSystem = curGame.system;
         var curPrice = Number(curGame.eshop_price);
         var curCategories = curGame.categories.category;
+        var curTitle = curGame.title;
         if (typeof(curCategories) === "string"){
             curCategories = [curCategories];
         }
@@ -413,7 +414,8 @@ document.getElementById("filter").addEventListener("click",(e)=>{
         ((Number(priceFilter) === 100 && curPrice > 90) ||
         (Number(priceFilter) !== 100 && curPrice <=  Number(priceFilter)) ||
         priceFilter === "allp") &&
-        (curCategories.includes(categoryFilter)|| categoryFilter === "allc" )) {
+        (curCategories.includes(categoryFilter)|| categoryFilter === "allc" ) &&
+        (curTitle.toLowerCase().includes(titleFilter.toLowerCase()) || titleFilter.trim() === "")) {
             temp_data.push(curGame);
         }
     }
