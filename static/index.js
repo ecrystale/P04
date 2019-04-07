@@ -1,8 +1,16 @@
-var width = 1250, height = 550;
+var width = 1250, height = 500;
 
 var chart = d3.select(".chart")
     .attr("width", width)
     .attr("height", height)
+
+chart.append("text")
+     .attr("fill","white")
+     .attr("font-size","32px")
+     .attr("font-family", "Tahoma, sans-serif")
+     .attr("font-weight","bold")
+     .html("NinTimeDo — Nintendo Game Timeline")
+     .attr("transform","translate(300,25)");
 
 // Get the correctly organized data from python
 var all_data = JSON.parse(document.getElementsByClassName("bar_data")[0].innerHTML);
@@ -70,9 +78,6 @@ var display = (data, axis) => {
                    .scale(o);
     }
 
-
-
-
     var bar = chart.selectAll(".box").data(data, function(e){return e.front_box_art+e.title+e.release_date+e.system});
     var colSpace = [];
 
@@ -117,13 +122,13 @@ var display = (data, axis) => {
         }
     }
 
-    maxColHeight = Math.round(1.2*maxColHeight);
+    maxColHeight = Math.round(1.2*maxColHeight)+1;
 
-    var rectHeight = 525 / maxColHeight;
+    var rectHeight = 475 / maxColHeight;
 
     y_scale = d3.scaleLinear()
         .domain([0,maxColHeight])
-        .range([525,0]);
+        .range([475,0]);
 
     y_axis = d3.axisLeft()
         .scale(y_scale)
@@ -223,16 +228,16 @@ var display = (data, axis) => {
         chart.select(".x").remove();
         chart.append('g')
             .attr("class","x axis")
-            .attr("transform","translate (25,530)")
+            .attr("transform","translate (25,480)")
             .call(x_axis);
     }
     else {
         chart.select(".x").transition().duration(trans_time+1500)
-             .attr("transform","translate(1300,530)").remove();
+             .attr("transform","translate(1300,480)").remove();
         chart.append('g')
-            .attr("transform","translate(-1300,530)")
+            .attr("transform","translate(-1300,480)")
             .attr("class","x axis").transition().duration(trans_time+1500)
-            .attr("transform","translate (25,530)")
+            .attr("transform","translate (25,480)")
             .call(x_axis)
     }
 
@@ -271,11 +276,11 @@ function handleHover(d,i) {
     var y_col = transformVal.split(",")[1].split(")")[0];//.attr("transform").split(",")[1].split(")")[0];
     var inner_y = d3.mouse(this)[1];
     var y_result = parseInt(y_col) + parseInt(inner_y) - 60;
-    if (y_result > 270-offset){
-        y_result = 270-offset;
+    if (y_result > 250-offset){
+        y_result = 250-offset;
     }
-    else if (y_result < 135){
-        y_result = 135;
+    else if (y_result < 160){
+        y_result = 160;
     }
     d3.select(this)
     .attr("stroke","turquoise")

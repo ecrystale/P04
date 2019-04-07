@@ -4,15 +4,6 @@ html {
         background-color: hsla(0,0%,0%,0.80);
         background-blend-mode: overlay;
     }
-h1 {
-  text-align: center;
-  font-family: Tahoma, sans-serif;
-  color: #FFFFFF;
-  text-shadow: -1px 1px 0 #000,
-				  1px 1px 0 #000,
-				 1px -1px 0 #000,
-				-1px -1px 0 #000;
-}
 .filter_menu {
   width: 50%;
   display: inline;
