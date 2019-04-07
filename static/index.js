@@ -231,14 +231,14 @@ var display = (data, axis) => {
         });
 
     if (prevAxis === axis){
-        chart.select(".x").remove();
+        chart.selectAll(".x").remove();
         chart.append('g')
             .attr("class","x axis")
             .attr("transform","translate (25,480)")
             .call(x_axis);
     }
     else {
-        chart.select(".x").transition().duration(trans_time+1500)
+        chart.selectAll(".x").transition().duration(trans_time+1500)
              .attr("transform","translate(1300,480)").remove();
         chart.append('g')
             .attr("transform","translate(-1300,480)")
@@ -248,14 +248,14 @@ var display = (data, axis) => {
     }
 
     if (prevColHeight === maxColHeight){
-        chart.select(".y").remove();
+        chart.selectAll(".y").remove();
         chart.append('g')
              .attr("transform","translate (25,5)")
              .attr("class","y axis")
              .call(y_axis);
     }
     else {
-        chart.select(".y").transition().duration(trans_time+1500)
+        chart.selectAll(".y").transition().duration(trans_time+1500)
              .attr("transform","translate(25,-530)").remove();
         chart.append('g')
              .attr("transform","translate(25,600)")
@@ -397,12 +397,18 @@ var addText = (chart, outputText, x, y) => {
     }
 }
 
+var yearInput = document.getElementById("year");
+var systemInput = document.getElementById("system");
+var priceInput = document.getElementById("price");
+var categoryInput = document.getElementById("category");
+var titleInput = document.getElementById("search");
+
 var filter = () => {
-    var yearFilter = document.getElementById("year").value;
-    var systemFilter = document.getElementById("system").value;
-    var priceFilter = document.getElementById("price").value;
-    var categoryFilter = document.getElementById("category").value;
-    var titleFilter = document.getElementById("search").value;
+    var yearFilter = yearInput.value;
+    var systemFilter = systemInput.value;
+    var priceFilter = priceInput.value;
+    var categoryFilter = categoryInput.value;
+    var titleFilter = titleInput.value;
     var temp_data = []
     var i;
     for (i=0; i<all_data.length; i++){
@@ -433,17 +439,15 @@ var filter = () => {
     }
 }
 
-document.getElementById("year").onchange = filter;
-document.getElementById("system").onchange = filter;
-document.getElementById("price").onchange = filter;
-document.getElementById("category").onchange = filter;
+yearInput.onchange = filter;
+systemInput.onchange = filter;
+priceInput.onchange = filter;
+categoryInput.onchange = filter;
 
-var searchInput = document.getElementById("search");
 var searchTimer;
-var handleSearch = () => {
+titleInput.addEventListener('keyup', () => {
     clearTimeout(searchTimer);
     searchTimer = setTimeout(filter,1500);
-}
-searchInput.onkeyup = handleSearch;
+})
 
 display(all_data,"y");
