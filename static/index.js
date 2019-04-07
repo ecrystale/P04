@@ -333,13 +333,13 @@ function handleHover(d,i) {
         .style("stroke-width", border);
     addText(chart,titleText,x_result+5,y_result+200)
     chart.append("text")
-        .attr("id","popup")
+        .attr("id","system")
         .attr("transform", function (d){
             return "translate(" + (x_result+5) + "," + (y_result+offset+220) + ")";
         })
         .html(d.system)
     chart.append("text")
-        .attr("id","popup")
+        .attr("id","release")
         .attr("transform", function (d){
             return "translate(" + (x_result+5) + "," + (y_result+offset+240) + ")";
         })
@@ -357,9 +357,12 @@ function handleUnhover(d,i) {
     d3.select(this)
 	.attr("stroke","gray")
 	.attr("stroke-width",1);
+    d3.selectAll("#title").remove();
     d3.selectAll("#popup").remove();
     d3.select("#img").remove();
     d3.select("#border").remove();
+    d3.select("#system").remove();
+    d3.select("#release").remove();
 }
 
 var createText = (maxLength,text) => {
@@ -389,7 +392,7 @@ var addText = (chart, outputText, x, y) => {
             line += outputText[i][j] + " ";
         }
         chart.append("text")
-            .attr("id","popup")
+            .attr("id","title")
             .attr("transform", function (data){
                 return "translate(" + x + "," + (y+i*20) + ")";
             })
