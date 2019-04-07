@@ -130,8 +130,14 @@ var display = (data, axis) => {
         .domain([0,maxColHeight])
         .range([475,0]);
 
-    y_axis = d3.axisLeft()
-        .scale(y_scale)
+    if (maxColHeight < 20){
+        y_axis = d3.axisLeft()
+            .scale(y_scale).ticks(maxColHeight+1);
+    }
+    else {
+        y_axis = d3.axisLeft()
+            .scale(y_scale);
+    }
 
     bar.exit()
        .transition()
