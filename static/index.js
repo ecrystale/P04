@@ -397,7 +397,7 @@ var addText = (chart, outputText, x, y) => {
     }
 }
 
-document.getElementById("filter").addEventListener("click",(e)=>{
+var filter = () => {
     var yearFilter = document.getElementById("year").value;
     var systemFilter = document.getElementById("system").value;
     var priceFilter = document.getElementById("price").value;
@@ -431,6 +431,19 @@ document.getElementById("filter").addEventListener("click",(e)=>{
     else {
         display(temp_data,"y");
     }
-});
+}
+
+document.getElementById("year").onchange = filter;
+document.getElementById("system").onchange = filter;
+document.getElementById("price").onchange = filter;
+document.getElementById("category").onchange = filter;
+
+var searchInput = document.getElementById("search");
+var searchTimer;
+var handleSearch = () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(filter,1500);
+}
+searchInput.onkeyup = handleSearch;
 
 display(all_data,"y");
