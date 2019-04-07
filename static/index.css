@@ -1,7 +1,7 @@
 html {
     background: url('/static/nintendo.jpg') no-repeat center fixed;
     background-size: cover;
-    background-color: hsla(0,0%,0%,0.63);
+    background-color: hsla(0,0%,0%,0.8);
     background-blend-mode: overlay;
 }
 body{

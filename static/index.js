@@ -508,7 +508,11 @@ var handleModal = (d) => {
          .attr("transform","translate(675,50)")
          .attr("fill","#e60012")
          .attr("width",function(){
-             return d.system.length*8+10;
+             var systemWidth = 8;
+             if (typeof (InstallTrigger) !== 'undefined'){
+                 systemWidth = 9.5;
+             }
+             return d.system.length*systemWidth+10;
          })
          .attr("height",20)
          .attr("fill-opacity",1e-6)
@@ -650,10 +654,14 @@ var handleModal = (d) => {
          .attr("target","_blank")
          .append("text")
          .attr("transform", function () {
-             if (otherOffset < 380){
-                 return "translate(730,415)";
+             var x_cor = 730;
+             if (typeof (InstallTrigger) !== 'undefined'){
+                 x_cor = 715;
              }
-             return "translate(730,"+(otherOffset+35)+")";
+             if (otherOffset < 380){
+                 return "translate("+x_cor+",415)";
+             }
+             return "translate("+x_cor+","+(otherOffset+35)+")";
          })
          .attr("fill-opacity",1e-6)
          .attr("fill","white")
@@ -672,7 +680,13 @@ var handleModal = (d) => {
       .attr("height",405);
     chart.append("text")
          .attr("id","modal_stuff")
-         .attr("transform","translate(938,70)")
+         .attr("transform", function() {
+             var x_pos = 938;
+             if (typeof (InstallTrigger) !== 'undefined') {
+                 x_pos = 930
+             }
+             return "translate("+x_pos+",70)";
+         })
          .attr("fill-opacity",1e-6)
          .attr("fill","grey")
          .attr("font-size","40px")
