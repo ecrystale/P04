@@ -3,6 +3,8 @@
 {% block title %} NinTimeDo {% endblock %}
 {% block content %}
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='index.css') }}">
+<div id="modal">
+</div>
 <svg class="chart"></svg>
 <p class="bar_data" hidden>{{bar_data | tojson}}</p>
 <div class= "bottom_part">
@@ -11,7 +13,7 @@
             <tr>
                 <td>
                     Year:
-                    <select id="year">
+                    <select id="year_filter">
                         <option value="ally">All</option>
                         <option value="2006">2006</option>
                         <option value="2007">2007</option>
@@ -33,7 +35,7 @@
                 </td>
                 <td>
                     System:
-                    <select id="system">
+                    <select id="system_filter">
                         <option value="alls">All</option>
                         <option value="Nintendo 3DS">Nintendo 3DS</option>
                         <option value="Nintendo DS">Nintendo DS</option>
@@ -50,7 +52,7 @@
             <tr>
                 <td>
                   Price:
-                  <select id="price">
+                  <select id="price_filter">
                     <option value="allp">All</option>
                     <option value="100"> &gt; $90 </option>
                     <option value="90"> &#8804; $90 </option>
@@ -67,7 +69,7 @@
                 </td>
                 <td>
                   Category:
-                  <select id="category">
+                  <select id="category_filter">
                     <option value="allc">All</option>
                     <option value="Action">Action</option>
                     <option value="Adventure">Adventure</option>
@@ -76,6 +78,7 @@
                     <option value="Casual">Casual</option>
                     <option value="Communication">Communication</option>
                     <option value="Education">Education</option>
+                    <option value="Edutainment">Edutainment</option>
                     <option value="Exploration">Exploration</option>
                     <option value="Family">Family</option>
                     <option value="Fantasy">Fantasy</option>
@@ -171,8 +174,8 @@
 </div>
 <script src="http://d3js.org/d3.v5.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='index.js')}}"></script>
-<br><br><hr>
+<hr>
 <footer>
-  &copy; Team calm-squid-salsa
+  <b>&copy; Team calm-squid-salsa &mdash; Emily Lee, Tina Wong, Jason Lin, Isaac Jon</b>
 </footer>
 {% endblock %}

@@ -1,37 +1,47 @@
 html {
-        background: url('/static/nintendo.jpg') no-repeat center fixed;
-        background-size: cover;
-        background-color: hsla(0,0%,0%,0.80);
-        background-blend-mode: overlay;
-    }
+    background: url('/static/nintendo.jpg') no-repeat center fixed;
+    background-size: cover;
+    background-color: hsla(0,0%,0%,0.63);
+    background-blend-mode: overlay;
+}
+body{
+    margin: 0px 8px;
+}
 .filter_menu {
-  width: 50%;
-  display: inline;
-  float: left;
+    width: 50%;
+    display: inline;
+    float: left;
+}
+.chart{
+    position: relative;
 }
 table {
-  border-style: double;
-  border-collapse: separate;
-  border-spacing: 5px;
-  background-color: white;
-  margin: 0 auto;
+    border-style: double;
+    border-collapse: separate;
+    border-spacing: 5px 3px;
+    background-color: white;
+    margin: 0 auto;
 }
 td {
-  text-align: center;
+    text-align: center;
 }
 footer {
-  text-align: center;
-  color: white;
-  text-shadow: -1px 1px 0 #000,
-				  1px 1px 0 #000,
-				 1px -1px 0 #000,
-				-1px -1px 0 #000;
+    position: relative;
+    text-align: center;
+    color: white;
+    text-shadow: -1px 1px 0 #000,
+    1px 1px 0 #000,
+    1px -1px 0 #000,
+    -1px -1px 0 #000;
+}
+.bottom_part{
+    z-index: -2;
 }
 .legend_menu{
     display: inline;
 }
 .chart {
-  color: #FFFFFF;
+    color: #FFFFFF;
 }
 
 .legend_menu div{
@@ -40,7 +50,18 @@ footer {
     height:10px;
     display: inline-block;
 }
-
+#modal{
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 0; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+}
 #filter{
     margin: 0 auto;
 }

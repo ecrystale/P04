@@ -168,7 +168,7 @@ var display = (data, axis) => {
        .attr("class","box")
        .append("rect")
        .on("click", function(d) {
-           console.log(d);
+           handleModal(d);
        })
        .on("mouseover", handleHover)
        .on("mouseout", handleUnhover)
@@ -281,7 +281,7 @@ function handleHover(d,i) {
         x_result -= 260;
         changeSide = true;
     }
-    var y_col = transformVal.split(",")[1].split(")")[0];//.attr("transform").split(",")[1].split(")")[0];
+    var y_col = transformVal.split(",")[1].split(")")[0];
     var inner_y = d3.mouse(this)[1];
     var y_result = parseInt(y_col) + parseInt(inner_y) - 60;
     if (y_result > 250-offset){
@@ -325,8 +325,7 @@ function handleHover(d,i) {
          });
     chart.append("rect")
         .attr("id", "border")
-        .attr("x", x_result)
-        .attr("y", y_result-130)
+        .attr("transform","translate("+x_result+","+(y_result-130)+")")
         .attr("height", 380+offset)
         .attr("width", 210 )
         .style("fill", "white")
@@ -358,7 +357,7 @@ function handleUnhover(d,i) {
 	.attr("stroke","gray")
 	.attr("stroke-width",1);
     d3.selectAll("#title").remove();
-    d3.selectAll("#popup").remove();
+    d3.select("#popup").remove();
     d3.select("#img").remove();
     d3.select("#border").remove();
     d3.select("#system").remove();
@@ -400,10 +399,10 @@ var addText = (chart, outputText, x, y) => {
     }
 }
 
-var yearInput = document.getElementById("year");
-var systemInput = document.getElementById("system");
-var priceInput = document.getElementById("price");
-var categoryInput = document.getElementById("category");
+var yearInput = document.getElementById("year_filter");
+var systemInput = document.getElementById("system_filter");
+var priceInput = document.getElementById("price_filter");
+var categoryInput = document.getElementById("category_filter");
 var titleInput = document.getElementById("search");
 
 var filter = () => {
@@ -452,5 +451,225 @@ titleInput.addEventListener('keyup', () => {
     clearTimeout(searchTimer);
     searchTimer = setTimeout(filter,1500);
 })
+
+var handleModal = (d) => {
+    var modal_duration = 500;
+    var originalHeight = -999;
+    var otherOffset = 100;
+    chart.append("rect")
+         .attr("id","modal_stuff")
+         .attr("width",width)
+         .attr("height",height)
+         .attr("fill","black")
+         .attr("fill-opacity",0.6);
+    d3.select("#modal")
+      .style("display","block");
+    d3.select("#border")
+      .attr("id","modal_stuff")
+      .raise()
+      .transition().duration(modal_duration)
+      .attr("transform","translate(350,35)")
+      .attr("width",620)
+      .attr("height",425)
+      .attr("stroke","#e60012")
+      .attr("stroke-width","3");
+    d3.selectAll("#title")
+      .attr("id","modal_stuff")
+      .raise()
+      .transition().duration(modal_duration)
+      .attr("transform", function() {
+          var transformVal = this.attributes[1].nodeValue;
+          if (originalHeight === -999){
+              originalHeight = transformVal.split(",")[1].split(")")[0];
+              otherOffset += 22.39;
+              return "translate(675,100)";
+          }
+          else {
+              var titleOffset= transformVal.split(",")[1].split(")")[0] - originalHeight;
+              otherOffset += 22.39;
+              return "translate(675,"+(titleOffset+100)+")";
+          }
+      })
+      .attr("font-size","20px")
+      .attr("font-family", "LatoBlack, sans-serif")
+      .attr("font-weight","bold");
+    chart.append("rect")
+         .attr("id","modal_stuff")
+         .attr("transform","translate(675,50)")
+         .attr("fill","#e60012")
+         .attr("width",function(){
+             return d.system.length*8+10;
+         })
+         .attr("height",20)
+         .attr("fill-opacity",1e-6)
+         .transition().duration(modal_duration+1300)
+         .attr("fill-opacity",1);
+    d3.select("#system")
+      .attr("id","modal_stuff")
+      .raise()
+      .transition().duration(modal_duration)
+      .attr("transform","translate(680,65)")
+      .attr("fill","white")
+      .attr("font-size","15px")
+      .attr("font-family", "LatoBlack, sans-serif")
+      .attr("font-weight","bold");
+    d3.select("#release")
+      .attr("id","modal_stuff")
+      .raise()
+      .transition().duration(modal_duration)
+      .attr("fill","#808080")
+      .attr("font-size","13px")
+      .attr("font-family", "LatoBlack, sans-serif")
+      .attr("font-weight","bold")
+      .attr("transform",function (){
+          return "translate(675,"+otherOffset+")";
+      });
+    var priceText;
+    if (!d.eshop_price){
+        priceText = "No Price Data";
+    }
+    else if (d.eshop_price == "0.00"){
+        priceText = "Free";
+    }
+    else {
+        priceText = "$" + d.eshop_price;
+    }
+    chart.append("text")
+         .attr("id","modal_stuff")
+         .attr("transform",function() {
+             otherOffset += 35;
+             return "translate(675,"+otherOffset+")";
+         })
+         .attr("fill-opacity",1e-6)
+         .attr("fill","black")
+         .attr("font-size","25px")
+         .attr("font-family", "LatoBlack, sans-serif")
+         .attr("font-weight","bold")
+         .html(priceText)
+         .transition().duration(modal_duration+1300)
+         .attr("fill-opacity",1);
+
+    var genres = d.categories.category;
+    if (typeof(genres) === "string"){
+        genres = [genres];
+    }
+    chart.append("text")
+         .attr("id","modal_stuff")
+         .attr("transform",function() {
+             otherOffset += 35;
+             return "translate(675,"+otherOffset+")";
+         })
+         .attr("fill-opacity",1e-6)
+         .attr("fill","black")
+         .attr("font-size","20px")
+         .attr("font-family", "LatoBlack, sans-serif")
+         .attr("font-weight","bold")
+         .html(function() {
+             if (genres.length == 1){
+                 return "Genre:";
+             }
+             else {
+                 return "Genres:";
+             }
+         })
+         .transition().duration(modal_duration+1300)
+         .attr("fill-opacity",1);
+    var i;
+    for (i=0; i<genres.length; i++){
+        chart.append("text")
+             .attr("id","modal_stuff")
+             .attr("transform",function() {
+                 otherOffset += 20;
+                 return "translate(700,"+otherOffset+")";
+             })
+             .attr("fill-opacity",1e-6)
+             .attr("fill","#8f908f")
+             .attr("font-size","16px")
+             .attr("font-family", "LatoBlack, sans-serif")
+             .attr("font-weight","bold")
+             .html(genres[i])
+             .transition().duration(modal_duration+1700)
+             .attr("fill-opacity",1);
+    }
+    chart.append("text")
+         .attr("id","modal_stuff")
+         .attr("transform",function() {
+             otherOffset += 30;
+             return "translate(675,"+otherOffset+")";
+         })
+         .attr("fill-opacity",1e-6)
+         .attr("fill","black")
+         .attr("font-size","20px")
+         .attr("font-family", "LatoBlack, sans-serif")
+         .attr("font-weight","bold")
+         .html("Number of Players:")
+         .transition().duration(modal_duration+1300)
+         .attr("fill-opacity",1);
+    chart.append("text")
+         .attr("id","modal_stuff")
+         .attr("transform",function() {
+             otherOffset += 20;
+             return "translate(700,"+otherOffset+")";
+         })
+         .attr("fill-opacity",1e-6)
+         .attr("fill","#8f908f")
+         .attr("font-size","16px")
+         .attr("font-family", "LatoBlack, sans-serif")
+         .attr("font-weight","bold")
+         .html(d.number_of_players)
+         .transition().duration(modal_duration+1700)
+         .attr("fill-opacity",1);
+    chart.append("a")
+         .attr("id","modal_stuff")
+         .attr("xlink:href", "https://www.google.com/search?q="+d.title+" video game")
+         .attr("target","_blank")
+         .append("rect")
+         .attr("transform","translate(700,380)")
+         .attr("fill","#f8b050")
+         .attr("width",220)
+         .attr("height",50)
+         .attr("fill-opacity",1e-6)
+         .transition().duration(modal_duration+1300)
+         .attr("fill-opacity",1);
+    chart.append("a")
+         .attr("id","modal_stuff")
+         .attr("xlink:href", "https://www.google.com/search?q="+d.title+" video game")
+         .attr("target","_blank")
+         .append("text")
+         .attr("transform","translate(730,415)")
+         .attr("fill-opacity",1e-6)
+         .attr("fill","white")
+         .attr("font-size","30px")
+         .attr("font-family", "LatoBlack, sans-serif")
+         .attr("font-weight","bold")
+         .html("Learn More")
+         .transition().duration(modal_duration+1700)
+         .attr("fill-opacity",1);
+    d3.select("#img")
+      .attr("id","modal_stuff")
+      .raise()
+      .transition().duration(modal_duration)
+      .attr("transform","translate(360,45)")
+      .attr("width",300)
+      .attr("height",405);
+    chart.append("text")
+         .attr("id","modal_stuff")
+         .attr("transform","translate(938,70)")
+         .attr("fill-opacity",1e-6)
+         .attr("fill","grey")
+         .attr("font-size","40px")
+         .attr("font-family", "LatoBlack, sans-serif")
+         .attr("font-weight","bold")
+         .attr("cursor","pointer")
+         .html("&times;")
+         .on("click",removeModal)
+         .transition().duration(modal_duration+1300)
+         .attr("fill-opacity",1);
+}
+
+var removeModal = () => {
+    d3.selectAll("#modal_stuff").remove();
+    d3.select("#modal").style("display","none");
+}
 
 display(all_data,"y");
