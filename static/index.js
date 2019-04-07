@@ -262,37 +262,7 @@ var display = (data, axis) => {
     prevColHeight = maxColHeight;
 }
 
-
-
-var myCanvas = document.createElement('canvas');
-
 function handleHover(d,i) {
-    document.body.appendChild(myCanvas);
-    //var loc=getPointerInfo().getLocation();
-    // var xy=loc.getLocation();
-    //var e=window.event;
-    myCanvas.style.position = 'absolute';
-    console.log(event.clientX)
-    console.log(event.clientY)
-    myCanvas.style.left=event.clientX-20+"px";
-    myCanvas.style.top=event.clientY+"px";
-    myCanvas.style.zIndex="0";
-    myCanvas.style.width="5px";
-    myCanvas.style.height="10px";
-    myCanvas.width=myCanvas.offsetWidth;
-    myCanvas.height=myCanvas.offsetHeight;
-    var ctx=myCanvas.getContext("2d");
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(5, 5);
-    ctx.lineTo(0, 10);
-    ctx.closePath();
-    ctx.lineWidth = 10;
-    ctx.strokeStyle = '#666666';
-    ctx.stroke(); 
-    ctx.fillStyle = "#FFCC00";
-    ctx.fill();
-    
     var titleText = createText(18, d.title);
     var offset = (titleText.length-1) * 20;
 
@@ -300,8 +270,10 @@ function handleHover(d,i) {
     var x_col = transformVal.split("(")[1].split(",")[0];
     var inner_x = d3.mouse(this)[0];
     var x_result = parseInt(x_col) + parseInt(inner_x) + 25;
+    var changeSide = false;
     if (x_result > 1040){
         x_result -= 260;
+        changeSide = true;
     }
     var y_col = transformVal.split(",")[1].split(")")[0];//.attr("transform").split(",")[1].split(")")[0];
     var inner_y = d3.mouse(this)[1];
@@ -312,16 +284,46 @@ function handleHover(d,i) {
     else if (y_result < 160){
         y_result = 160;
     }
+    console.log(x_result);
     d3.select(this)
     .attr("stroke","turquoise")
 	.attr("stroke-width",2);
+    chart.append("polygon")
+         .attr("id","popup")
+         .attr("fill","white")
+         .attr("points", function(d){
+             var rectHeight = 475 / prevColHeight;
+             if (prevAxis === "y"){
+                 var offset1 = 0;
+                 var offset2 = 0;
+                 if (changeSide){
+                     offset1 = -16;
+                     offset2 = -100;
+                 }
+                 var tri = (parseInt(x_col)+13+offset1) + "," + (parseInt(y_col)+(rectHeight/2)) + " " +
+                           (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)+40)+ " " +
+                           (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)-40);
+                return tri
+            }
+            else {
+                var offset1 = 0;
+                var offset2 = 0;
+                if (changeSide){
+                    offset1 = -26;
+                    offset2 = -90;
+                }
+                var tri = (parseInt(x_col)+24+offset1) + "," + (parseInt(y_col)+(rectHeight/2)) + " " +
+                          (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)+40)+ " " +
+                          (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)-40);
+               return tri
+            }
+         });
     chart.append("rect")
         .attr("id", "border")
         .attr("x", x_result)
         .attr("y", y_result-130)
         .attr("height", 380+offset)
         .attr("width", 210 )
-        .style("stroke", 'black')
         .style("fill", "white")
         .style("stroke-width", border);
     addText(chart,titleText,x_result+5,y_result+200)
@@ -347,7 +349,6 @@ function handleHover(d,i) {
 }
 
 function handleUnhover(d,i) {
-    document.body.removeChild(myCanvas);
     d3.select(this)
 	.attr("stroke","gray")
 	.attr("stroke-width",1);
@@ -406,7 +407,6 @@ document.getElementById("filter").addEventListener("click",(e)=>{
         var curCategories = curGame.categories.category;
         if (typeof(curCategories) === "string"){
             curCategories = [curCategories];
-
         }
         if ((curYear == yearFilter || yearFilter === "ally") &&
         (curSystem == systemFilter || systemFilter === "alls") &&
