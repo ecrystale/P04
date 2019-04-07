@@ -333,12 +333,18 @@ function handleHover(d,i) {
     addText(chart,titleText,x_result+5,y_result+200)
     chart.append("text")
         .attr("id","system")
+        .attr("font-size","15px")
+        .attr("font-family", "LatoBlack, sans-serif")
         .attr("transform", function (d){
             return "translate(" + (x_result+5) + "," + (y_result+offset+220) + ")";
         })
         .html(d.system)
     chart.append("text")
         .attr("id","release")
+        .attr("fill","#707070")
+        .attr("font-size","15px")
+        .attr("font-family", "LatoBlack, sans-serif")
+        .attr("font-weight","bold")
         .attr("transform", function (d){
             return "translate(" + (x_result+5) + "," + (y_result+offset+240) + ")";
         })
@@ -392,6 +398,10 @@ var addText = (chart, outputText, x, y) => {
         }
         chart.append("text")
             .attr("id","title")
+            .attr("fill","black")
+            .attr("font-size","15px")
+            .attr("font-family", "LatoBlack, sans-serif")
+            .attr("font-weight","bold")
             .attr("transform", function (data){
                 return "translate(" + x + "," + (y+i*20) + ")";
             })
@@ -461,9 +471,11 @@ var handleModal = (d) => {
          .attr("width",width)
          .attr("height",height)
          .attr("fill","black")
-         .attr("fill-opacity",0.6);
+         .attr("fill-opacity",0.6)
+         .on("click",removeModal);
     d3.select("#modal")
-      .style("display","block");
+      .style("display","block")
+      .on("click",removeModal);
     d3.select("#border")
       .attr("id","modal_stuff")
       .raise()
@@ -478,7 +490,7 @@ var handleModal = (d) => {
       .raise()
       .transition().duration(modal_duration)
       .attr("transform", function() {
-          var transformVal = this.attributes[1].nodeValue;
+          var transformVal = this.attributes[5].nodeValue;
           if (originalHeight === -999){
               originalHeight = transformVal.split(",")[1].split(")")[0];
               otherOffset += 22.39;
@@ -491,8 +503,6 @@ var handleModal = (d) => {
           }
       })
       .attr("font-size","20px")
-      .attr("font-family", "LatoBlack, sans-serif")
-      .attr("font-weight","bold");
     chart.append("rect")
          .attr("id","modal_stuff")
          .attr("transform","translate(675,50)")
@@ -510,8 +520,6 @@ var handleModal = (d) => {
       .transition().duration(modal_duration)
       .attr("transform","translate(680,65)")
       .attr("fill","white")
-      .attr("font-size","15px")
-      .attr("font-family", "LatoBlack, sans-serif")
       .attr("font-weight","bold");
     d3.select("#release")
       .attr("id","modal_stuff")
@@ -519,7 +527,6 @@ var handleModal = (d) => {
       .transition().duration(modal_duration)
       .attr("fill","#808080")
       .attr("font-size","13px")
-      .attr("font-family", "LatoBlack, sans-serif")
       .attr("font-weight","bold")
       .attr("transform",function (){
           return "translate(675,"+otherOffset+")";
@@ -621,10 +628,16 @@ var handleModal = (d) => {
          .attr("fill-opacity",1);
     chart.append("a")
          .attr("id","modal_stuff")
-         .attr("xlink:href", "https://www.google.com/search?q="+d.title+" video game")
+         .attr("xlink:href", "https://www.google.com/search?q="+d.title+" nintendo")
          .attr("target","_blank")
          .append("rect")
-         .attr("transform","translate(700,380)")
+         .attr("transform", function () {
+             if (otherOffset < 370){
+                 return "translate(700,380)";
+             }
+             otherOffset += 10;
+             return "translate(700,"+otherOffset+")";
+         })
          .attr("fill","#f8b050")
          .attr("width",220)
          .attr("height",50)
@@ -633,10 +646,15 @@ var handleModal = (d) => {
          .attr("fill-opacity",1);
     chart.append("a")
          .attr("id","modal_stuff")
-         .attr("xlink:href", "https://www.google.com/search?q="+d.title+" video game")
+         .attr("xlink:href", "https://www.google.com/search?q="+d.title+" nintendo")
          .attr("target","_blank")
          .append("text")
-         .attr("transform","translate(730,415)")
+         .attr("transform", function () {
+             if (otherOffset < 380){
+                 return "translate(730,415)";
+             }
+             return "translate(730,"+(otherOffset+35)+")";
+         })
          .attr("fill-opacity",1e-6)
          .attr("fill","white")
          .attr("font-size","30px")
