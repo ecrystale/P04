@@ -143,82 +143,82 @@ var display = (data, axis) => {
     }
 
     bar.exit()
-	.transition()
-	.delay(function(d, i) { return i*2; })
-	.duration(trans_time)
-	.attr("transform","translate(0,550)")
-	.style("fill-opacity", 1e-6)
-	.style("stroke-opacity", 1e-6)
-	.remove();
+      .transition()
+      .delay(function(d, i) { return i*2; })
+      .duration(trans_time)
+      .attr("transform","translate(0,550)")
+      .style("fill-opacity", 1e-6)
+      .style("stroke-opacity", 1e-6)
+      .remove();
 
     bar.select("rect").transition()
-	.delay(function(d, i) { return i*3; })
-	.duration(trans_time)
-	.attr("width", function(d){
-            if (axis === "y"){
-		return 8.73;
-            }
-            else {
-		return 21.34038;
-            }
-	})
-	.attr("height",rectHeight)
-	.attr("transform", function(d) {
-            return "translate(" + d.colIndex + "," + (height - 20-rectHeight - (d.heightOffset*rectHeight)) +")";
-	});
+    	.delay(function(d, i) { return i*3; })
+    	.duration(trans_time)
+    	.attr("width", function(d){
+          if (axis === "y"){
+		         return 8.73;
+          }
+          else {
+		         return 21.34038;
+          }
+	    })
+    	.attr("height",rectHeight)
+    	.attr("transform", function(d) {
+                return "translate(" + d.colIndex + "," + (height - 20-rectHeight - (d.heightOffset*rectHeight)) +")";
+    	});
 
     // add boxes on the bar graph, colored a shade of red based on the price of the game that the box represents
     bar.enter().append("g")
-	.attr("class","box")
-	.append("rect")
-	.on("click", function(d) {
-            handleModal(d);
-	})
-	.on("mouseover", handleHover)
-	.on("mouseout", handleUnhover)
-	.attr("height",rectHeight)
-	.attr("fill", function(d){
-            if (d.eshop_price > 90){
-		return "#000000"
-            }
-            else if (d.eshop_price > 80){
-		return "#330000"
-            }
-            else if (Number(d.eshop_price) > 70){
-		return "#660000"
-            }
-            else if (Number(d.eshop_price) > 60){
-		return "#990000"
-            }
-            else if (Number(d.eshop_price) > 50){
-		return "#cc0000"
-            }
-            else if (Number(d.eshop_price) > 40){
-		return "#ff0000"
-            }
-            else if (Number(d.eshop_price) > 30){
-		return "#ff3333"
-            }
-            else if (Number(d.eshop_price)> 20){
-		return "#ff6666"
-            }
-            else if (Number(d.eshop_price) > 10) {
-		return "#ff9999"
-            }
-            else if (Number(d.eshop_price) > 0){
-		return "#ffcccc"
-            }
-            else if (Number(d.eshop_price) == 0){
-		return "#ffe6e6"
-            }
-            else {
-		return "white"
-            }
-	})
-	.attr("stroke","grey")
-	.attr("stroke-width",1)
-	.attr("transform", function(d){
-            return "translate(" + d.colIndex + ","+(height+20)+")";
+       .attr("class","box")
+       .append("rect")
+       .on("click", function(d) {
+           handleModal(d);
+       })
+       .on("mouseover", handleHover)
+       .on("mouseout", handleUnhover)
+       .attr("height",rectHeight)
+       .attr("fill", function(d){
+           if (d.eshop_price > 90){
+               return "#000000"
+           }
+           else if (d.eshop_price > 80){
+               return "#330000"
+           }
+           else if (Number(d.eshop_price) > 70){
+               return "#660000"
+           }
+           else if (Number(d.eshop_price) > 60){
+               return "#990000"
+           }
+           else if (Number(d.eshop_price) > 50){
+               return "#cc0000"
+           }
+           else if (Number(d.eshop_price) > 40){
+               return "#ff0000"
+           }
+           else if (Number(d.eshop_price) > 30){
+               return "#ff3333"
+           }
+           else if (Number(d.eshop_price)> 20){
+               return "#ff6666"
+           }
+           else if (Number(d.eshop_price) > 10) {
+               return "#ff9999"
+           }
+           else if (Number(d.eshop_price) > 0){
+               return "#ffcccc"
+           }
+           else if (Number(d.eshop_price) == 0){
+               return "#ffe6e6"
+           }
+           else {
+               return "white" // no price data available
+           }
+       })
+       .attr("stroke","grey")
+       .attr("stroke-width",1)
+       .attr("transform", function(d){
+           return "translate(" + d.colIndex + ","+(height+20)+")";
         })
         .transition().delay(function(d, i) { return i*3; })
         .duration(trans_time)
@@ -448,23 +448,23 @@ var filter = () => {
         var curCategories = curGame.categories.category;
         var curTitle = curGame.title;
         if (typeof(curCategories) === "string"){
-            curCategories = [curCategories];
+            curCategories = [curCategories]; // turn into list if category is a string
         }
         if ((curYear == yearFilter || yearFilter === "ally") &&
-            (curSystem == systemFilter || systemFilter === "alls") &&
-            ((Number(priceFilter) === 100 && curPrice > 90) ||
-             (Number(priceFilter) !== 100 && curPrice <=  Number(priceFilter)) ||
-             priceFilter === "allp") &&
-            (curCategories.includes(categoryFilter)|| categoryFilter === "allc" ) &&
-            (curTitle.toLowerCase().includes(titleFilter.toLowerCase()) || titleFilter.trim() === "")) {
-            temp_data.push(curGame); // add game to list of what boxes will be displayted
+        (curSystem == systemFilter || systemFilter === "alls") &&
+        ((Number(priceFilter) === 100 && curPrice > 90) ||
+        (Number(priceFilter) !== 100 && curPrice <=  Number(priceFilter)) ||
+        priceFilter === "allp") &&
+        (curCategories.includes(categoryFilter)|| categoryFilter === "allc" ) &&
+        (curTitle.toLowerCase().includes(titleFilter.toLowerCase()) || titleFilter.trim() === "")) { // case insensitive search
+            temp_data.push(curGame); // add game to list of what boxes will be displayed
         }
     }
     if (yearFilter !== "ally"){
-        display(temp_data,"m");
+        display(temp_data,"m"); // display months on axes
     }
     else {
-        display(temp_data,"y");
+        display(temp_data,"y"); // display years between 2006 and 2021
     }
 }
 
@@ -479,6 +479,7 @@ titleInput.addEventListener('keyup', () => {
     searchTimer = setTimeout(filter,1500);
 })
 
+// handles what will be displayed when the user clicks on the boxes in the graph
 var handleModal = (d) => {
     var modal_duration = 500;
     var originalHeight = -999;
@@ -577,6 +578,7 @@ var handleModal = (d) => {
         .transition().duration(modal_duration+1300)
         .attr("fill-opacity",1);
 
+    // display all the genres of the game
     var genres = d.categories.category;
     if (typeof(genres) === "string"){
         genres = [genres];
@@ -619,6 +621,7 @@ var handleModal = (d) => {
             .transition().duration(modal_duration+1700)
             .attr("fill-opacity",1);
     }
+    // display number of players required
     chart.append("text")
         .attr("id","modal_stuff")
         .attr("transform",function() {
@@ -647,6 +650,7 @@ var handleModal = (d) => {
         .html(d.number_of_players)
         .transition().duration(modal_duration+1700)
         .attr("fill-opacity",1);
+    // display a button that allows the user to learn more by conducting a google search using the title of the game
     chart.append("a")
         .attr("id","modal_stuff")
         .attr("xlink:href", "https://www.google.com/search?q="+d.title+" nintendo")
@@ -716,6 +720,7 @@ var handleModal = (d) => {
         .attr("fill-opacity",1);
 }
 
+// remove pop up box that is displayed when user clicks on the boxs
 var removeModal = () => {
     d3.selectAll("#modal_stuff").remove();
     d3.select("#modal").style("display","none");
