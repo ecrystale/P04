@@ -6,12 +6,12 @@ var chart = d3.select(".chart")
 
 // add title of graph
 chart.append("text")
-     .attr("fill","white")
-     .attr("font-size","32px")
-     .attr("font-family", "Tahoma, sans-serif")
-     .attr("font-weight","bold")
-     .html("NinTimeDo — Nintendo Game Timeline")
-     .attr("transform","translate(350,25)");
+    .attr("fill","white")
+    .attr("font-size","32px")
+    .attr("font-family", "Tahoma, sans-serif")
+    .attr("font-weight","bold")
+    .html("NinTimeDo — Nintendo Game Timeline")
+    .attr("transform","translate(350,25)");
 
 // Get the correctly organized data from python
 var all_data = JSON.parse(document.getElementsByClassName("bar_data")[0].innerHTML);
@@ -58,26 +58,26 @@ var display = (data, axis) => {
     // display axes on chart, adjust axes based on the filtering by year
     if (axis === "y"){
         x_scale = d3.scaleLinear()
-                    .domain([2005.8,2021.2])
-                    .range([0, 1210]);
+            .domain([2005.8,2021.2])
+            .range([0, 1210]);
 
         x_axis = d3.axisBottom()
-                   .scale(x_scale)
-                   .tickFormat(d3.format("d"))
-                   .ticks(17)
+            .scale(x_scale)
+            .tickFormat(d3.format("d"))
+            .ticks(17)
     }
     else {
         var o =d3.scalePoint()
-        .domain(["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan "])
-        .range([0,1210])
-        .padding(.3);
+            .domain(["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan "])
+            .range([0,1210])
+            .padding(.3);
 
         x_scale = d3.scaleTime()
-                    .domain([123232323, 12])
-                    .range([0, 1210]);
+            .domain([123232323, 12])
+            .range([0, 1210]);
 
         x_axis = d3.axisBottom()
-                   .scale(o);
+            .scale(o);
     }
 
     var bar = chart.selectAll(".box").data(data, function(e){return e.front_box_art+e.title+e.release_date+e.system});
@@ -143,82 +143,82 @@ var display = (data, axis) => {
     }
 
     bar.exit()
-       .transition()
-       .delay(function(d, i) { return i*2; })
-       .duration(trans_time)
-       .attr("transform","translate(0,550)")
-       .style("fill-opacity", 1e-6)
-       .style("stroke-opacity", 1e-6)
-       .remove();
+	.transition()
+	.delay(function(d, i) { return i*2; })
+	.duration(trans_time)
+	.attr("transform","translate(0,550)")
+	.style("fill-opacity", 1e-6)
+	.style("stroke-opacity", 1e-6)
+	.remove();
 
     bar.select("rect").transition()
-       .delay(function(d, i) { return i*3; })
-       .duration(trans_time)
-       .attr("width", function(d){
-           if (axis === "y"){
-               return 8.73;
-           }
-           else {
-               return 21.34038;
-           }
-       })
-       .attr("height",rectHeight)
-       .attr("transform", function(d) {
-           return "translate(" + d.colIndex + "," + (height - 20-rectHeight - (d.heightOffset*rectHeight)) +")";
-       });
+	.delay(function(d, i) { return i*3; })
+	.duration(trans_time)
+	.attr("width", function(d){
+            if (axis === "y"){
+		return 8.73;
+            }
+            else {
+		return 21.34038;
+            }
+	})
+	.attr("height",rectHeight)
+	.attr("transform", function(d) {
+            return "translate(" + d.colIndex + "," + (height - 20-rectHeight - (d.heightOffset*rectHeight)) +")";
+	});
 
     // add boxes on the bar graph, colored a shade of red based on the price of the game that the box represents
     bar.enter().append("g")
-       .attr("class","box")
-       .append("rect")
-       .on("click", function(d) {
-           handleModal(d);
-       })
-       .on("mouseover", handleHover)
-       .on("mouseout", handleUnhover)
-       .attr("height",rectHeight)
-       .attr("fill", function(d){
-           if (d.eshop_price > 90){
-               return "#000000"
-           }
-           else if (d.eshop_price > 80){
-               return "#330000"
-           }
-           else if (Number(d.eshop_price) > 70){
-               return "#660000"
-           }
-           else if (Number(d.eshop_price) > 60){
-               return "#990000"
-           }
-           else if (Number(d.eshop_price) > 50){
-               return "#cc0000"
-           }
-           else if (Number(d.eshop_price) > 40){
-               return "#ff0000"
-           }
-           else if (Number(d.eshop_price) > 30){
-               return "#ff3333"
-           }
-           else if (Number(d.eshop_price)> 20){
-               return "#ff6666"
-           }
-           else if (Number(d.eshop_price) > 10) {
-               return "#ff9999"
-           }
-           else if (Number(d.eshop_price) > 0){
-               return "#ffcccc"
-           }
-           else if (Number(d.eshop_price) == 0){
-               return "#ffe6e6"
-           }
-           else {
-               return "white"
-           }
-       })
-       .attr("stroke","grey")
-       .attr("stroke-width",1)
-       .attr("transform", function(d){
-           return "translate(" + d.colIndex + ","+(height+20)+")";
+	.attr("class","box")
+	.append("rect")
+	.on("click", function(d) {
+            handleModal(d);
+	})
+	.on("mouseover", handleHover)
+	.on("mouseout", handleUnhover)
+	.attr("height",rectHeight)
+	.attr("fill", function(d){
+            if (d.eshop_price > 90){
+		return "#000000"
+            }
+            else if (d.eshop_price > 80){
+		return "#330000"
+            }
+            else if (Number(d.eshop_price) > 70){
+		return "#660000"
+            }
+            else if (Number(d.eshop_price) > 60){
+		return "#990000"
+            }
+            else if (Number(d.eshop_price) > 50){
+		return "#cc0000"
+            }
+            else if (Number(d.eshop_price) > 40){
+		return "#ff0000"
+            }
+            else if (Number(d.eshop_price) > 30){
+		return "#ff3333"
+            }
+            else if (Number(d.eshop_price)> 20){
+		return "#ff6666"
+            }
+            else if (Number(d.eshop_price) > 10) {
+		return "#ff9999"
+            }
+            else if (Number(d.eshop_price) > 0){
+		return "#ffcccc"
+            }
+            else if (Number(d.eshop_price) == 0){
+		return "#ffe6e6"
+            }
+            else {
+		return "white"
+            }
+	})
+	.attr("stroke","grey")
+	.attr("stroke-width",1)
+	.attr("transform", function(d){
+            return "translate(" + d.colIndex + ","+(height+20)+")";
         })
         .transition().delay(function(d, i) { return i*3; })
         .duration(trans_time)
@@ -243,7 +243,7 @@ var display = (data, axis) => {
     }
     else {
         chart.selectAll(".x").transition().duration(trans_time+1500)
-             .attr("transform","translate(1300,480)").remove();
+            .attr("transform","translate(1300,480)").remove();
         chart.append('g')
             .attr("transform","translate(-1300,480)")
             .attr("class","x axis").transition().duration(trans_time+1500)
@@ -254,18 +254,18 @@ var display = (data, axis) => {
     if (prevColHeight === maxColHeight){
         chart.selectAll(".y").remove();
         chart.append('g')
-             .attr("transform","translate (25,5)")
-             .attr("class","y axis")
-             .call(y_axis);
+            .attr("transform","translate (25,5)")
+            .attr("class","y axis")
+            .call(y_axis);
     }
     else {
         chart.selectAll(".y").transition().duration(trans_time+1500)
-             .attr("transform","translate(25,-530)").remove();
+            .attr("transform","translate(25,-530)").remove();
         chart.append('g')
-             .attr("transform","translate(25,600)")
-             .attr("class","y axis").transition().duration(trans_time+1500)
-             .attr("transform","translate (25,5)")
-             .call(y_axis);
+            .attr("transform","translate(25,600)")
+            .attr("class","y axis").transition().duration(trans_time+1500)
+            .attr("transform","translate (25,5)")
+            .call(y_axis);
     }
 
     prevAxis = axis;
@@ -275,6 +275,14 @@ var display = (data, axis) => {
 // display data about the game when user hovers on a box in the bar graph, including
 // title, system, release date, and front box art
 function handleHover(d,i) {
+    chart.append("text")
+	.attr("id","showyear")
+	.attr("fill","grey")
+	.attr("font-size","100px")
+	.attr("font-family", "Tahoma, sans-serif")
+	.attr("font-weight","bold")
+	.html(d.release_date.split(" ")[2])
+	.attr("transform","translate(500,150)");
     var titleText = createText(18, d.title);
     var offset = (titleText.length-1) * 20;
 
@@ -297,23 +305,23 @@ function handleHover(d,i) {
         y_result = 160;
     }
     d3.select(this)
-    .attr("stroke","turquoise")
+	.attr("stroke","turquoise")
 	.attr("stroke-width",2);
     chart.append("polygon") // add triangle that sticks out to show which box you are hovering on
-         .attr("id","popup")
-         .attr("fill","white")
-         .attr("points", function(d){
-             var rectHeight = 475 / prevColHeight;
-             if (prevAxis === "y"){
-                 var offset1 = 0;
-                 var offset2 = 0;
-                 if (changeSide){
-                     offset1 = -16;
-                     offset2 = -100;
-                 }
-                 var tri = (parseInt(x_col)+13+offset1) + "," + (parseInt(y_col)+(rectHeight/2)) + " " +
-                           (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)+40)+ " " +
-                           (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)-40);
+        .attr("id","popup")
+        .attr("fill","white")
+        .attr("points", function(d){
+            var rectHeight = 475 / prevColHeight;
+            if (prevAxis === "y"){
+                var offset1 = 0;
+                var offset2 = 0;
+                if (changeSide){
+                    offset1 = -16;
+                    offset2 = -100;
+                }
+                var tri = (parseInt(x_col)+13+offset1) + "," + (parseInt(y_col)+(rectHeight/2)) + " " +
+                    (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)+40)+ " " +
+                    (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)-40);
                 return tri
             }
             else {
@@ -324,11 +332,11 @@ function handleHover(d,i) {
                     offset2 = -90;
                 }
                 var tri = (parseInt(x_col)+24+offset1) + "," + (parseInt(y_col)+(rectHeight/2)) + " " +
-                          (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)+40)+ " " +
-                          (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)-40);
-               return tri
+                    (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)+40)+ " " +
+                    (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)-40);
+		return tri
             }
-         });
+        });
     chart.append("rect")
         .attr("id", "border")
         .attr("transform","translate("+x_result+","+(y_result-130)+")")
@@ -366,6 +374,7 @@ function handleHover(d,i) {
 
 // removes pop-up box with data when the user stops hovering over the box
 function handleUnhover(d,i) {
+    d3.selectAll("#showyear").remove();
     d3.select(this)
 	.attr("stroke","gray")
 	.attr("stroke-width",1);
@@ -442,12 +451,12 @@ var filter = () => {
             curCategories = [curCategories];
         }
         if ((curYear == yearFilter || yearFilter === "ally") &&
-        (curSystem == systemFilter || systemFilter === "alls") &&
-        ((Number(priceFilter) === 100 && curPrice > 90) ||
-        (Number(priceFilter) !== 100 && curPrice <=  Number(priceFilter)) ||
-        priceFilter === "allp") &&
-        (curCategories.includes(categoryFilter)|| categoryFilter === "allc" ) &&
-        (curTitle.toLowerCase().includes(titleFilter.toLowerCase()) || titleFilter.trim() === "")) {
+            (curSystem == systemFilter || systemFilter === "alls") &&
+            ((Number(priceFilter) === 100 && curPrice > 90) ||
+             (Number(priceFilter) !== 100 && curPrice <=  Number(priceFilter)) ||
+             priceFilter === "allp") &&
+            (curCategories.includes(categoryFilter)|| categoryFilter === "allc" ) &&
+            (curTitle.toLowerCase().includes(titleFilter.toLowerCase()) || titleFilter.trim() === "")) {
             temp_data.push(curGame); // add game to list of what boxes will be displayted
         }
     }
@@ -475,74 +484,74 @@ var handleModal = (d) => {
     var originalHeight = -999;
     var otherOffset = 100;
     chart.append("rect")
-         .attr("id","modal_stuff")
-         .attr("width",width)
-         .attr("height",height)
-         .attr("fill","black")
-         .attr("fill-opacity",0.6)
-         .on("click",removeModal);
+        .attr("id","modal_stuff")
+        .attr("width",width)
+        .attr("height",height)
+        .attr("fill","black")
+        .attr("fill-opacity",0.6)
+        .on("click",removeModal);
     d3.select("#modal")
-      .style("display","block")
-      .on("click",removeModal);
+	.style("display","block")
+	.on("click",removeModal);
     d3.select("#border")
-      .attr("id","modal_stuff")
-      .raise()
-      .transition().duration(modal_duration)
-      .attr("transform","translate(350,35)")
-      .attr("width",620)
-      .attr("height",425)
-      .attr("stroke","#e60012")
-      .attr("stroke-width","3");
+	.attr("id","modal_stuff")
+	.raise()
+	.transition().duration(modal_duration)
+	.attr("transform","translate(350,35)")
+	.attr("width",620)
+	.attr("height",425)
+	.attr("stroke","#e60012")
+	.attr("stroke-width","3");
     d3.selectAll("#title")
-      .attr("id","modal_stuff")
-      .raise()
-      .transition().duration(modal_duration)
-      .attr("transform", function() {
-          var transformVal = this.attributes[5].nodeValue;
-          if (originalHeight === -999){
-              originalHeight = transformVal.split(",")[1].split(")")[0];
-              otherOffset += 22.39;
-              return "translate(675,100)";
-          }
-          else {
-              var titleOffset= transformVal.split(",")[1].split(")")[0] - originalHeight;
-              otherOffset += 22.39;
-              return "translate(675,"+(titleOffset+100)+")";
-          }
-      })
-      .attr("font-size","20px")
+	.attr("id","modal_stuff")
+	.raise()
+	.transition().duration(modal_duration)
+	.attr("transform", function() {
+            var transformVal = this.attributes[5].nodeValue;
+            if (originalHeight === -999){
+		originalHeight = transformVal.split(",")[1].split(")")[0];
+		otherOffset += 22.39;
+		return "translate(675,100)";
+            }
+            else {
+		var titleOffset= transformVal.split(",")[1].split(")")[0] - originalHeight;
+		otherOffset += 22.39;
+		return "translate(675,"+(titleOffset+100)+")";
+            }
+	})
+	.attr("font-size","20px")
     chart.append("rect")
-         .attr("id","modal_stuff")
-         .attr("transform","translate(675,50)")
-         .attr("fill","#e60012")
-         .attr("width",function(){
-             var systemWidth = 8;
-             if (typeof (InstallTrigger) !== 'undefined'){
-                 systemWidth = 9.5;
-             }
-             return d.system.length*systemWidth+10;
-         })
-         .attr("height",20)
-         .attr("fill-opacity",1e-6)
-         .transition().duration(modal_duration+1300)
-         .attr("fill-opacity",1);
+        .attr("id","modal_stuff")
+        .attr("transform","translate(675,50)")
+        .attr("fill","#e60012")
+        .attr("width",function(){
+            var systemWidth = 8;
+            if (typeof (InstallTrigger) !== 'undefined'){
+                systemWidth = 9.5;
+            }
+            return d.system.length*systemWidth+10;
+        })
+        .attr("height",20)
+        .attr("fill-opacity",1e-6)
+        .transition().duration(modal_duration+1300)
+        .attr("fill-opacity",1);
     d3.select("#system")
-      .attr("id","modal_stuff")
-      .raise()
-      .transition().duration(modal_duration)
-      .attr("transform","translate(680,65)")
-      .attr("fill","white")
-      .attr("font-weight","bold");
+	.attr("id","modal_stuff")
+	.raise()
+	.transition().duration(modal_duration)
+	.attr("transform","translate(680,65)")
+	.attr("fill","white")
+	.attr("font-weight","bold");
     d3.select("#release")
-      .attr("id","modal_stuff")
-      .raise()
-      .transition().duration(modal_duration)
-      .attr("fill","#808080")
-      .attr("font-size","13px")
-      .attr("font-weight","bold")
-      .attr("transform",function (){
-          return "translate(675,"+otherOffset+")";
-      });
+	.attr("id","modal_stuff")
+	.raise()
+	.transition().duration(modal_duration)
+	.attr("fill","#808080")
+	.attr("font-size","13px")
+	.attr("font-weight","bold")
+	.attr("transform",function (){
+            return "translate(675,"+otherOffset+")";
+	});
     var priceText;
     if (!d.eshop_price){
         priceText = "No Price Data";
@@ -554,157 +563,157 @@ var handleModal = (d) => {
         priceText = "$" + d.eshop_price;
     }
     chart.append("text")
-         .attr("id","modal_stuff")
-         .attr("transform",function() {
-             otherOffset += 35;
-             return "translate(675,"+otherOffset+")";
-         })
-         .attr("fill-opacity",1e-6)
-         .attr("fill","black")
-         .attr("font-size","25px")
-         .attr("font-family", "LatoBlack, sans-serif")
-         .attr("font-weight","bold")
-         .html(priceText)
-         .transition().duration(modal_duration+1300)
-         .attr("fill-opacity",1);
+        .attr("id","modal_stuff")
+        .attr("transform",function() {
+            otherOffset += 35;
+            return "translate(675,"+otherOffset+")";
+        })
+        .attr("fill-opacity",1e-6)
+        .attr("fill","black")
+        .attr("font-size","25px")
+        .attr("font-family", "LatoBlack, sans-serif")
+        .attr("font-weight","bold")
+        .html(priceText)
+        .transition().duration(modal_duration+1300)
+        .attr("fill-opacity",1);
 
     var genres = d.categories.category;
     if (typeof(genres) === "string"){
         genres = [genres];
     }
     chart.append("text")
-         .attr("id","modal_stuff")
-         .attr("transform",function() {
-             otherOffset += 35;
-             return "translate(675,"+otherOffset+")";
-         })
-         .attr("fill-opacity",1e-6)
-         .attr("fill","black")
-         .attr("font-size","20px")
-         .attr("font-family", "LatoBlack, sans-serif")
-         .attr("font-weight","bold")
-         .html(function() {
-             if (genres.length == 1){
-                 return "Genre:";
-             }
-             else {
-                 return "Genres:";
-             }
-         })
-         .transition().duration(modal_duration+1300)
-         .attr("fill-opacity",1);
+        .attr("id","modal_stuff")
+        .attr("transform",function() {
+            otherOffset += 35;
+            return "translate(675,"+otherOffset+")";
+        })
+        .attr("fill-opacity",1e-6)
+        .attr("fill","black")
+        .attr("font-size","20px")
+        .attr("font-family", "LatoBlack, sans-serif")
+        .attr("font-weight","bold")
+        .html(function() {
+            if (genres.length == 1){
+                return "Genre:";
+            }
+            else {
+                return "Genres:";
+            }
+        })
+        .transition().duration(modal_duration+1300)
+        .attr("fill-opacity",1);
     var i;
     for (i=0; i<genres.length; i++){
         chart.append("text")
-             .attr("id","modal_stuff")
-             .attr("transform",function() {
-                 otherOffset += 20;
-                 return "translate(700,"+otherOffset+")";
-             })
-             .attr("fill-opacity",1e-6)
-             .attr("fill","#8f908f")
-             .attr("font-size","16px")
-             .attr("font-family", "LatoBlack, sans-serif")
-             .attr("font-weight","bold")
-             .html(genres[i])
-             .transition().duration(modal_duration+1700)
-             .attr("fill-opacity",1);
+            .attr("id","modal_stuff")
+            .attr("transform",function() {
+                otherOffset += 20;
+                return "translate(700,"+otherOffset+")";
+            })
+            .attr("fill-opacity",1e-6)
+            .attr("fill","#8f908f")
+            .attr("font-size","16px")
+            .attr("font-family", "LatoBlack, sans-serif")
+            .attr("font-weight","bold")
+            .html(genres[i])
+            .transition().duration(modal_duration+1700)
+            .attr("fill-opacity",1);
     }
     chart.append("text")
-         .attr("id","modal_stuff")
-         .attr("transform",function() {
-             otherOffset += 30;
-             return "translate(675,"+otherOffset+")";
-         })
-         .attr("fill-opacity",1e-6)
-         .attr("fill","black")
-         .attr("font-size","20px")
-         .attr("font-family", "LatoBlack, sans-serif")
-         .attr("font-weight","bold")
-         .html("Number of Players:")
-         .transition().duration(modal_duration+1300)
-         .attr("fill-opacity",1);
+        .attr("id","modal_stuff")
+        .attr("transform",function() {
+            otherOffset += 30;
+            return "translate(675,"+otherOffset+")";
+        })
+        .attr("fill-opacity",1e-6)
+        .attr("fill","black")
+        .attr("font-size","20px")
+        .attr("font-family", "LatoBlack, sans-serif")
+        .attr("font-weight","bold")
+        .html("Number of Players:")
+        .transition().duration(modal_duration+1300)
+        .attr("fill-opacity",1);
     chart.append("text")
-         .attr("id","modal_stuff")
-         .attr("transform",function() {
-             otherOffset += 20;
-             return "translate(700,"+otherOffset+")";
-         })
-         .attr("fill-opacity",1e-6)
-         .attr("fill","#8f908f")
-         .attr("font-size","16px")
-         .attr("font-family", "LatoBlack, sans-serif")
-         .attr("font-weight","bold")
-         .html(d.number_of_players)
-         .transition().duration(modal_duration+1700)
-         .attr("fill-opacity",1);
+        .attr("id","modal_stuff")
+        .attr("transform",function() {
+            otherOffset += 20;
+            return "translate(700,"+otherOffset+")";
+        })
+        .attr("fill-opacity",1e-6)
+        .attr("fill","#8f908f")
+        .attr("font-size","16px")
+        .attr("font-family", "LatoBlack, sans-serif")
+        .attr("font-weight","bold")
+        .html(d.number_of_players)
+        .transition().duration(modal_duration+1700)
+        .attr("fill-opacity",1);
     chart.append("a")
-         .attr("id","modal_stuff")
-         .attr("xlink:href", "https://www.google.com/search?q="+d.title+" nintendo")
-         .attr("target","_blank")
-         .append("rect")
-         .attr("transform", function () {
-             if (otherOffset < 370){
-                 return "translate(700,380)";
-             }
-             otherOffset += 10;
-             return "translate(700,"+otherOffset+")";
-         })
-         .attr("fill","#f8b050")
-         .attr("width",220)
-         .attr("height",50)
-         .attr("fill-opacity",1e-6)
-         .transition().duration(modal_duration+1300)
-         .attr("fill-opacity",1);
+        .attr("id","modal_stuff")
+        .attr("xlink:href", "https://www.google.com/search?q="+d.title+" nintendo")
+        .attr("target","_blank")
+        .append("rect")
+        .attr("transform", function () {
+            if (otherOffset < 370){
+                return "translate(700,380)";
+            }
+            otherOffset += 10;
+            return "translate(700,"+otherOffset+")";
+        })
+        .attr("fill","#f8b050")
+        .attr("width",220)
+        .attr("height",50)
+        .attr("fill-opacity",1e-6)
+        .transition().duration(modal_duration+1300)
+        .attr("fill-opacity",1);
     chart.append("a")
-         .attr("id","modal_stuff")
-         .attr("xlink:href", "https://www.google.com/search?q="+d.title+" nintendo")
-         .attr("target","_blank")
-         .append("text")
-         .attr("transform", function () {
-             var x_cor = 730;
-             if (typeof (InstallTrigger) !== 'undefined'){
-                 x_cor = 715;
-             }
-             if (otherOffset < 380){
-                 return "translate("+x_cor+",415)";
-             }
-             return "translate("+x_cor+","+(otherOffset+35)+")";
-         })
-         .attr("fill-opacity",1e-6)
-         .attr("fill","white")
-         .attr("font-size","30px")
-         .attr("font-family", "LatoBlack, sans-serif")
-         .attr("font-weight","bold")
-         .html("Learn More")
-         .transition().duration(modal_duration+1700)
-         .attr("fill-opacity",1);
+        .attr("id","modal_stuff")
+        .attr("xlink:href", "https://www.google.com/search?q="+d.title+" nintendo")
+        .attr("target","_blank")
+        .append("text")
+        .attr("transform", function () {
+            var x_cor = 730;
+            if (typeof (InstallTrigger) !== 'undefined'){
+                x_cor = 715;
+            }
+            if (otherOffset < 380){
+                return "translate("+x_cor+",415)";
+            }
+            return "translate("+x_cor+","+(otherOffset+35)+")";
+        })
+        .attr("fill-opacity",1e-6)
+        .attr("fill","white")
+        .attr("font-size","30px")
+        .attr("font-family", "LatoBlack, sans-serif")
+        .attr("font-weight","bold")
+        .html("Learn More")
+        .transition().duration(modal_duration+1700)
+        .attr("fill-opacity",1);
     d3.select("#img")
-      .attr("id","modal_stuff")
-      .raise()
-      .transition().duration(modal_duration)
-      .attr("transform","translate(360,45)")
-      .attr("width",300)
-      .attr("height",405);
+	.attr("id","modal_stuff")
+	.raise()
+	.transition().duration(modal_duration)
+	.attr("transform","translate(360,45)")
+	.attr("width",300)
+	.attr("height",405);
     chart.append("text")
-         .attr("id","modal_stuff")
-         .attr("transform", function() {
-             var x_pos = 938;
-             if (typeof (InstallTrigger) !== 'undefined') {
-                 x_pos = 930
-             }
-             return "translate("+x_pos+",70)";
-         })
-         .attr("fill-opacity",1e-6)
-         .attr("fill","grey")
-         .attr("font-size","40px")
-         .attr("font-family", "LatoBlack, sans-serif")
-         .attr("font-weight","bold")
-         .attr("cursor","pointer")
-         .html("&times;")
-         .on("click",removeModal)
-         .transition().duration(modal_duration+1300)
-         .attr("fill-opacity",1);
+        .attr("id","modal_stuff")
+        .attr("transform", function() {
+            var x_pos = 938;
+            if (typeof (InstallTrigger) !== 'undefined') {
+                x_pos = 930
+            }
+            return "translate("+x_pos+",70)";
+        })
+        .attr("fill-opacity",1e-6)
+        .attr("fill","grey")
+        .attr("font-size","40px")
+        .attr("font-family", "LatoBlack, sans-serif")
+        .attr("font-weight","bold")
+        .attr("cursor","pointer")
+        .html("&times;")
+        .on("click",removeModal)
+        .transition().duration(modal_duration+1300)
+        .attr("fill-opacity",1);
 }
 
 var removeModal = () => {
