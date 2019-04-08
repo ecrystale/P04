@@ -56,7 +56,9 @@ Takes in an array of JSON objects and the string "y" or "m" for axis to know how
 the x axis and column width.
 Displays the columns and axis with transitions.
 */
+var xmy
 var display = (data, axis) => {
+    xmy=axis
     var x_scale;
     var x_axis;
     var y_scale;
@@ -179,7 +181,7 @@ var display = (data, axis) => {
        .on("click", function(d) {
            handleModal(d);
        })
-       .on("mouseover", handleHover)
+	.on("mouseover", handleHover)
        .on("mouseout", handleUnhover)
        .attr("height",rectHeight)
        .attr("fill", function(d){
@@ -283,10 +285,10 @@ var display = (data, axis) => {
 // title, system, release date, and front box art
 function handleHover(d,i) {
     yt=""
-    if (axis=="y"){
+    if (xmy=="y"){
 	 yt=d.release_date.split(" ")[2]
     }
-    else if (axis=="m"){
+    else if (xmy=="m"){
 	yt=d.release_date.split(" ")[0]
     }
     chart.append("text")
