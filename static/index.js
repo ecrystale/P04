@@ -16,6 +16,7 @@ chart.append("text")
 // Get the correctly organized data from python
 var all_data = JSON.parse(document.getElementsByClassName("bar_data")[0].innerHTML);
 
+// For yearly scale
 var month_dict = {
     "Jan": 0,
     "Feb": 0,
@@ -31,6 +32,7 @@ var month_dict = {
     "Dec": 5
 };
 
+// For monthly scale
 var month_dict2 = {
     "Jan": 0,
     "Feb": 1,
@@ -46,9 +48,14 @@ var month_dict2 = {
     "Dec": 11
 };
 
-var prevAxis = "m";
-var prevColHeight = -1;
+var prevAxis = "m"; // Either "y" for year or "m" for month
+var prevColHeight = -1; // Max height of the previous graph for knowing if we should change y axis
 
+/**
+Takes in an array of JSON objects and the string "y" or "m" for axis to know how to format
+the x axis and column width.
+Displays the columns and axis with transitions.
+*/
 var display = (data, axis) => {
     var x_scale;
     var x_axis;
@@ -67,29 +74,26 @@ var display = (data, axis) => {
             .ticks(17)
     }
     else {
-        var o =d3.scalePoint()
-            .domain(["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan "])
-            .range([0,1210])
-            .padding(.3);
-
-        x_scale = d3.scaleTime()
-            .domain([123232323, 12])
-            .range([0, 1210]);
+        var x_scale = d3.scalePoint()
+        .domain(["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan "])
+        .range([0,1210])
+        .padding(.3);
 
         x_axis = d3.axisBottom()
-            .scale(o);
+                   .scale(x_scale);
     }
 
+    // Selects all of the boxes and gives them each a unique identifier
     var bar = chart.selectAll(".box").data(data, function(e){return e.front_box_art+e.title+e.release_date+e.system});
-    var colSpace = [];
 
-    // transitions of axes
+    // Used for determining how many boxes are in each column
+    var colSpace = [];
     var i;
-    var trans_time = 1500;
     for (i=0; i<90; i++){
         colSpace.push(0);
     }
 
+    // Determines the width of each column and how high up each box is
     for (i=0; i<data.length; i++){
         var date = data[i].release_date.split(" ");
         var month = date[0];
@@ -117,108 +121,109 @@ var display = (data, axis) => {
         }
     }
 
+    // Use the maximum column height to scale y axis
     var maxColHeight = 0;
-
     for (i=0; i<colSpace.length; i++){
         if (colSpace[i] > maxColHeight){
             maxColHeight = colSpace[i];
         }
     }
-
     maxColHeight = Math.round(1.2*maxColHeight)+1;
-
-    var rectHeight = 475 / maxColHeight;
-
     y_scale = d3.scaleLinear()
         .domain([0,maxColHeight])
         .range([475,0]);
 
     if (maxColHeight < 20){
         y_axis = d3.axisLeft()
-            .scale(y_scale).ticks(maxColHeight+1);
+        .scale(y_scale).ticks(maxColHeight+1);
     }
     else {
         y_axis = d3.axisLeft()
-            .scale(y_scale);
+        .scale(y_scale);
     }
 
-    bar.exit()
-	.transition()
-	.delay(function(d, i) { return i*2; })
-	.duration(trans_time)
-	.attr("transform","translate(0,550)")
-	.style("fill-opacity", 1e-6)
-	.style("stroke-opacity", 1e-6)
-	.remove();
+    var rectHeight = 475 / maxColHeight;
+    var trans_time = 1500; //transition time
 
+    // Remove all of the boxes that are in the exit selection
+    bar.exit()
+      .transition()
+      .delay(function(d, i) { return i*2; })
+      .duration(trans_time)
+      .attr("transform","translate(0,550)")
+      .style("fill-opacity", 1e-6)
+      .style("stroke-opacity", 1e-6)
+      .remove();
+
+    // Move all of the boxes that are still in the chart
     bar.select("rect").transition()
-	.delay(function(d, i) { return i*3; })
-	.duration(trans_time)
-	.attr("width", function(d){
-            if (axis === "y"){
-		return 8.73;
-            }
-            else {
-		return 21.34038;
-            }
-	})
-	.attr("height",rectHeight)
-	.attr("transform", function(d) {
-            return "translate(" + d.colIndex + "," + (height - 20-rectHeight - (d.heightOffset*rectHeight)) +")";
-	});
+    	.delay(function(d, i) { return i*3; })
+    	.duration(trans_time)
+    	.attr("width", function(d){
+          if (axis === "y"){
+		         return 8.73;
+          }
+          else {
+		         return 21.34038;
+          }
+	    })
+    	.attr("height",rectHeight)
+    	.attr("transform", function(d) {
+                return "translate(" + d.colIndex + "," + (height - 20-rectHeight - (d.heightOffset*rectHeight)) +")";
+    	});
 
     // add boxes on the bar graph, colored a shade of red based on the price of the game that the box represents
     bar.enter().append("g")
-	.attr("class","box")
-	.append("rect")
-	.on("click", function(d) {
-            handleModal(d);
-	})
-	.on("mouseover", handleHover)
-	.on("mouseout", handleUnhover)
-	.attr("height",rectHeight)
-	.attr("fill", function(d){
-            if (d.eshop_price > 90){
-		return "#000000"
-            }
-            else if (d.eshop_price > 80){
-		return "#330000"
-            }
-            else if (Number(d.eshop_price) > 70){
-		return "#660000"
-            }
-            else if (Number(d.eshop_price) > 60){
-		return "#990000"
-            }
-            else if (Number(d.eshop_price) > 50){
-		return "#cc0000"
-            }
-            else if (Number(d.eshop_price) > 40){
-		return "#ff0000"
-            }
-            else if (Number(d.eshop_price) > 30){
-		return "#ff3333"
-            }
-            else if (Number(d.eshop_price)> 20){
-		return "#ff6666"
-            }
-            else if (Number(d.eshop_price) > 10) {
-		return "#ff9999"
-            }
-            else if (Number(d.eshop_price) > 0){
-		return "#ffcccc"
-            }
-            else if (Number(d.eshop_price) == 0){
-		return "#ffe6e6"
-            }
-            else {
-		return "white"
-            }
-	})
-	.attr("stroke","grey")
-	.attr("stroke-width",1)
-	.attr("transform", function(d){
-            return "translate(" + d.colIndex + ","+(height+20)+")";
+       .attr("class","box")
+       .append("rect")
+       .on("click", function(d) {
+           handleModal(d);
+       })
+       .on("mouseover", handleHover)
+       .on("mouseout", handleUnhover)
+       .attr("height",rectHeight)
+       .attr("fill", function(d){
+           if (d.eshop_price > 90){
+               return "#000000"
+           }
+           else if (d.eshop_price > 80){
+               return "#330000"
+           }
+           else if (Number(d.eshop_price) > 70){
+               return "#660000"
+           }
+           else if (Number(d.eshop_price) > 60){
+               return "#990000"
+           }
+           else if (Number(d.eshop_price) > 50){
+               return "#cc0000"
+           }
+           else if (Number(d.eshop_price) > 40){
+               return "#ff0000"
+           }
+           else if (Number(d.eshop_price) > 30){
+               return "#ff3333"
+           }
+           else if (Number(d.eshop_price)> 20){
+               return "#ff6666"
+           }
+           else if (Number(d.eshop_price) > 10) {
+               return "#ff9999"
+           }
+           else if (Number(d.eshop_price) > 0){
+               return "#ffcccc"
+           }
+           else if (Number(d.eshop_price) == 0){
+               return "#ffe6e6"
+           }
+           else {
+               return "white" // no price data available
+           }
+       })
+       .attr("stroke","grey")
+       .attr("stroke-width",1)
+       .attr("transform", function(d){
+           return "translate(" + d.colIndex + ","+(height+20)+")";
         })
         .transition().delay(function(d, i) { return i*3; })
         .duration(trans_time)
@@ -234,6 +239,7 @@ var display = (data, axis) => {
             return "translate(" + d.colIndex + "," + (height - 20-rectHeight - (d.heightOffset*rectHeight)) +")";
         });
 
+    // For transitioning x axis
     if (prevAxis === axis){
         chart.selectAll(".x").remove();
         chart.append('g')
@@ -251,6 +257,7 @@ var display = (data, axis) => {
             .call(x_axis)
     }
 
+    // For transitioning y axis
     if (prevColHeight === maxColHeight){
         chart.selectAll(".y").remove();
         chart.append('g')
@@ -294,6 +301,7 @@ function handleHover(d,i) {
     var titleText = createText(18, d.title);
     var offset = (titleText.length-1) * 20;
 
+    // Gets the x and y value of the "transform" attribute
     var transformVal = d3.select(this)["_groups"][0][0].attributes[4].nodeValue;
     var x_col = transformVal.split("(")[1].split(",")[0];
     var inner_x = d3.mouse(this)[0];
@@ -312,9 +320,10 @@ function handleHover(d,i) {
     else if (y_result < 160){
         y_result = 160;
     }
+
     d3.select(this)
-	.attr("stroke","turquoise")
-	.attr("stroke-width",2);
+      .attr("stroke","turquoise")
+      .attr("stroke-width",2);
     chart.append("polygon") // add triangle that sticks out to show which box you are hovering on
         .attr("id","popup")
         .attr("fill","white")
@@ -384,8 +393,8 @@ function handleHover(d,i) {
 function handleUnhover(d,i) {
     d3.selectAll("#showyear").remove();
     d3.select(this)
-	.attr("stroke","gray")
-	.attr("stroke-width",1);
+    	.attr("stroke","gray")
+    	.attr("stroke-width",1);
     d3.selectAll("#title").remove();
     d3.select("#popup").remove();
     d3.select("#img").remove();
@@ -394,6 +403,8 @@ function handleUnhover(d,i) {
     d3.select("#release").remove();
 }
 
+// Returns a list of list of words so that each sublist contains words that do
+// not exceed the maxLength. Used for keeping words within boxes when hovering
 var createText = (maxLength,text) => {
     var words = text.split(" ");
     var outputText = [];
@@ -413,6 +424,7 @@ var createText = (maxLength,text) => {
     return outputText;
 }
 
+// Takes the output from createText and puts it on the popup box
 var addText = (chart, outputText, x, y) => {
     for (i=0; i<outputText.length; i++){
         var j;
@@ -421,15 +433,15 @@ var addText = (chart, outputText, x, y) => {
             line += outputText[i][j] + " ";
         }
         chart.append("text")
-            .attr("id","title")
-            .attr("fill","black")
-            .attr("font-size","15px")
-            .attr("font-family", "LatoBlack, sans-serif")
-            .attr("font-weight","bold")
-            .attr("transform", function (data){
-                return "translate(" + x + "," + (y+i*20) + ")";
-            })
-            .html(line)
+             .attr("id","title")
+             .attr("fill","black")
+             .attr("font-size","15px")
+             .attr("font-family", "LatoBlack, sans-serif")
+             .attr("font-weight","bold")
+             .attr("transform", function (data){
+                 return "translate(" + x + "," + (y+i*20) + ")";
+             })
+             .html(line)
     }
 }
 
@@ -456,37 +468,40 @@ var filter = () => {
         var curCategories = curGame.categories.category;
         var curTitle = curGame.title;
         if (typeof(curCategories) === "string"){
-            curCategories = [curCategories];
+            curCategories = [curCategories]; // turn into list if category is a string
         }
         if ((curYear == yearFilter || yearFilter === "ally") &&
-            (curSystem == systemFilter || systemFilter === "alls") &&
-            ((Number(priceFilter) === 100 && curPrice > 90) ||
-             (Number(priceFilter) !== 100 && curPrice <=  Number(priceFilter)) ||
-             priceFilter === "allp") &&
-            (curCategories.includes(categoryFilter)|| categoryFilter === "allc" ) &&
-            (curTitle.toLowerCase().includes(titleFilter.toLowerCase()) || titleFilter.trim() === "")) {
-            temp_data.push(curGame); // add game to list of what boxes will be displayted
+        (curSystem == systemFilter || systemFilter === "alls") &&
+        ((Number(priceFilter) === 100 && curPrice > 90) ||
+        (Number(priceFilter) !== 100 && curPrice <=  Number(priceFilter)) ||
+        priceFilter === "allp") &&
+        (curCategories.includes(categoryFilter)|| categoryFilter === "allc" ) &&
+        (curTitle.toLowerCase().includes(titleFilter.toLowerCase()) || titleFilter.trim() === "")) { // case insensitive search
+            temp_data.push(curGame); // add game to list of what boxes will be displayed
         }
     }
     if (yearFilter !== "ally"){
-        display(temp_data,"m");
+        display(temp_data,"m"); // display months on axes
     }
     else {
-        display(temp_data,"y");
+        display(temp_data,"y"); // display years between 2006 and 2021
     }
 }
 
+// When user changes the filter, automatically changes graph
 yearInput.onchange = filter;
 systemInput.onchange = filter;
 priceInput.onchange = filter;
 categoryInput.onchange = filter;
 
+// Gives user time to type search term in before filtering
 var searchTimer;
 titleInput.addEventListener('keyup', () => {
     clearTimeout(searchTimer);
     searchTimer = setTimeout(filter,1500);
 })
 
+// handles what will be displayed when the user clicks on the boxes in the graph
 var handleModal = (d) => {
     var modal_duration = 500;
     var originalHeight = -999;
@@ -529,37 +544,37 @@ var handleModal = (d) => {
 	})
 	.attr("font-size","20px")
     chart.append("rect")
-        .attr("id","modal_stuff")
-        .attr("transform","translate(675,50)")
-        .attr("fill","#e60012")
-        .attr("width",function(){
-            var systemWidth = 8;
-            if (typeof (InstallTrigger) !== 'undefined'){
-                systemWidth = 9.5;
-            }
-            return d.system.length*systemWidth+10;
-        })
-        .attr("height",20)
-        .attr("fill-opacity",1e-6)
-        .transition().duration(modal_duration+1300)
-        .attr("fill-opacity",1);
+         .attr("id","modal_stuff")
+         .attr("transform","translate(675,50)")
+         .attr("fill","#e60012")
+         .attr("width",function(){
+             var systemWidth = 8;
+             if (typeof (InstallTrigger) !== 'undefined'){ // For firefox
+                 systemWidth = 9.5;
+             }
+             return d.system.length*systemWidth+10;
+         })
+         .attr("height",20)
+         .attr("fill-opacity",1e-6)
+         .transition().duration(modal_duration+1300)
+         .attr("fill-opacity",1);
     d3.select("#system")
-	.attr("id","modal_stuff")
-	.raise()
-	.transition().duration(modal_duration)
-	.attr("transform","translate(680,65)")
-	.attr("fill","white")
-	.attr("font-weight","bold");
+	  .attr("id","modal_stuff")
+      .raise()
+      .transition().duration(modal_duration)
+      .attr("transform","translate(680,65)")
+      .attr("fill","white")
+      .attr("font-weight","bold");
     d3.select("#release")
-	.attr("id","modal_stuff")
-	.raise()
-	.transition().duration(modal_duration)
-	.attr("fill","#808080")
-	.attr("font-size","13px")
-	.attr("font-weight","bold")
-	.attr("transform",function (){
-            return "translate(675,"+otherOffset+")";
-	});
+	  .attr("id","modal_stuff")
+      .raise()
+      .transition().duration(modal_duration)
+      .attr("fill","#808080")
+      .attr("font-size","13px")
+      .attr("font-weight","bold")
+      .attr("transform",function (){
+          return "translate(675,"+otherOffset+")";
+      });
     var priceText;
     if (!d.eshop_price){
         priceText = "No Price Data";
@@ -571,131 +586,148 @@ var handleModal = (d) => {
         priceText = "$" + d.eshop_price;
     }
     chart.append("text")
-        .attr("id","modal_stuff")
-        .attr("transform",function() {
-            otherOffset += 35;
-            return "translate(675,"+otherOffset+")";
-        })
-        .attr("fill-opacity",1e-6)
-        .attr("fill","black")
-        .attr("font-size","25px")
-        .attr("font-family", "LatoBlack, sans-serif")
-        .attr("font-weight","bold")
-        .html(priceText)
-        .transition().duration(modal_duration+1300)
-        .attr("fill-opacity",1);
+         .attr("id","modal_stuff")
+         .attr("transform",function() {
+             otherOffset += 35;
+             return "translate(675,"+otherOffset+")";
+         })
+         .attr("fill-opacity",1e-6)
+         .attr("fill","black")
+         .attr("font-size","25px")
+         .attr("font-family", "LatoBlack, sans-serif")
+         .attr("font-weight","bold")
+         .html(priceText)
+         .transition().duration(modal_duration+1300)
+         .attr("fill-opacity",1);
 
+    // display all the genres of the game
     var genres = d.categories.category;
     if (typeof(genres) === "string"){
         genres = [genres];
     }
     chart.append("text")
-        .attr("id","modal_stuff")
-        .attr("transform",function() {
-            otherOffset += 35;
-            return "translate(675,"+otherOffset+")";
-        })
-        .attr("fill-opacity",1e-6)
-        .attr("fill","black")
-        .attr("font-size","20px")
-        .attr("font-family", "LatoBlack, sans-serif")
-        .attr("font-weight","bold")
-        .html(function() {
-            if (genres.length == 1){
-                return "Genre:";
-            }
-            else {
-                return "Genres:";
-            }
-        })
-        .transition().duration(modal_duration+1300)
-        .attr("fill-opacity",1);
+         .attr("id","modal_stuff")
+         .attr("transform",function() {
+             otherOffset += 35;
+             return "translate(675,"+otherOffset+")";
+         })
+         .attr("fill-opacity",1e-6)
+         .attr("fill","black")
+         .attr("font-size","20px")
+         .attr("font-family", "LatoBlack, sans-serif")
+         .attr("font-weight","bold")
+         .html(function() {
+             if (genres.length == 1){
+                 return "Genre:";
+             }
+             else {
+                 return "Genres:";
+             }
+         })
+         .transition().duration(modal_duration+1300)
+         .attr("fill-opacity",1);
     var i;
     for (i=0; i<genres.length; i++){
         chart.append("text")
-            .attr("id","modal_stuff")
-            .attr("transform",function() {
-                otherOffset += 20;
-                return "translate(700,"+otherOffset+")";
-            })
-            .attr("fill-opacity",1e-6)
-            .attr("fill","#8f908f")
-            .attr("font-size","16px")
-            .attr("font-family", "LatoBlack, sans-serif")
-            .attr("font-weight","bold")
-            .html(genres[i])
-            .transition().duration(modal_duration+1700)
-            .attr("fill-opacity",1);
+             .attr("id","modal_stuff")
+             .attr("transform",function() {
+                 otherOffset += 20;
+                 return "translate(700,"+otherOffset+")";
+             })
+             .attr("fill-opacity",1e-6)
+             .attr("fill","#8f908f")
+             .attr("font-size","16px")
+             .attr("font-family", "LatoBlack, sans-serif")
+             .attr("font-weight","bold")
+             .html(genres[i])
+             .transition().duration(modal_duration+1700)
+             .attr("fill-opacity",1);
     }
+    // display number of players required
     chart.append("text")
-        .attr("id","modal_stuff")
-        .attr("transform",function() {
-            otherOffset += 30;
-            return "translate(675,"+otherOffset+")";
-        })
-        .attr("fill-opacity",1e-6)
-        .attr("fill","black")
-        .attr("font-size","20px")
-        .attr("font-family", "LatoBlack, sans-serif")
-        .attr("font-weight","bold")
-        .html("Number of Players:")
-        .transition().duration(modal_duration+1300)
-        .attr("fill-opacity",1);
+         .attr("id","modal_stuff")
+         .attr("transform",function() {
+             otherOffset += 30;
+             return "translate(675,"+otherOffset+")";
+         })
+         .attr("fill-opacity",1e-6)
+         .attr("fill","black")
+         .attr("font-size","20px")
+         .attr("font-family", "LatoBlack, sans-serif")
+         .attr("font-weight","bold")
+         .html("Number of Players:")
+         .transition().duration(modal_duration+1300)
+         .attr("fill-opacity",1);
     chart.append("text")
-        .attr("id","modal_stuff")
-        .attr("transform",function() {
-            otherOffset += 20;
-            return "translate(700,"+otherOffset+")";
-        })
-        .attr("fill-opacity",1e-6)
-        .attr("fill","#8f908f")
-        .attr("font-size","16px")
-        .attr("font-family", "LatoBlack, sans-serif")
-        .attr("font-weight","bold")
-        .html(d.number_of_players)
-        .transition().duration(modal_duration+1700)
-        .attr("fill-opacity",1);
+         .attr("id","modal_stuff")
+         .attr("transform",function() {
+             otherOffset += 20;
+             return "translate(700,"+otherOffset+")";
+         })
+         .attr("fill-opacity",1e-6)
+         .attr("fill","#8f908f")
+         .attr("font-size","16px")
+         .attr("font-family", "LatoBlack, sans-serif")
+         .attr("font-weight","bold")
+         .html(d.number_of_players)
+         .transition().duration(modal_duration+1700)
+         .attr("fill-opacity",1);
+    // Links to nintendo detail page if there is a link, else a google search
     chart.append("a")
-        .attr("id","modal_stuff")
-        .attr("xlink:href", "https://www.google.com/search?q="+d.title+" nintendo")
-        .attr("target","_blank")
-        .append("rect")
-        .attr("transform", function () {
-            if (otherOffset < 370){
-                return "translate(700,380)";
-            }
-            otherOffset += 10;
-            return "translate(700,"+otherOffset+")";
-        })
-        .attr("fill","#f8b050")
-        .attr("width",220)
-        .attr("height",50)
-        .attr("fill-opacity",1e-6)
-        .transition().duration(modal_duration+1300)
-        .attr("fill-opacity",1);
+         .attr("id","modal_stuff")
+         .attr("xlink:href", function(){
+             if (d.slug){
+                 return "https://www.nintendo.com/games/detail/"+d.slug;
+             }
+             else {
+                 return "https://www.google.com/search?q="+d.title+" nintendo";
+             }
+         })
+         .attr("target","_blank")
+         .append("rect")
+         .attr("transform", function () {
+             if (otherOffset < 370){
+                 return "translate(700,380)";
+             }
+             otherOffset += 10;
+             return "translate(700,"+otherOffset+")";
+         })
+         .attr("fill","#f8b050")
+         .attr("width",220)
+         .attr("height",50)
+         .attr("fill-opacity",1e-6)
+         .transition().duration(modal_duration+1300)
+         .attr("fill-opacity",1);
     chart.append("a")
-        .attr("id","modal_stuff")
-        .attr("xlink:href", "https://www.google.com/search?q="+d.title+" nintendo")
-        .attr("target","_blank")
-        .append("text")
-        .attr("transform", function () {
-            var x_cor = 730;
-            if (typeof (InstallTrigger) !== 'undefined'){
-                x_cor = 715;
-            }
-            if (otherOffset < 380){
-                return "translate("+x_cor+",415)";
-            }
-            return "translate("+x_cor+","+(otherOffset+35)+")";
-        })
-        .attr("fill-opacity",1e-6)
-        .attr("fill","white")
-        .attr("font-size","30px")
-        .attr("font-family", "LatoBlack, sans-serif")
-        .attr("font-weight","bold")
-        .html("Learn More")
-        .transition().duration(modal_duration+1700)
-        .attr("fill-opacity",1);
+         .attr("id","modal_stuff")
+         .attr("xlink:href", function(){
+             if (d.slug){
+                 return "https://www.nintendo.com/games/detail/"+d.slug;
+             }
+             else {
+                 return "https://www.google.com/search?q="+d.title+" nintendo";
+             }
+         })
+         .attr("target","_blank")
+         .append("text")
+         .attr("transform", function () {
+             var x_cor = 730;
+             if (typeof (InstallTrigger) !== 'undefined'){ // For firefox
+                 x_cor = 715;
+             }
+             if (otherOffset < 380){
+                 return "translate("+x_cor+",415)";
+             }
+             return "translate("+x_cor+","+(otherOffset+35)+")";
+         })
+         .attr("fill-opacity",1e-6)
+         .attr("fill","white")
+         .attr("font-size","30px")
+         .attr("font-family", "LatoBlack, sans-serif")
+         .attr("font-weight","bold")
+         .html("Learn More")
+         .transition().duration(modal_duration+1700)
+         .attr("fill-opacity",1);
     d3.select("#img")
 	.attr("id","modal_stuff")
 	.raise()
@@ -704,26 +736,27 @@ var handleModal = (d) => {
 	.attr("width",300)
 	.attr("height",405);
     chart.append("text")
-        .attr("id","modal_stuff")
-        .attr("transform", function() {
-            var x_pos = 938;
-            if (typeof (InstallTrigger) !== 'undefined') {
-                x_pos = 930
-            }
-            return "translate("+x_pos+",70)";
-        })
-        .attr("fill-opacity",1e-6)
-        .attr("fill","grey")
-        .attr("font-size","40px")
-        .attr("font-family", "LatoBlack, sans-serif")
-        .attr("font-weight","bold")
-        .attr("cursor","pointer")
-        .html("&times;")
-        .on("click",removeModal)
-        .transition().duration(modal_duration+1300)
-        .attr("fill-opacity",1);
+         .attr("id","modal_stuff")
+         .attr("transform", function() {
+             var x_pos = 938;
+             if (typeof (InstallTrigger) !== 'undefined') { // For firefox
+                 x_pos = 930
+             }
+             return "translate("+x_pos+",70)";
+         })
+         .attr("fill-opacity",1e-6)
+         .attr("fill","grey")
+         .attr("font-size","40px")
+         .attr("font-family", "LatoBlack, sans-serif")
+         .attr("font-weight","bold")
+         .attr("cursor","pointer")
+         .html("&times;")
+         .on("click",removeModal)
+         .transition().duration(modal_duration+1300)
+         .attr("fill-opacity",1);
 }
 
+// Removes the popup modal
 var removeModal = () => {
     d3.selectAll("#modal_stuff").remove();
     d3.select("#modal").style("display","none");
