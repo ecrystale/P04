@@ -50,7 +50,7 @@ $ . venv/bin/activate
 ```
 4. Run the following command to install all the packages needed for the data visualization to display on the Flask server:
 ```
-(venv)$ pip install -r requirements.txt
+(venv) $ pip install -r requirements.txt
 ```
 5. Now, activate your virtual environment and run the python file to start the Flask server:
 ```
