@@ -376,8 +376,8 @@ function handleHover(d,i) {
 function handleUnhover(d,i) {
     d3.selectAll("#showyear").remove();
     d3.select(this)
-	.attr("stroke","gray")
-	.attr("stroke-width",1);
+    	.attr("stroke","gray")
+    	.attr("stroke-width",1);
     d3.selectAll("#title").remove();
     d3.select("#popup").remove();
     d3.select("#img").remove();
