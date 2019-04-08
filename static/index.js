@@ -6,12 +6,12 @@ var chart = d3.select(".chart")
 
 // add title of graph
 chart.append("text")
-     .attr("fill","white")
-     .attr("font-size","32px")
-     .attr("font-family", "Tahoma, sans-serif")
-     .attr("font-weight","bold")
-     .html("NinTimeDo — Nintendo Game Timeline")
-     .attr("transform","translate(350,25)");
+    .attr("fill","white")
+    .attr("font-size","32px")
+    .attr("font-family", "Tahoma, sans-serif")
+    .attr("font-weight","bold")
+    .html("NinTimeDo — Nintendo Game Timeline")
+    .attr("transform","translate(350,25)");
 
 // Get the correctly organized data from python
 var all_data = JSON.parse(document.getElementsByClassName("bar_data")[0].innerHTML);
@@ -65,13 +65,13 @@ var display = (data, axis) => {
     // display axes on chart, adjust axes based on the filtering by year
     if (axis === "y"){
         x_scale = d3.scaleLinear()
-                    .domain([2005.8,2021.2])
-                    .range([0, 1210]);
+            .domain([2005.8,2021.2])
+            .range([0, 1210]);
 
         x_axis = d3.axisBottom()
-                   .scale(x_scale)
-                   .tickFormat(d3.format("d"))
-                   .ticks(17)
+            .scale(x_scale)
+            .tickFormat(d3.format("d"))
+            .ticks(17)
     }
     else {
         var x_scale = d3.scalePoint()
@@ -147,30 +147,30 @@ var display = (data, axis) => {
 
     // Remove all of the boxes that are in the exit selection
     bar.exit()
-       .transition()
-       .delay(function(d, i) { return i*2; })
-       .duration(trans_time)
-       .attr("transform","translate(0,550)")
-       .style("fill-opacity", 1e-6)
-       .style("stroke-opacity", 1e-6)
-       .remove();
+      .transition()
+      .delay(function(d, i) { return i*2; })
+      .duration(trans_time)
+      .attr("transform","translate(0,550)")
+      .style("fill-opacity", 1e-6)
+      .style("stroke-opacity", 1e-6)
+      .remove();
 
     // Move all of the boxes that are still in the chart
     bar.select("rect").transition()
-       .delay(function(d, i) { return i*3; })
-       .duration(trans_time)
-       .attr("width", function(d){
-           if (axis === "y"){
-               return 8.73;
-           }
-           else {
-               return 21.34038;
-           }
-       })
-       .attr("height",rectHeight)
-       .attr("transform", function(d) {
-           return "translate(" + d.colIndex + "," + (height - 20-rectHeight - (d.heightOffset*rectHeight)) +")";
-       });
+    	.delay(function(d, i) { return i*3; })
+    	.duration(trans_time)
+    	.attr("width", function(d){
+          if (axis === "y"){
+		         return 8.73;
+          }
+          else {
+		         return 21.34038;
+          }
+	    })
+    	.attr("height",rectHeight)
+    	.attr("transform", function(d) {
+                return "translate(" + d.colIndex + "," + (height - 20-rectHeight - (d.heightOffset*rectHeight)) +")";
+    	});
 
     // add boxes on the bar graph, colored a shade of red based on the price of the game that the box represents
     bar.enter().append("g")
@@ -217,7 +217,7 @@ var display = (data, axis) => {
                return "#ffe6e6"
            }
            else {
-               return "white"
+               return "white" // no price data available
            }
        })
        .attr("stroke","grey")
@@ -249,7 +249,7 @@ var display = (data, axis) => {
     }
     else {
         chart.selectAll(".x").transition().duration(trans_time+1500)
-             .attr("transform","translate(1300,480)").remove();
+            .attr("transform","translate(1300,480)").remove();
         chart.append('g')
             .attr("transform","translate(-1300,480)")
             .attr("class","x axis").transition().duration(trans_time+1500)
@@ -261,18 +261,18 @@ var display = (data, axis) => {
     if (prevColHeight === maxColHeight){
         chart.selectAll(".y").remove();
         chart.append('g')
-             .attr("transform","translate (25,5)")
-             .attr("class","y axis")
-             .call(y_axis);
+            .attr("transform","translate (25,5)")
+            .attr("class","y axis")
+            .call(y_axis);
     }
     else {
         chart.selectAll(".y").transition().duration(trans_time+1500)
-             .attr("transform","translate(25,-530)").remove();
+            .attr("transform","translate(25,-530)").remove();
         chart.append('g')
-             .attr("transform","translate(25,600)")
-             .attr("class","y axis").transition().duration(trans_time+1500)
-             .attr("transform","translate (25,5)")
-             .call(y_axis);
+            .attr("transform","translate(25,600)")
+            .attr("class","y axis").transition().duration(trans_time+1500)
+            .attr("transform","translate (25,5)")
+            .call(y_axis);
     }
 
     prevAxis = axis;
@@ -282,6 +282,14 @@ var display = (data, axis) => {
 // display data about the game when user hovers on a box in the bar graph, including
 // title, system, release date, and front box art
 function handleHover(d,i) {
+    chart.append("text")
+	.attr("id","showyear")
+	.attr("fill","grey")
+	.attr("font-size","100px")
+	.attr("font-family", "Tahoma, sans-serif")
+	.attr("font-weight","bold")
+	.html(d.release_date.split(" ")[2])
+	.attr("transform","translate(500,150)");
     var titleText = createText(18, d.title);
     var offset = (titleText.length-1) * 20;
 
@@ -309,20 +317,20 @@ function handleHover(d,i) {
       .attr("stroke","turquoise")
       .attr("stroke-width",2);
     chart.append("polygon") // add triangle that sticks out to show which box you are hovering on
-         .attr("id","popup")
-         .attr("fill","white")
-         .attr("points", function(d){
-             var rectHeight = 475 / prevColHeight;
-             if (prevAxis === "y"){
-                 var offset1 = 0;
-                 var offset2 = 0;
-                 if (changeSide){
-                     offset1 = -16;
-                     offset2 = -100;
-                 }
-                 var tri = (parseInt(x_col)+13+offset1) + "," + (parseInt(y_col)+(rectHeight/2)) + " " +
-                           (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)+40)+ " " +
-                           (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)-40);
+        .attr("id","popup")
+        .attr("fill","white")
+        .attr("points", function(d){
+            var rectHeight = 475 / prevColHeight;
+            if (prevAxis === "y"){
+                var offset1 = 0;
+                var offset2 = 0;
+                if (changeSide){
+                    offset1 = -16;
+                    offset2 = -100;
+                }
+                var tri = (parseInt(x_col)+13+offset1) + "," + (parseInt(y_col)+(rectHeight/2)) + " " +
+                    (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)+40)+ " " +
+                    (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)-40);
                 return tri
             }
             else {
@@ -333,11 +341,11 @@ function handleHover(d,i) {
                     offset2 = -90;
                 }
                 var tri = (parseInt(x_col)+24+offset1) + "," + (parseInt(y_col)+(rectHeight/2)) + " " +
-                          (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)+40)+ " " +
-                          (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)-40);
-               return tri
+                    (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)+40)+ " " +
+                    (parseInt(x_col)+50+offset2) + "," + (parseInt(y_col)+(rectHeight/2)-40);
+		return tri
             }
-         });
+        });
     chart.append("rect")
         .attr("id", "border")
         .attr("transform","translate("+x_result+","+(y_result-130)+")")
@@ -375,9 +383,10 @@ function handleHover(d,i) {
 
 // removes pop-up box with data when the user stops hovering over the box
 function handleUnhover(d,i) {
+    d3.selectAll("#showyear").remove();
     d3.select(this)
-	.attr("stroke","gray")
-	.attr("stroke-width",1);
+    	.attr("stroke","gray")
+    	.attr("stroke-width",1);
     d3.selectAll("#title").remove();
     d3.select("#popup").remove();
     d3.select("#img").remove();
@@ -451,7 +460,7 @@ var filter = () => {
         var curCategories = curGame.categories.category;
         var curTitle = curGame.title;
         if (typeof(curCategories) === "string"){
-            curCategories = [curCategories];
+            curCategories = [curCategories]; // turn into list if category is a string
         }
         if ((curYear == yearFilter || yearFilter === "ally") &&
         (curSystem == systemFilter || systemFilter === "alls") &&
@@ -459,15 +468,15 @@ var filter = () => {
         (Number(priceFilter) !== 100 && curPrice <=  Number(priceFilter)) ||
         priceFilter === "allp") &&
         (curCategories.includes(categoryFilter)|| categoryFilter === "allc" ) &&
-        (curTitle.toLowerCase().includes(titleFilter.toLowerCase()) || titleFilter.trim() === "")) {
-            temp_data.push(curGame); // add game to list of what boxes will be displayted
+        (curTitle.toLowerCase().includes(titleFilter.toLowerCase()) || titleFilter.trim() === "")) { // case insensitive search
+            temp_data.push(curGame); // add game to list of what boxes will be displayed
         }
     }
     if (yearFilter !== "ally"){
-        display(temp_data,"m");
+        display(temp_data,"m"); // display months on axes
     }
     else {
-        display(temp_data,"y");
+        display(temp_data,"y"); // display years between 2006 and 2021
     }
 }
 
@@ -484,48 +493,48 @@ titleInput.addEventListener('keyup', () => {
     searchTimer = setTimeout(filter,1500);
 })
 
-// Makes the transition to the bigger box when user clicks on smaller box
+// handles what will be displayed when the user clicks on the boxes in the graph
 var handleModal = (d) => {
     var modal_duration = 500;
     var originalHeight = -999;
     var otherOffset = 100;
     chart.append("rect")
-         .attr("id","modal_stuff")
-         .attr("width",width)
-         .attr("height",height)
-         .attr("fill","black")
-         .attr("fill-opacity",0.6)
-         .on("click",removeModal);
+        .attr("id","modal_stuff")
+        .attr("width",width)
+        .attr("height",height)
+        .attr("fill","black")
+        .attr("fill-opacity",0.6)
+        .on("click",removeModal);
     d3.select("#modal")
-      .style("display","block")
-      .on("click",removeModal);
+	.style("display","block")
+	.on("click",removeModal);
     d3.select("#border")
-      .attr("id","modal_stuff")
-      .raise()
-      .transition().duration(modal_duration)
-      .attr("transform","translate(350,35)")
-      .attr("width",620)
-      .attr("height",425)
-      .attr("stroke","#e60012")
-      .attr("stroke-width","3");
+	.attr("id","modal_stuff")
+	.raise()
+	.transition().duration(modal_duration)
+	.attr("transform","translate(350,35)")
+	.attr("width",620)
+	.attr("height",425)
+	.attr("stroke","#e60012")
+	.attr("stroke-width","3");
     d3.selectAll("#title")
-      .attr("id","modal_stuff")
-      .raise()
-      .transition().duration(modal_duration)
-      .attr("transform", function() {
-          var transformVal = this.attributes[5].nodeValue;
-          if (originalHeight === -999){
-              originalHeight = transformVal.split(",")[1].split(")")[0];
-              otherOffset += 22.39;
-              return "translate(675,100)";
-          }
-          else {
-              var titleOffset= transformVal.split(",")[1].split(")")[0] - originalHeight;
-              otherOffset += 22.39;
-              return "translate(675,"+(titleOffset+100)+")";
-          }
-      })
-      .attr("font-size","20px")
+	.attr("id","modal_stuff")
+	.raise()
+	.transition().duration(modal_duration)
+	.attr("transform", function() {
+            var transformVal = this.attributes[5].nodeValue;
+            if (originalHeight === -999){
+		originalHeight = transformVal.split(",")[1].split(")")[0];
+		otherOffset += 22.39;
+		return "translate(675,100)";
+            }
+            else {
+		var titleOffset= transformVal.split(",")[1].split(")")[0] - originalHeight;
+		otherOffset += 22.39;
+		return "translate(675,"+(titleOffset+100)+")";
+            }
+	})
+	.attr("font-size","20px")
     chart.append("rect")
          .attr("id","modal_stuff")
          .attr("transform","translate(675,50)")
@@ -542,14 +551,14 @@ var handleModal = (d) => {
          .transition().duration(modal_duration+1300)
          .attr("fill-opacity",1);
     d3.select("#system")
-      .attr("id","modal_stuff")
+	  .attr("id","modal_stuff")
       .raise()
       .transition().duration(modal_duration)
       .attr("transform","translate(680,65)")
       .attr("fill","white")
       .attr("font-weight","bold");
     d3.select("#release")
-      .attr("id","modal_stuff")
+	  .attr("id","modal_stuff")
       .raise()
       .transition().duration(modal_duration)
       .attr("fill","#808080")
@@ -583,6 +592,7 @@ var handleModal = (d) => {
          .transition().duration(modal_duration+1300)
          .attr("fill-opacity",1);
 
+    // display all the genres of the game
     var genres = d.categories.category;
     if (typeof(genres) === "string"){
         genres = [genres];
@@ -625,6 +635,7 @@ var handleModal = (d) => {
              .transition().duration(modal_duration+1700)
              .attr("fill-opacity",1);
     }
+    // display number of players required
     chart.append("text")
          .attr("id","modal_stuff")
          .attr("transform",function() {
@@ -710,12 +721,12 @@ var handleModal = (d) => {
          .transition().duration(modal_duration+1700)
          .attr("fill-opacity",1);
     d3.select("#img")
-      .attr("id","modal_stuff")
-      .raise()
-      .transition().duration(modal_duration)
-      .attr("transform","translate(360,45)")
-      .attr("width",300)
-      .attr("height",405);
+	.attr("id","modal_stuff")
+	.raise()
+	.transition().duration(modal_duration)
+	.attr("transform","translate(360,45)")
+	.attr("width",300)
+	.attr("height",405);
     chart.append("text")
          .attr("id","modal_stuff")
          .attr("transform", function() {
