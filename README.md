@@ -56,3 +56,4 @@ $ . venv/bin/activate
 ```
 (venv) $ python3 app.py
 ```
+6. Visit the website at (http://localhost:5000/)[http://localhost:5000/]
