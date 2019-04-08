@@ -3,12 +3,6 @@ var width = 1250, height = 500;
 var chart = d3.select(".chart")
     .attr("width", width)
     .attr("height", height)
-    .on("mouseout", function(){
-        d3.select("#showyear")
-          .attr("fill-opacity",0.5)
-          .transition().duration(1000)
-          .attr("fill-opacity",0);
-    })
 
 // add title of graph
 chart.append("text")
@@ -402,6 +396,10 @@ function handleHover(d,i) {
 
 // removes pop-up box with data when the user stops hovering over the box
 function handleUnhover(d,i) {
+    d3.select("#showyear")
+      .attr("fill-opacity",0.5)
+      .transition().duration(1000)
+      .attr("fill-opacity",0);
     d3.select(this)
     	.attr("stroke","gray")
     	.attr("stroke-width",1);
