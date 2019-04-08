@@ -4,6 +4,7 @@ var chart = d3.select(".chart")
     .attr("width", width)
     .attr("height", height)
 
+// add title of graph
 chart.append("text")
      .attr("fill","white")
      .attr("font-size","32px")
@@ -54,6 +55,7 @@ var display = (data, axis) => {
     var y_scale;
     var y_axis;
 
+    // display axes on chart, adjust axes based on the filtering by year
     if (axis === "y"){
         x_scale = d3.scaleLinear()
                     .domain([2005.8,2021.2])
@@ -81,6 +83,7 @@ var display = (data, axis) => {
     var bar = chart.selectAll(".box").data(data, function(e){return e.front_box_art+e.title+e.release_date+e.system});
     var colSpace = [];
 
+    // transitions of axes
     var i;
     var trans_time = 1500;
     for (i=0; i<90; i++){
@@ -164,6 +167,7 @@ var display = (data, axis) => {
            return "translate(" + d.colIndex + "," + (height - 20-rectHeight - (d.heightOffset*rectHeight)) +")";
        });
 
+    // add boxes on the bar graph, colored a shade of red based on the price of the game that the box represents
     bar.enter().append("g")
        .attr("class","box")
        .append("rect")
@@ -268,6 +272,8 @@ var display = (data, axis) => {
     prevColHeight = maxColHeight;
 }
 
+// display data about the game when user hovers on a box in the bar graph, including
+// title, system, release date, and front box art
 function handleHover(d,i) {
     var titleText = createText(18, d.title);
     var offset = (titleText.length-1) * 20;
@@ -293,7 +299,7 @@ function handleHover(d,i) {
     d3.select(this)
     .attr("stroke","turquoise")
 	.attr("stroke-width",2);
-    chart.append("polygon")
+    chart.append("polygon") // add triangle that sticks out to show which box you are hovering on
          .attr("id","popup")
          .attr("fill","white")
          .attr("points", function(d){
@@ -358,6 +364,7 @@ function handleHover(d,i) {
         .attr("preserveAspectRatio","none");
 }
 
+// removes pop-up box with data when the user stops hovering over the box
 function handleUnhover(d,i) {
     d3.select(this)
 	.attr("stroke","gray")
@@ -409,6 +416,7 @@ var addText = (chart, outputText, x, y) => {
     }
 }
 
+// filtering by year, system, price, category, and title
 var yearInput = document.getElementById("year_filter");
 var systemInput = document.getElementById("system_filter");
 var priceInput = document.getElementById("price_filter");
@@ -440,7 +448,7 @@ var filter = () => {
         priceFilter === "allp") &&
         (curCategories.includes(categoryFilter)|| categoryFilter === "allc" ) &&
         (curTitle.toLowerCase().includes(titleFilter.toLowerCase()) || titleFilter.trim() === "")) {
-            temp_data.push(curGame);
+            temp_data.push(curGame); // add game to list of what boxes will be displayted
         }
     }
     if (yearFilter !== "ally"){
