@@ -275,14 +275,22 @@ var display = (data, axis) => {
 // display data about the game when user hovers on a box in the bar graph, including
 // title, system, release date, and front box art
 function handleHover(d,i) {
+    yt=""
+    if (axis=="y"){
+	 yt=d.release_date.split(" ")[2]
+    }
+    else if (axis=="m"){
+	yt=d.release_date.split(" ")[0]
+    }
     chart.append("text")
 	.attr("id","showyear")
 	.attr("fill","grey")
 	.attr("font-size","100px")
 	.attr("font-family", "Tahoma, sans-serif")
 	.attr("font-weight","bold")
-	.html(d.release_date.split(" ")[2])
+	.html(yt)
 	.attr("transform","translate(500,150)");
+    d3.select("#showyear").lower();
     var titleText = createText(18, d.title);
     var offset = (titleText.length-1) * 20;
 
