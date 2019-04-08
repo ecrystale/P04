@@ -16,6 +16,7 @@ chart.append("text")
 // Get the correctly organized data from python
 var all_data = JSON.parse(document.getElementsByClassName("bar_data")[0].innerHTML);
 
+// For yearly scale
 var month_dict = {
     "Jan": 0,
     "Feb": 0,
@@ -31,6 +32,7 @@ var month_dict = {
     "Dec": 5
 };
 
+// For monthly scale
 var month_dict2 = {
     "Jan": 0,
     "Feb": 1,
@@ -46,9 +48,14 @@ var month_dict2 = {
     "Dec": 11
 };
 
-var prevAxis = "m";
-var prevColHeight = -1;
+var prevAxis = "m"; // Either "y" for year or "m" for month
+var prevColHeight = -1; // Max height of the previous graph for knowing if we should change y axis
 
+/**
+Takes in an array of JSON objects and the string "y" or "m" for axis to know how to format
+the x axis and column width.
+Displays the columns and axis with transitions.
+*/
 var display = (data, axis) => {
     var x_scale;
     var x_axis;
@@ -67,29 +74,26 @@ var display = (data, axis) => {
                    .ticks(17)
     }
     else {
-        var o =d3.scalePoint()
+        var x_scale = d3.scalePoint()
         .domain(["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan "])
         .range([0,1210])
         .padding(.3);
 
-        x_scale = d3.scaleTime()
-                    .domain([123232323, 12])
-                    .range([0, 1210]);
-
         x_axis = d3.axisBottom()
-                   .scale(o);
+                   .scale(x_scale);
     }
 
+    // Selects all of the boxes and gives them each a unique identifier
     var bar = chart.selectAll(".box").data(data, function(e){return e.front_box_art+e.title+e.release_date+e.system});
-    var colSpace = [];
 
-    // transitions of axes
+    // Used for determining how many boxes are in each column
+    var colSpace = [];
     var i;
-    var trans_time = 1500;
     for (i=0; i<90; i++){
         colSpace.push(0);
     }
 
+    // Determines the width of each column and how high up each box is
     for (i=0; i<data.length; i++){
         var date = data[i].release_date.split(" ");
         var month = date[0];
@@ -117,31 +121,31 @@ var display = (data, axis) => {
         }
     }
 
+    // Use the maximum column height to scale y axis
     var maxColHeight = 0;
-
     for (i=0; i<colSpace.length; i++){
         if (colSpace[i] > maxColHeight){
             maxColHeight = colSpace[i];
         }
     }
-
     maxColHeight = Math.round(1.2*maxColHeight)+1;
-
-    var rectHeight = 475 / maxColHeight;
-
     y_scale = d3.scaleLinear()
         .domain([0,maxColHeight])
         .range([475,0]);
 
     if (maxColHeight < 20){
         y_axis = d3.axisLeft()
-            .scale(y_scale).ticks(maxColHeight+1);
+        .scale(y_scale).ticks(maxColHeight+1);
     }
     else {
         y_axis = d3.axisLeft()
-            .scale(y_scale);
+        .scale(y_scale);
     }
 
+    var rectHeight = 475 / maxColHeight;
+    var trans_time = 1500; //transition time
+
+    // Remove all of the boxes that are in the exit selection
     bar.exit()
        .transition()
        .delay(function(d, i) { return i*2; })
@@ -151,6 +155,7 @@ var display = (data, axis) => {
        .style("stroke-opacity", 1e-6)
        .remove();
 
+    // Move all of the boxes that are still in the chart
     bar.select("rect").transition()
        .delay(function(d, i) { return i*3; })
        .duration(trans_time)
@@ -234,6 +239,7 @@ var display = (data, axis) => {
             return "translate(" + d.colIndex + "," + (height - 20-rectHeight - (d.heightOffset*rectHeight)) +")";
         });
 
+    // For transitioning x axis
     if (prevAxis === axis){
         chart.selectAll(".x").remove();
         chart.append('g')
@@ -251,6 +257,7 @@ var display = (data, axis) => {
             .call(x_axis)
     }
 
+    // For transitioning y axis
     if (prevColHeight === maxColHeight){
         chart.selectAll(".y").remove();
         chart.append('g')
@@ -278,6 +285,7 @@ function handleHover(d,i) {
     var titleText = createText(18, d.title);
     var offset = (titleText.length-1) * 20;
 
+    // Gets the x and y value of the "transform" attribute
     var transformVal = d3.select(this)["_groups"][0][0].attributes[4].nodeValue;
     var x_col = transformVal.split("(")[1].split(",")[0];
     var inner_x = d3.mouse(this)[0];
@@ -296,9 +304,10 @@ function handleHover(d,i) {
     else if (y_result < 160){
         y_result = 160;
     }
+
     d3.select(this)
-    .attr("stroke","turquoise")
-	.attr("stroke-width",2);
+      .attr("stroke","turquoise")
+      .attr("stroke-width",2);
     chart.append("polygon") // add triangle that sticks out to show which box you are hovering on
          .attr("id","popup")
          .attr("fill","white")
@@ -377,6 +386,8 @@ function handleUnhover(d,i) {
     d3.select("#release").remove();
 }
 
+// Returns a list of list of words so that each sublist contains words that do
+// not exceed the maxLength. Used for keeping words within boxes when hovering
 var createText = (maxLength,text) => {
     var words = text.split(" ");
     var outputText = [];
@@ -396,6 +407,7 @@ var createText = (maxLength,text) => {
     return outputText;
 }
 
+// Takes the output from createText and puts it on the popup box
 var addText = (chart, outputText, x, y) => {
     for (i=0; i<outputText.length; i++){
         var j;
@@ -404,15 +416,15 @@ var addText = (chart, outputText, x, y) => {
             line += outputText[i][j] + " ";
         }
         chart.append("text")
-            .attr("id","title")
-            .attr("fill","black")
-            .attr("font-size","15px")
-            .attr("font-family", "LatoBlack, sans-serif")
-            .attr("font-weight","bold")
-            .attr("transform", function (data){
-                return "translate(" + x + "," + (y+i*20) + ")";
-            })
-            .html(line)
+             .attr("id","title")
+             .attr("fill","black")
+             .attr("font-size","15px")
+             .attr("font-family", "LatoBlack, sans-serif")
+             .attr("font-weight","bold")
+             .attr("transform", function (data){
+                 return "translate(" + x + "," + (y+i*20) + ")";
+             })
+             .html(line)
     }
 }
 
@@ -459,17 +471,20 @@ var filter = () => {
     }
 }
 
+// When user changes the filter, automatically changes graph
 yearInput.onchange = filter;
 systemInput.onchange = filter;
 priceInput.onchange = filter;
 categoryInput.onchange = filter;
 
+// Gives user time to type search term in before filtering
 var searchTimer;
 titleInput.addEventListener('keyup', () => {
     clearTimeout(searchTimer);
     searchTimer = setTimeout(filter,1500);
 })
 
+// Makes the transition to the bigger box when user clicks on smaller box
 var handleModal = (d) => {
     var modal_duration = 500;
     var originalHeight = -999;
@@ -517,7 +532,7 @@ var handleModal = (d) => {
          .attr("fill","#e60012")
          .attr("width",function(){
              var systemWidth = 8;
-             if (typeof (InstallTrigger) !== 'undefined'){
+             if (typeof (InstallTrigger) !== 'undefined'){ // For firefox
                  systemWidth = 9.5;
              }
              return d.system.length*systemWidth+10;
@@ -638,9 +653,17 @@ var handleModal = (d) => {
          .html(d.number_of_players)
          .transition().duration(modal_duration+1700)
          .attr("fill-opacity",1);
+    // Links to nintendo detail page if there is a link, else a google search
     chart.append("a")
          .attr("id","modal_stuff")
-         .attr("xlink:href", "https://www.google.com/search?q="+d.title+" nintendo")
+         .attr("xlink:href", function(){
+             if (d.slug){
+                 return "https://www.nintendo.com/games/detail/"+d.slug;
+             }
+             else {
+                 return "https://www.google.com/search?q="+d.title+" nintendo";
+             }
+         })
          .attr("target","_blank")
          .append("rect")
          .attr("transform", function () {
@@ -658,12 +681,19 @@ var handleModal = (d) => {
          .attr("fill-opacity",1);
     chart.append("a")
          .attr("id","modal_stuff")
-         .attr("xlink:href", "https://www.google.com/search?q="+d.title+" nintendo")
+         .attr("xlink:href", function(){
+             if (d.slug){
+                 return "https://www.nintendo.com/games/detail/"+d.slug;
+             }
+             else {
+                 return "https://www.google.com/search?q="+d.title+" nintendo";
+             }
+         })
          .attr("target","_blank")
          .append("text")
          .attr("transform", function () {
              var x_cor = 730;
-             if (typeof (InstallTrigger) !== 'undefined'){
+             if (typeof (InstallTrigger) !== 'undefined'){ // For firefox
                  x_cor = 715;
              }
              if (otherOffset < 380){
@@ -690,7 +720,7 @@ var handleModal = (d) => {
          .attr("id","modal_stuff")
          .attr("transform", function() {
              var x_pos = 938;
-             if (typeof (InstallTrigger) !== 'undefined') {
+             if (typeof (InstallTrigger) !== 'undefined') { // For firefox
                  x_pos = 930
              }
              return "translate("+x_pos+",70)";
@@ -707,6 +737,7 @@ var handleModal = (d) => {
          .attr("fill-opacity",1);
 }
 
+// Removes the popup modal
 var removeModal = () => {
     d3.selectAll("#modal_stuff").remove();
     d3.select("#modal").style("display","none");
