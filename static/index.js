@@ -3,6 +3,12 @@ var width = 1250, height = 500;
 var chart = d3.select(".chart")
     .attr("width", width)
     .attr("height", height)
+    .on("mouseout", function(){
+        d3.select("#showyear")
+          .attr("fill-opacity",0.5)
+          .transition().duration(1000)
+          .attr("fill-opacity",0);
+    })
 
 // add title of graph
 chart.append("text")
@@ -222,6 +228,7 @@ var display = (data, axis) => {
                return "white" // no price data available
            }
        })
+       .attr("fill-opacity",0.9)
        .attr("stroke","grey")
        .attr("stroke-width",1)
        .attr("transform", function(d){
@@ -284,27 +291,29 @@ var display = (data, axis) => {
 // display data about the game when user hovers on a box in the bar graph, including
 // title, system, release date, and front box art
 function handleHover(d,i) {
-    yt=""
+    var yt="";
     if (xmy=="y"){
-	 yt=d.release_date.split(" ")[2]
+        yt=d.release_date.split(" ")[2];
     }
     else if (xmy=="m"){
-	yt=d.release_date.split(" ")[0]
+        yt=d.release_date.split(" ")[0];
     }
-    chart.append("text")
-	.attr("id","showyear")
-	.attr("fill","grey")
-	.attr("font-size","100px")
-	.attr("font-family", "Tahoma, sans-serif")
-	.attr("font-weight","bold")
-	.html(yt)
-	.attr("transform","translate(500,150)");
-    d3.select("#showyear").lower();
+    chart.select("#showyear")
+         .attr("fill","grey")
+         .attr("font-size","180px")
+         .attr("font-family", "Tahoma, sans-serif")
+         .attr("font-weight","bold")
+         .html(yt)
+         .lower()
+         .attr("transform","translate(450,300)")
+         .transition().duration(100)
+         .attr("fill-opacity",0.5);
+
     var titleText = createText(18, d.title);
     var offset = (titleText.length-1) * 20;
 
     // Gets the x and y value of the "transform" attribute
-    var transformVal = d3.select(this)["_groups"][0][0].attributes[4].nodeValue;
+    var transformVal = d3.select(this)["_groups"][0][0].attributes[5].nodeValue;
     var x_col = transformVal.split("(")[1].split(",")[0];
     var inner_x = d3.mouse(this)[0];
     var x_result = parseInt(x_col) + parseInt(inner_x) + 25;
@@ -393,7 +402,6 @@ function handleHover(d,i) {
 
 // removes pop-up box with data when the user stops hovering over the box
 function handleUnhover(d,i) {
-    d3.selectAll("#showyear").remove();
     d3.select(this)
     	.attr("stroke","gray")
     	.attr("stroke-width",1);
