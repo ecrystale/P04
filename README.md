@@ -43,7 +43,16 @@ $ git clone https://github.com/ecrystale/P04.git
 ```
 $ cd P04
 ```
-3. Now, activate your virtual environment and run the python file to start the Flask server:
+3. Activate your virtual environment. If you do not have one set up, you may create one in the current working directory, and activate it like so:
+```
+$ python3 -m venv venv
+$ . venv/bin/activate
+```
+4. Run the following command to install all the packages needed for the data visualization to display on the Flask server:
+```
+(venv)$ pip install -r requirements.txt
+```
+5. Now, activate your virtual environment and run the python file to start the Flask server:
 ```
 (venv) $ python3 app.py
 ```
